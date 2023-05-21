@@ -1,0 +1,129 @@
+[gd_scene load_steps=14 format=3 uid="uid://dup2wof0tqald"]
+
+[ext_resource type="Script" path="res://prototypes/levels/level1/level1.gd" id="1_ry8k0"]
+[ext_resource type="Texture2D" uid="uid://ltgsrvjns4g3" path="res://prototypes/levels/level1/esteira.png" id="2_2owqn"]
+[ext_resource type="Texture2D" uid="uid://ij3fb1h1of8h" path="res://prototypes/levels/level1/person.png" id="2_yyplg"]
+[ext_resource type="Texture2D" uid="uid://b0qafyvynwqms" path="res://prototypes/levels/level1/prateleira.png" id="4_ftjj0"]
+[ext_resource type="Script" path="res://prototypes/levels/level1/Prateleira.gd" id="5_na55o"]
+[ext_resource type="Texture2D" uid="uid://dgix176xx0gaq" path="res://prototypes/levels/level1/monitor.png" id="5_oxtam"]
+[ext_resource type="Theme" uid="uid://gqiqdmks7lp3" path="res://themes/monitor.tres" id="6_a2tqe"]
+[ext_resource type="PackedScene" uid="uid://caubneh3ftkd3" path="res://utils/debug_ui.tscn" id="7_7vt1t"]
+[ext_resource type="Texture2D" uid="uid://x7fxdrgbdxf" path="res://prototypes/levels/level1/score_off.png" id="8_8rle8"]
+[ext_resource type="Texture2D" uid="uid://dhm6ab5kp1q6k" path="res://prototypes/levels/level1/score.png" id="9_ph2sr"]
+[ext_resource type="PackedScene" uid="uid://cwhqeggivhc5j" path="res://prototypes/objects/product.tscn" id="10_wa7g3"]
+[ext_resource type="PackedScene" uid="uid://cf6g8u4vxqa2i" path="res://prototypes/objects/falling_object.tscn" id="11_j88ms"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_llkem"]
+size = Vector2(328, 522)
+
+[node name="level1" type="Node2D"]
+script = ExtResource("1_ry8k0")
+metadata/_edit_horizontal_guides_ = []
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.788235, 0.854902, 0.972549, 1)
+
+[node name="Person" type="Sprite2D" parent="."]
+position = Vector2(591, 387)
+scale = Vector2(0.678431, 0.678431)
+texture = ExtResource("2_yyplg")
+
+[node name="ShowProduct" parent="Person" instance=ExtResource("10_wa7g3")]
+unique_name_in_owner = true
+position = Vector2(166.561, -263.844)
+scale = Vector2(1.47399, 1.47399)
+product_name = "leite"
+
+[node name="Prateleira" type="Sprite2D" parent="."]
+position = Vector2(145, 378)
+scale = Vector2(0.563415, 0.563415)
+texture = ExtResource("4_ftjj0")
+script = ExtResource("5_na55o")
+
+[node name="Esteira" type="Sprite2D" parent="."]
+position = Vector2(560, 501)
+texture = ExtResource("2_2owqn")
+
+[node name="Monitor" type="Sprite2D" parent="."]
+position = Vector2(965, 338)
+scale = Vector2(0.522737, 0.516292)
+texture = ExtResource("5_oxtam")
+
+[node name="Control" type="Control" parent="Monitor"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -209.0
+offset_top = -159.0
+offset_right = -296.0
+offset_bottom = -387.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("6_a2tqe")
+
+[node name="Monitor" type="Label" parent="Monitor/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="FallingObject2" parent="." instance=ExtResource("11_j88ms")]
+position = Vector2(232, 223)
+
+[node name="FallingObject" parent="." instance=ExtResource("11_j88ms")]
+position = Vector2(64, 72)
+product_name = "coxinha"
+
+[node name="Foreground" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="Foreground"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Progress" type="TextureProgressBar" parent="Foreground/UI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -368.0
+offset_top = 8.0
+offset_right = -14.0
+offset_bottom = 50.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+max_value = 7.0
+texture_under = ExtResource("8_8rle8")
+texture_progress = ExtResource("9_ph2sr")
+
+[node name="DebugUI" parent="Foreground" instance=ExtResource("7_7vt1t")]
+unique_name_in_owner = true
+visible = false
+mouse_filter = 1
+
+[node name="CheckArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CheckArea"]
+position = Vector2(148, 309)
+shape = SubResource("RectangleShape2D_llkem")

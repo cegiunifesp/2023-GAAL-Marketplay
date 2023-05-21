@@ -1,0 +1,12 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://gqiqdmks7lp3"]
+
+[sub_resource type="SystemFont" id="SystemFont_57m7j"]
+font_names = PackedStringArray("Monospace")
+font_weight = 550
+generate_mipmaps = true
+force_autohinter = true
+
+[resource]
+Label/colors/font_color = Color(0.247059, 0.721569, 0.113725, 1)
+Label/font_sizes/font_size = 36
+Label/fonts/font = SubResource("SystemFont_57m7j")

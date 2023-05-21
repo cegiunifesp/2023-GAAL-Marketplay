@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://caubneh3ftkd3"]
+
+[ext_resource type="Theme" uid="uid://g0gceolybl1x" path="res://themes/debug.tres" id="1_ml4el"]
+
+[node name="DebugUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ml4el")
+
+[node name="Infos" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 1
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 360.0
+offset_bottom = 124.0
