@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9034789723724786330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5880450674394426770}
+  - component: {fileID: 9180423421580432353}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5880450674394426770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9034789723724786330}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9180423421580432353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9034789723724786330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d164c2ce0013df4fb2166c1d2eef738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _breakfastProducts:
+  - {fileID: 11400000, guid: 6954d7bfb0611924b9e03908e2d150e4, type: 2}
+  - {fileID: 11400000, guid: a4b89c374a0f2924ca70f89bc96a4529, type: 2}
+  - {fileID: 11400000, guid: f192df1aa75834942895ec1cd9613b46, type: 2}
+  - {fileID: 11400000, guid: 1fa2b85feb2001f46b1b4f3e95e45223, type: 2}
+  - {fileID: 11400000, guid: d3cae1c13d787e74598d3d808ba2b7ae, type: 2}
+  - {fileID: 11400000, guid: a3c56822ec6c96946bc4eda4f7e1c91b, type: 2}
+  - {fileID: 11400000, guid: bbb2a7a3220d3af4bbf199dd7606df6f, type: 2}
+  _lunchProducts:
+  - {fileID: 11400000, guid: 6eaa7b5d661bcda488a44172c6d88950, type: 2}
+  - {fileID: 11400000, guid: 4747bf82a9c880a4f803ca562455fec4, type: 2}
+  - {fileID: 11400000, guid: 871c85005c88b1e4bb9c3e8ba381f4a1, type: 2}
+  - {fileID: 11400000, guid: af8a0b86e85edc741adc5aa5403b4be2, type: 2}
+  - {fileID: 11400000, guid: e68fa11f0d7e224489ed34fdb057239c, type: 2}
+  - {fileID: 11400000, guid: 6779d1a4bfce55641a9836d54ea7bf56, type: 2}
+  - {fileID: 11400000, guid: 083da3ab03e0a9549956cab4f71d4b2e, type: 2}
+  _hygieneProducts:
+  - {fileID: 11400000, guid: 6cdb91f1ab058114c8bc02098cd85109, type: 2}
+  - {fileID: 11400000, guid: 54c7293da70fdcc4f80b6074a3016994, type: 2}
+  - {fileID: 11400000, guid: 8ad6423b57403b14abb596d788f71379, type: 2}
+  - {fileID: 11400000, guid: 4579d4e3ab300fc40b01c5f09cf01d8f, type: 2}
+  - {fileID: 11400000, guid: 006475fe9e5a73a498df5b19b998c1b6, type: 2}
+  - {fileID: 11400000, guid: 36f8a38d66b746f48a9ec73617e5c0f0, type: 2}
