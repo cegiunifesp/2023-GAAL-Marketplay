@@ -43,7 +43,7 @@ public class Cursor : MonoBehaviour
         { 
             if (_lastObjectSelected != null)
             {
-                if (_lastObjectSelected.TryGetComponent(out Product product))
+                if (_lastObjectSelected.TryGetComponent(out ProductLevel1 product))
                 {
                     Events.OnProductSelected(product);
                 }

@@ -9,7 +9,7 @@ using TMPro;
 public class FirstLevelManager : MonoBehaviour
 {
     [Header("Related To Products")]
-    [SerializeField] private Product _productPrefab;
+    [SerializeField] private ProductLevel1 _productPrefab;
     [SerializeField] private Transform _productsParent;
     [SerializeField] private Transform _shelf;
 
@@ -29,7 +29,7 @@ public class FirstLevelManager : MonoBehaviour
     private bool _gameStarted;
     private bool _gameEnded;
 
-    private Queue<Product> _productsInTreadmill = new Queue<Product>();
+    private Queue<ProductLevel1> _productsInTreadmill = new Queue<ProductLevel1>();
     private List<ProductSO> _productsAvailables;
     private List<ProductSO> _ordersAvailables;
     private Order _orderDesired;
@@ -92,15 +92,19 @@ public class FirstLevelManager : MonoBehaviour
         if (paused)
         {
             Time.timeScale = 0;
+            _videoPlayer.Pause();
         }
         else
         {
             Time.timeScale = 1;
+            _videoPlayer.Play();
         }
     }
 
-    private void HandleProductSelected(Product product)
+    private void HandleProductSelected(ProductLevel1 product)
     {
+        if (!product.IsInteractable()) return;
+
         if (product.ProductName == _orderDesired.ProductName)
         {
             product.ProductCorrect();
@@ -113,7 +117,7 @@ public class FirstLevelManager : MonoBehaviour
         }
     }
 
-    private void HandleEnqueueProduct(Product instance)
+    private void HandleEnqueueProduct(ProductLevel1 instance)
     {
         instance.gameObject.SetActive(false);
         instance.transform.eulerAngles = Vector3.zero;
@@ -130,6 +134,8 @@ public class FirstLevelManager : MonoBehaviour
 
         Events.OnGameEnded();
         _gameEnded = true;
+        _videoPlayer.Stop();
+        _videoPlayer.gameObject.SetActive(false);
 
         _finalScene.Initiate();
     }
@@ -145,9 +151,9 @@ public class FirstLevelManager : MonoBehaviour
             return;
         }
 
-        var productDesired = _ordersAvailables.GetRandom();
+        var productDesired = _ordersAvailables.GetRandomValue();
 
-        _orderDesired = new Order(productDesired.ProductName, 1, productDesired.Clip);
+        _orderDesired = new Order(productDesired.ProductName, 1, productDesired.SpriteSource, productDesired.Clip);
 
         _ordersAvailables.Remove(_ordersAvailables.First(t => t.ProductName == productDesired.ProductName));
         _leftOrdersTx.text = $"Restam {_ordersAvailables.Count+1} produtos";
@@ -178,7 +184,7 @@ public class FirstLevelManager : MonoBehaviour
         _tokenSource.Cancel();
     }
 
-    private void CheckSequenceOfSpawning(Product product)
+    private void CheckSequenceOfSpawning(ProductLevel1 product)
     {
         if (_orderDesired == null)
         {
@@ -274,18 +280,18 @@ public class FirstLevelManager : MonoBehaviour
     {
         for(int i = 0; i < 6; i++)
         {
-            Product instance = Instantiate(_productPrefab, _productsParent);
+            ProductLevel1 instance = Instantiate(_productPrefab, _productsParent);
             AddToPool(instance);
         }
     }
 
-    private void AddToPool(Product instance)
+    private void AddToPool(ProductLevel1 instance)
     {
         instance.gameObject.SetActive(false);
         _productsInTreadmill.Enqueue(instance);
     }
 
-    private Product GetFromPool()
+    private ProductLevel1 GetFromPool()
     {
         if (_productsInTreadmill.Count == 0)
         {
@@ -305,7 +311,7 @@ public class FirstLevelManager : MonoBehaviour
         if (product == null) return false;
 
         product.transform.position = _productsParent.position;
-        product.InitiateProduct(_productsAvailables.GetRandom());
+        product.InitiateProduct(_productsAvailables.GetRandomValue());
 
         CheckSequenceOfSpawning(product);
 

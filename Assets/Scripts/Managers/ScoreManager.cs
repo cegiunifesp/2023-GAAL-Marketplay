@@ -11,6 +11,9 @@ public class ScoreManager : MonoBehaviour
 
     private void Start()
     {
+        _score = 0;
+        HandleUpdateScore(PlayerPrefs.GetInt("SCORE"));
+
         Events.onAddScore += HandleUpdateScore;
         Events.onGameEnded += HandleGameEnded;
     }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Limit
   - Product
+  - Shelf
   layers:
   - Default
   - TransparentFX

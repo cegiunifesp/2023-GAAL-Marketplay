@@ -102,7 +102,7 @@ public class Loader : MonoBehaviour
     #region Visual Part
     private void InitiateVisual()
     {
-        LeanTween.scaleY(_treadmill, 1, 0.3f).setEaseInBounce();
+        LeanTween.scaleY(_treadmill, 1, 0.3f).setEaseInCubic();
     }
     #endregion
 }

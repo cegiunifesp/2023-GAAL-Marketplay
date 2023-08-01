@@ -16,4 +16,4 @@ MonoBehaviour:
   <TypeProduct>k__BackingField: 1
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 2aa110a8cd8e2c081b9c9ade09a44bfe, type: 3}
   <Clip>k__BackingField: {fileID: 32900000, guid: 79ff8b6f7de9e427d946d14ba071a231, type: 3}
-  <AdjustHorizontally>k__BackingField: 0
+  <AdjustHorizontally>k__BackingField: 1

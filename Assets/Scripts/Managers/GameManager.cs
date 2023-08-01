@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -10,7 +11,10 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if (_instance == null) _instance = FindObjectOfType<GameManager>();
+            if (_instance == null)
+            {
+                _instance = Instantiate(Resources.Load("Prefabs/Game Manager")).GetComponent<GameManager>();
+            }
             return _instance;
         }
         set

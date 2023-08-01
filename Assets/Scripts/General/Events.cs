@@ -16,14 +16,14 @@ public static class Events
         onGameEnded?.Invoke();
     }
 
-    public static Action<Product> onEnqueueProduct { get; set; }
-    public static void OnEnqueueProduct(Product product)
+    public static Action<ProductLevel1> onEnqueueProduct { get; set; }
+    public static void OnEnqueueProduct(ProductLevel1 product)
     {
         onEnqueueProduct?.Invoke(product);
     }
 
-    public static Action<Product> onProductSelected { get; set; }
-    public static void OnProductSelected(Product product)
+    public static Action<ProductLevel1> onProductSelected { get; set; }
+    public static void OnProductSelected(ProductLevel1 product)
     {
         onProductSelected?.Invoke(product);
     }

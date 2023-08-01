@@ -10,7 +10,7 @@ using UnityEngine.Video;
 public class MenuManager : MonoBehaviour
 {
     private int _typeIndex;
-    private bool _choseTypeProduct;
+    private bool _firstEntry;
 
     private CancellationTokenSource _tokenSource;
 
@@ -41,17 +41,14 @@ public class MenuManager : MonoBehaviour
     private void Awake()
     {
         _tokenSource = new CancellationTokenSource();
-    }
+        _firstEntry = true;
 
-    void Start()
-    {
         _nextTypeProductsBt.onClick.AddListener(NextTypeProducts);
         _previousTypeProductsBt.onClick.AddListener(PreviousTypeProducts);
         _leaveOptionsBt.onClick.AddListener(LeaveOptionsScene);
 
         SetButtonsToMenuOptions();
     }
-
 
     private void SetButtonsToMenuOptions()
     {
@@ -62,10 +59,8 @@ public class MenuManager : MonoBehaviour
         _leave_Level3_Bt.onClick.RemoveAllListeners();
         _leave_Level3_Tx.text = "Sair";
 
-        _play_Level1_Bt.onClick.AddListener(() =>
-        {
+        _play_Level1_Bt.onClick.AddListener(() => {
             ShowOptionsScene();
-            _choseTypeProduct = false;
         });
 
         _credits_Level2_Bt.onClick.AddListener(() => Invoke("CreditsScene", 1));
@@ -84,9 +79,7 @@ public class MenuManager : MonoBehaviour
 
         _play_Level1_Bt.onClick.AddListener(() =>
         {
-            if (!_choseTypeProduct) GameManager.Instance.SetTypeSelected(-1);
-
-            if (_videoPlayer.isPlaying) _videoPlayer.Stop();
+            _videoPlayer.gameObject.SetActive(false);
 
             var loader = Instantiate(_loader);
             loader.LoadScene(Enums.Scenes.Chapter1, instantly: false);
@@ -94,9 +87,7 @@ public class MenuManager : MonoBehaviour
 
         _credits_Level2_Bt.onClick.AddListener(() =>
         {
-            if (!_choseTypeProduct) GameManager.Instance.SetTypeSelected(-1);
-
-            if (_videoPlayer.isPlaying) _videoPlayer.Stop();
+            _videoPlayer.gameObject.SetActive(false);
 
             var loader = Instantiate(_loader);
             loader.LoadScene(Enums.Scenes.Chapter2, instantly: false);
@@ -104,9 +95,7 @@ public class MenuManager : MonoBehaviour
 
         _leave_Level3_Bt.onClick.AddListener(() =>
         {
-            if (!_choseTypeProduct) GameManager.Instance.SetTypeSelected(-1);
-
-            if (_videoPlayer.isPlaying) _videoPlayer.Stop();
+            _videoPlayer.gameObject.SetActive(false);
 
             var loader = Instantiate(_loader);
             loader.LoadScene(Enums.Scenes.Chapter3, instantly: false);
@@ -122,7 +111,6 @@ public class MenuManager : MonoBehaviour
         ShowVideo();
 
         GameManager.Instance.SetTypeSelected(_typeIndex);
-        _choseTypeProduct = true;
     }
 
     private void PreviousTypeProducts()
@@ -137,7 +125,6 @@ public class MenuManager : MonoBehaviour
         ShowVideo();
 
         GameManager.Instance.SetTypeSelected(_typeIndex);
-        _choseTypeProduct = true;
     }
 
     private void ShowVideo()
@@ -158,6 +145,16 @@ public class MenuManager : MonoBehaviour
 
         _nextTypeProductsBt.gameObject.SetActive(true);
         _previousTypeProductsBt.gameObject.SetActive(true);
+
+        if (_firstEntry)
+        {
+            _typeIndex = Random.Range(0, 3);
+            _shelf.GetChild(_typeIndex).gameObject.SetActive(true);
+
+            ShowVideo();
+
+            _firstEntry = false;
+        }
 
         SetButtonsToChapters();
     }
