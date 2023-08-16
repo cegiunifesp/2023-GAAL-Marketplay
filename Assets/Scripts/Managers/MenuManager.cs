@@ -21,16 +21,20 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Button _play_Level1_Bt;
     [SerializeField] private TextMeshProUGUI _play_Level1_Tx;
 
+    [Space(5)]
     [SerializeField] private Button _credits_Level2_Bt;
     [SerializeField] private TextMeshProUGUI _credits_Level2_Tx;
 
+    [Space(5)]
     [SerializeField] private Button _leave_Level3_Bt;
     [SerializeField] private TextMeshProUGUI _leave_Level3_Tx;
 
+    [Space(5)]
     [SerializeField] private Button _nextTypeProductsBt;
     [SerializeField] private Button _previousTypeProductsBt;
     [SerializeField] private Button _leaveOptionsBt;
 
+    [Space(5)]
     [SerializeField] private TextMeshProUGUI _monitorTx;
 
     [Header("Others")]
@@ -106,6 +110,7 @@ public class MenuManager : MonoBehaviour
             var loader = Instantiate(_loader);
             loader.LoadScene(Enums.Scenes.Chapter3, instantly: false);
         });
+
     }
 
     private void NextTypeProducts()
@@ -151,6 +156,7 @@ public class MenuManager : MonoBehaviour
 
         _nextTypeProductsBt.gameObject.SetActive(true);
         _previousTypeProductsBt.gameObject.SetActive(true);
+        _leaveOptionsBt.gameObject.SetActive(true);
 
         if (_firstEntry)
         {
@@ -169,6 +175,7 @@ public class MenuManager : MonoBehaviour
     {
         _nextTypeProductsBt.gameObject.SetActive(false);
         _previousTypeProductsBt.gameObject.SetActive(false);
+        _leaveOptionsBt.gameObject.SetActive(false);
 
         SetButtonsToMenuOptions();
     }
