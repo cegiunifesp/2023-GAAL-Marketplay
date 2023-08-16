@@ -4,6 +4,14 @@ using UnityEngine;
 
 public static class Extensions
 {
+    public static void AddList<T>(this List<T> list, List<T> listToAdd)
+    {
+        if (list == null) list = new List<T>();
+
+        foreach(T item in listToAdd) 
+            list.Add(item);
+    }
+
     public static T GetRandomValue<T>(this List<T> list, bool delete = false)
     {
         if (list.Count == 0) return default(T);
@@ -33,6 +41,11 @@ public static class Extensions
             else
             {
                 T[] newArray = new T[array.Length - 1];
+                for (int i = index; i < array.Length - 1; i++)
+                {
+                    newArray[i] = array[i + 1];
+                }
+                array = newArray;
             }
         }
 
@@ -41,7 +54,7 @@ public static class Extensions
 
     public static void DeleteChildren(this Transform parent)
     {
-        foreach (Transform child in parent) Object.Destroy(child.gameObject);
+        foreach (Transform child in parent) Object.DestroyImmediate(child.gameObject);
     }
 
     public static Vector3 LastChildPosition(this Transform parent)

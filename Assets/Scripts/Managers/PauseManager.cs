@@ -15,18 +15,19 @@ public class PauseManager : MonoBehaviour
 
     public void PauseGame()
     {
-        Events.OnPause(true);
+        Events.Instance.OnPause(true);
         _pausePanel.SetActive(true);
     }
 
     public void UnpauseGame()
     {
-        Events.OnPause(false);
+        Events.Instance.OnPause(false);
         _pausePanel.SetActive(false);
     }
 
     public void RestartGame()
     {
+        Events.Instance.onPause(false);
         int indexScene = SceneManager.GetActiveScene().buildIndex;
         var loader = Instantiate(_loader);
         loader.LoadScene((Enums.Scenes)indexScene);
@@ -34,6 +35,7 @@ public class PauseManager : MonoBehaviour
 
     public void GoBackToMenu()
     {
+        Events.Instance.onPause(false);
         var loader = Instantiate(_loader);
         loader.LoadScene(Enums.Scenes.Menu);
     }

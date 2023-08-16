@@ -1,18 +1,21 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHandler
+public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHandler, IPointerClickHandler
 {
     private Enums.StatesDrag _state;
 
-    private HorizontalLayoutGroup _initialParent;
     [SerializeField] private Transform _canvas;
+    [SerializeField] private float _speedMovement;
+
+    private int _index;
+    private Vector3 _initialPosition;
+    private Vector3 _initialRotation;
+    private Transform _initialParent;
 
     private Camera _cam;
-    private Shelf _shelf;
+    private Basket _basket;
 
-    [SerializeField] private float _speedMovement;
 
     private void Update()
     {
@@ -21,6 +24,7 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
         switch (_state)
         {
             case Enums.StatesDrag.OnDrag:
+                //print($"Moving {gameObject.name}");
                 Vector3 mouse = _cam.ScreenToWorldPoint(Input.mousePosition);
                 mouse.z = 0;
                 var dir = mouse - transform.position;
@@ -37,16 +41,41 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
 
     public override void InitiateProduct(ProductSO info)
     {
-        _initialParent = transform.parent.GetComponent<HorizontalLayoutGroup>();
-        _canvas = GameObject.Find("Canvas").transform;
+        _index = transform.GetSiblingIndex();
+        _initialParent = transform.parent;
+        _initialPosition = transform.position;
+        _initialRotation = transform.rotation.eulerAngles;
+
         _cam = Camera.main;
 
-        Size = _initialParent.GetComponent<RectTransform>().rect.height;
+        Size = GetComponent<RectTransform>().rect.height;
         _defaultSize = Size;
 
         Interactable = true;
 
         base.InitiateProduct(info);
+
+        Events.Instance.onGameEnded += HandleEndGame;
+    }
+
+    private void HandleEndGame()
+    {
+        Interactable = false;
+    }
+
+    public void MakeItInteractable()
+    {
+        _index = transform.GetSiblingIndex();
+        _initialParent = transform.parent;
+        _initialPosition = transform.position;
+        _initialRotation = transform.rotation.eulerAngles;
+
+        _cam = Camera.main;
+
+        Size = GetComponent<RectTransform>().rect.height;
+        _defaultSize = Size;
+
+        Interactable = true;
     }
 
     private void InitialParent()
@@ -54,21 +83,14 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
         Size = _defaultSize;
         AdjustImage();
 
-        Vector3 oldPosition = transform.position;
-        Vector3 newPosition = _initialParent.transform.LastChildPosition() + Vector3.right;
-
-        transform.position = oldPosition;
-        LeanTween.move(gameObject, newPosition, 1f).setEaseOutQuad().setOnComplete(() =>
+        LeanTween.move(gameObject, _initialPosition, 1f).setEaseOutQuad().setOnComplete(() =>
         {
             if (_state == Enums.StatesDrag.OnDrag) return;
 
             transform.SetParent(_initialParent.transform);
+            transform.SetSiblingIndex(_index);
+            transform.eulerAngles = _initialRotation;
         });
-    }
-
-    public void SetInteractable(bool interactable)
-    {
-        Interactable = interactable;
     }
 
     #region Events
@@ -79,15 +101,16 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
         switch (_state)
         {
             case Enums.StatesDrag.OnDrag:
-                if (_shelf == null)
+                if (_basket == null)
                 {
                     _state = Enums.StatesDrag.Initial;
                     InitialParent();
                 }
                 else
                 {
-                    _shelf.AddProduct(this);
                     _state = Enums.StatesDrag.OnSlot;
+                    _basket.AddProduct(this);
+                    AddedToBasket();
                 }
                 break;
         }
@@ -107,6 +130,11 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
         }
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+
+    }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         if (!Interactable) return;
@@ -121,62 +149,43 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
                 _state = Enums.StatesDrag.OnDrag;
                 transform.SetParent(_canvas);
                 AdjustImage();
-                Replacing();
                 break;
             default:
                 break;
         }
     }
-
-    public void ResetState()
-    {
-        if (_state == Enums.StatesDrag.OnSlot)
-        {
-            RemoveFromShelf();
-        }
-        _state = Enums.StatesDrag.Initial;
-    }
     #endregion
 
-    #region Shelf Related
-    public void SetShelfReference(Shelf shelf)
+    #region Basket
+    private void AddedToBasket()
     {
-        _shelf = shelf;
-    }
-
-    public void ClearShelfReference(Shelf shelf)
-    {
-        if (_shelf == shelf) _shelf = null;
-    }
-
-    public void AddedToShelf(float size)
-    {
-        Size = size;
+        gameObject.SetActive(false);
         AdjustImage();
         Size = _defaultSize;
     }
 
-    private void Replacing()
+    public void RemoveFromBasket()
     {
-        if (_shelf != null)
-        {
-            _shelf.RemovedProduct(ProductName);
-        }
-    }
+        gameObject.SetActive(true);
 
-    public void RemoveFromShelf()
-    {
-        if (_shelf != null)
-        {
-            _shelf.RemovedProduct(ProductName);
-            _shelf = null;
-        }
-        else
-        {
-            Debug.LogError("Slot is null");
-        }
+        if (_basket != null) _basket = null;
+        else Debug.LogError("Slot is null");
 
         InitialParent();
+    }
+
+    public void SetBasket(Basket basket)
+    {
+        _basket = basket;
+    }
+
+    public void ClearBasketReference()
+    {
+        if (_state == Enums.StatesDrag.OnDrag)
+        {
+            print("Left Basket");
+            _basket = null;
+        }
     }
     #endregion
 }

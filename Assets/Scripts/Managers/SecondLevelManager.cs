@@ -2,12 +2,11 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SecondLevelManager : MonoBehaviour
+public class SecondLevelManager : LevelManagerBase
 {
     private List<int> _numbersLeft = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-    private List<ProductSO> _productsAvailables;
-    private List<ProductSO> _ordersAvailables;
+    private bool[] _shelfsCompleted;
 
     [Header("Prefabs")]
     [SerializeField] private Transform _productsDragDropParent;
@@ -18,20 +17,59 @@ public class SecondLevelManager : MonoBehaviour
     [SerializeField] private Sprite[] _numbers;
     [field: SerializeField] public Shelf[] Shelfs { get; private set; }
 
-    void Start()
+    private void Start()
     {
-        Events.onGameStart += HandleStart;
-
-        _productsAvailables = GameManager.Instance.GetProductsAvailables();
+        Events.Instance.onGameStart += HandleStartGame;
     }
 
-    public void HandleStart()
+    #region Handling Events
+    [ContextMenu("Star Game Manually")]
+    protected override void HandleStartGame()
     {
+        Events.Instance.onShelfCompleted += HandleShelfCompletion;
+
+        ProductsAvailables = GameManager.Instance.GetProductsAvailables();
+
+        _shelfsCompleted = new bool[3];
         CreateOrders();
     }
 
+    public void HandleShelfCompletion(int index)
+    {
+        _shelfsCompleted[index - 1] = true;
 
-    [ContextMenu("Create Orders Manually")]
+        if (_shelfsCompleted.All(completed => completed == true))
+        {
+            HandleEndGame();
+        }
+    }
+
+    protected override void HandlePause(bool paused)
+    {
+        if (paused)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
+    protected override void HandleEndGame()
+    {
+        Events.Instance.onGameStart -= HandleStartGame;
+        Events.Instance.onPause -= HandlePause;
+        Events.Instance.onShelfCompleted -= HandleShelfCompletion;
+
+        Events.Instance.OnGameEnded();
+        Time.timeScale = 1;
+
+        VictoryScene.Initiate();
+    }
+    #endregion
+
+
     private void CreateOrders()
     {
         List<ProductSO> products = new List<ProductSO>();
@@ -41,13 +79,13 @@ public class SecondLevelManager : MonoBehaviour
         {
             var orders = new List<Order>();
             int amountSum = 0;
-            _ordersAvailables = new List<ProductSO>(_productsAvailables);
+            OrdersAvailables = new List<ProductSO>(ProductsAvailables);
 
             while (amountSum < 9)
             {
                 int amountOfProduct = CheckAmountProducts(ref amountSum);
 
-                var productSelected = _ordersAvailables.GetRandomValue(true);
+                var productSelected = OrdersAvailables.GetRandomValue(true);
 
                 if (productSelected == null)
                 {
@@ -70,13 +108,13 @@ public class SecondLevelManager : MonoBehaviour
 
     private void SetOrderInSomeRandomPaper(Shelf shelf, List<Order> orders)
     {
-        var shelfOrder = _shelfOrders.GetRandomValue();
-        while (shelfOrder.Initiated)
+        var paperOrder = _shelfOrders.GetRandomValue();
+        while (paperOrder.Initiated)
         {
-            shelfOrder = _shelfOrders.GetRandomValue();
+            paperOrder = _shelfOrders.GetRandomValue();
         }
 
-        shelfOrder.Initiate(shelf.GetIndex(), orders.ToArray(), _numbers);
+        paperOrder.Initiate(shelf.GetIndex(), orders.ToArray(), _numbers);
     }
 
     private void InstantiateProducts(List<ProductSO> products, List<int> productsAmounts)
@@ -103,8 +141,6 @@ public class SecondLevelManager : MonoBehaviour
 
             steps--;
         }
-
-        print(steps);
     }
 
     private int CheckAmountProducts(ref int amountSum)

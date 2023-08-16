@@ -76,7 +76,7 @@ public class Loader : MonoBehaviour
         });
     }
 
-    public void NextChapter()
+    public void NextLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int destiny = 0;
@@ -93,7 +93,7 @@ public class Loader : MonoBehaviour
                 print("Menu");
                 break;
             default:
-                Events.OnGameStart();
+                Events.Instance.OnGameStart();
                 break;
         }
     }

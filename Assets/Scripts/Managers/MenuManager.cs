@@ -50,6 +50,12 @@ public class MenuManager : MonoBehaviour
         SetButtonsToMenuOptions();
     }
 
+    [ContextMenu("Reset Score")]
+    private void ResetScore()
+    {
+        PlayerPrefs.SetInt("SCORE", 0);
+    }
+
     private void SetButtonsToMenuOptions()
     {
         _play_Level1_Bt.onClick.RemoveAllListeners();

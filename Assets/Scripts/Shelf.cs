@@ -1,9 +1,9 @@
 using System.Collections;
+using System.Threading.Tasks;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using System.Threading.Tasks;
 
 public class Shelf : MonoBehaviour
 {
@@ -54,11 +54,6 @@ public class Shelf : MonoBehaviour
                 ChangeIndexTextColor(correct: false);
                 RemoveProductsFromShelf();
 
-                foreach (Order order in _orders)
-                {
-                    _ordersAmount[order.ProductName] = order.ProductAmount;
-                }
-
                 return;
             }
         }
@@ -91,10 +86,25 @@ public class Shelf : MonoBehaviour
         DiscountProductAmount(product);
     }
 
-    public void RemovedProduct()
+    public void RemovedProduct(string productRemoved)
     {
         _frontalProductsCount = _frontalProductsParent.childCount;
         _behindProductsCount = _behindProductsParent.childCount;
+
+        if (_ordersAmount.ContainsKey(productRemoved)) _ordersAmount[productRemoved]++;
+
+        while (_behindProductsCount < MaxBehindProducts)
+        {
+            if (_frontalProductsCount > 0)
+            {
+                Transform product = _frontalProductsParent.GetChild(_frontalProductsCount - 1);
+                product.SetParent(_behindProductsParent);
+                product.GetComponent<ProductLevel2>().AddedToShelf(_behindProductsParent.GetComponent<RectTransform>().rect.height);
+                _behindProductsCount++;
+                _frontalProductsCount--;
+            }
+            else break;
+        }
     }
 
     private void DiscountProductAmount(ProductLevel2 product)
@@ -120,7 +130,8 @@ public class Shelf : MonoBehaviour
             child.GetComponent<ProductLevel2>().SetInteractable(false);
         }
 
-        Events.onAddScore(500);
+        Events.Instance.OnShelfCompleted(_index);
+        Events.Instance.OnAddScore(500);
     }
 
     private void RemoveProductsFromShelf()
@@ -142,7 +153,7 @@ public class Shelf : MonoBehaviour
             _behindProductsCount--;
         }
 
-        Events.OnRemoveScore(100);
+        Events.Instance.OnRemoveScore(100);
     }
 
     private async void ChangeIndexTextColor(bool correct)
@@ -161,7 +172,7 @@ public class Shelf : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Product"))
         {
-            collision.gameObject.GetComponent<ProductLevel2>().SetShelf(this);
+            collision.gameObject.GetComponent<ProductLevel2>().SetShelfReference(this);
         }
     }
 
@@ -169,7 +180,7 @@ public class Shelf : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Product"))
         {
-            collision.gameObject.GetComponent<ProductLevel2>().ClearShelf(this);
+            collision.gameObject.GetComponent<ProductLevel2>().ClearShelfReference(this);
         }
     }
 }

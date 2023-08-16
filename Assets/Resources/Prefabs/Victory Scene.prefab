@@ -440,7 +440,7 @@ MonoBehaviour:
   _scoreTx: {fileID: 6570266098211515505}
   _nextBt: {fileID: 9134228567488499884}
   _menuBt: {fileID: 6267545693131918941}
-  _loader: {fileID: 0}
+  _loader: {fileID: 1564487087685776734, guid: e43faa6e30566a8408c6d6c73fb1d2a8, type: 3}
 --- !u!1 &4302336571582935311
 GameObject:
   m_ObjectHideFlags: 0
