@@ -27,7 +27,7 @@ public class PauseManager : MonoBehaviour
 
     public void RestartGame()
     {
-        Events.Instance.onPause(false);
+        Events.Instance.OnPause(false);
         int indexScene = SceneManager.GetActiveScene().buildIndex;
         var loader = Instantiate(_loader);
         loader.LoadScene((Enums.Scenes)indexScene);
@@ -35,7 +35,7 @@ public class PauseManager : MonoBehaviour
 
     public void GoBackToMenu()
     {
-        Events.Instance.onPause(false);
+        Events.Instance.OnPause(false);
         var loader = Instantiate(_loader);
         loader.LoadScene(Enums.Scenes.Menu);
     }
