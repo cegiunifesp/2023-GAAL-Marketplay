@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 
 public class ProductBase : MonoBehaviour
 {
     protected float _defaultSize;
     protected bool Interactable;
 
-    [SerializeField] protected float Size = 125;
+    public float Size { get; set; } = 125;
 
     [SerializeField] protected ProductSO InfoFromSO;
     [SerializeField] protected Image ImageSource;
@@ -40,7 +40,7 @@ public class ProductBase : MonoBehaviour
         AdjustImage();
     }
 
-    protected void AdjustImage()
+    protected virtual void AdjustImage()
     {
         ImageSource.sprite = InfoFromSO.SpriteSource;
         ImageSource.SetNativeSize();
@@ -48,19 +48,7 @@ public class ProductBase : MonoBehaviour
         var size = ImageSource.rectTransform.sizeDelta;
         AdjustSize(size);
 
-        size = ImageSource.rectTransform.sizeDelta;
-        AdjustPositionOverTreadmill(size);
-
-        BoxCollider.size = size;
-    }
-
-    private void AdjustPositionOverTreadmill(Vector2 size)
-    {
-        Vector3 newPosition = Vector3.zero;
-        if (size.y / 2 > 50) newPosition = Vector3.up * size.y / 2.75f;
-        else if (size.y / 2 < 50 && size.y / 2 > 25) newPosition = Vector3.up * size.y / 7f;
-
-        transform.localPosition = newPosition;
+        BoxCollider.size = ImageSource.rectTransform.sizeDelta;
     }
 
     private void AdjustSize(Vector2 size)
@@ -69,5 +57,13 @@ public class ProductBase : MonoBehaviour
 
         if (InfoFromSO.AdjustHorizontally) ImageSource.rectTransform.sizeDelta = new Vector2(Size * proportion, Size);
         else ImageSource.rectTransform.sizeDelta = new Vector2(Size, Size / proportion);
+    }
+
+    public void ResizeProportionally(float proportion)
+    {
+        var size = ImageSource.rectTransform.sizeDelta * proportion;
+        AdjustSize(size);
+
+        BoxCollider.size = ImageSource.rectTransform.sizeDelta;
     }
 }

@@ -29,12 +29,6 @@ public class VictoryScene : MonoBehaviour
     private void NextChapter()
     {
         var loader = Instantiate(_loader);
-        loader.NextChapter();
-    }
-
-    private void Menu()
-    {
-        var loader = Instantiate(_loader);
-        loader.LoadScene(Enums.Scenes.Menu);
+        loader.NextLevel();
     }
 }

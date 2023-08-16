@@ -6,7 +6,7 @@ using UnityEngine.Video;
 using UnityEngine;
 using TMPro;
 
-public class FirstLevelManager : MonoBehaviour
+public class FirstLevelManager : LevelManagerBase
 {
     [Header("Related To Products")]
     [SerializeField] private ProductLevel1 _productPrefab;
@@ -19,32 +19,21 @@ public class FirstLevelManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _monitorText;
 
     [Header("Others")]
-    [SerializeField] private VictoryScene _finalScene;
     [SerializeField] private TextMeshProUGUI _leftOrdersTx;
     [SerializeField] private VideoPlayer _videoPlayer;
 
     private int _productsPooledThatAreNotTheOrder;
     private float _timeToActiveProducts;
 
-    private bool _gameStarted;
-    private bool _gameEnded;
-
     private Queue<ProductLevel1> _productsInTreadmill = new Queue<ProductLevel1>();
-    private List<ProductSO> _productsAvailables;
-    private List<ProductSO> _ordersAvailables;
     private Order _orderDesired;
 
     private CancellationTokenSource _tokenSource;
 
-
-    private void Awake()
+    private void Start()
     {
-        Events.onGameStart += HandleStart;
-        Events.onPause += HandlePause;
-        Events.onEnqueueProduct += HandleEnqueueProduct;
-        Events.onProductSelected += HandleProductSelected;
-
-        _tokenSource = new CancellationTokenSource();
+        Events.Instance.onGameStart += HandleStartGame;
+        _videoPlayer.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -61,8 +50,7 @@ public class FirstLevelManager : MonoBehaviour
         }
     }
 
-    [ContextMenu("Start Manually")]
-    private void HandleStart()
+    private void ChangeShelfSprite()
     {
         switch (GameManager.Instance.TypeSelected)
         {
@@ -76,9 +64,22 @@ public class FirstLevelManager : MonoBehaviour
                 _shelf.GetChild(2).gameObject.SetActive(true);
                 break;
         }
+    }
 
-        _productsAvailables = GameManager.Instance.GetProductsAvailables();
-        _ordersAvailables = new List<ProductSO>(_productsAvailables);
+    #region Handling Events
+    [ContextMenu("Start Manually")]
+    protected override void HandleStartGame()
+    {
+        Events.Instance.onPause += HandlePause;
+        Events.Instance.onEnqueueProduct += HandleEnqueueProduct;
+        Events.Instance.onProductSelected += HandleProductSelected;
+
+        _tokenSource = new CancellationTokenSource();
+
+        ChangeShelfSprite();
+
+        ProductsAvailables = GameManager.Instance.GetProductsAvailables();
+        OrdersAvailables = new List<ProductSO>(ProductsAvailables);
 
         GrowPool();
 
@@ -87,7 +88,7 @@ public class FirstLevelManager : MonoBehaviour
         _gameStarted = true;
     }
 
-    private void HandlePause(bool paused)
+    protected override void HandlePause(bool paused)
     {
         if (paused)
         {
@@ -125,40 +126,40 @@ public class FirstLevelManager : MonoBehaviour
     }
 
     [ContextMenu("End Manually")]
-    private void EndGame()
+    protected override void HandleEndGame()
     {
-        Events.onGameStart -= HandleStart;
-        Events.onPause -= HandlePause;
-        Events.onEnqueueProduct -= HandleEnqueueProduct;
-        Events.onProductSelected += HandleProductSelected;
+        Events.Instance.onGameStart -= HandleStartGame;
+        Events.Instance.onPause -= HandlePause;
+        Events.Instance.onEnqueueProduct -= HandleEnqueueProduct;
+        Events.Instance.onProductSelected -= HandleProductSelected;
 
-        Events.OnGameEnded();
+        Events.Instance.OnGameEnded();
         _gameEnded = true;
         _videoPlayer.Stop();
         _videoPlayer.gameObject.SetActive(false);
 
-        _finalScene.Initiate();
+        VictoryScene.Initiate();
     }
-
+    #endregion
 
     #region Order
     private void NewOrder()
     {
-        if (_ordersAvailables.Count == 0)
+        if (OrdersAvailables.Count == 0)
         {
-            EndGame();
+            HandleEndGame();
             print("Finished");
             return;
         }
 
-        var productDesired = _ordersAvailables.GetRandomValue();
+        var productDesired = OrdersAvailables.GetRandomValue();
 
         _orderDesired = new Order(productDesired.ProductName, 1, productDesired.SpriteSource, productDesired.Clip);
 
-        _ordersAvailables.Remove(_ordersAvailables.First(t => t.ProductName == productDesired.ProductName));
-        _leftOrdersTx.text = $"Restam {_ordersAvailables.Count+1} produtos";
+        OrdersAvailables.Remove(OrdersAvailables.First(t => t.ProductName == productDesired.ProductName));
+        _leftOrdersTx.text = $"Restam {OrdersAvailables.Count+1} produtos";
 
-        ShowOrderVideo();
+        SetVideoPlayer(_orderDesired.Clip);
 
         _monitorText.color = Color.white;
         _monitorText.text = _orderDesired.ProductName;
@@ -166,7 +167,7 @@ public class FirstLevelManager : MonoBehaviour
 
     private void CorrectOrder()
     {
-        Events.OnAddScore(100);
+        Events.Instance.OnAddScore(100);
 
         ChangeMonitorTextColor(correct: true);
 
@@ -177,7 +178,7 @@ public class FirstLevelManager : MonoBehaviour
 
     private void IncorrectOrder()
     {
-        Events.OnRemoveScore(30);
+        Events.Instance.OnRemoveScore(30);
 
         ChangeMonitorTextColor(correct: false);
 
@@ -198,7 +199,7 @@ public class FirstLevelManager : MonoBehaviour
         if (_productsPooledThatAreNotTheOrder == 4)
         {
             print("Forced to spawn the desired product");
-            product.InitiateProduct(_productsAvailables.First(t => t.ProductName == _orderDesired.ProductName));
+            product.InitiateProduct(ProductsAvailables.First(t => t.ProductName == _orderDesired.ProductName));
             _productsPooledThatAreNotTheOrder = 0;
         }
     }
@@ -218,6 +219,7 @@ public class FirstLevelManager : MonoBehaviour
     #region Video
     private void SetVideoPlayer(VideoClip clip)
     {
+        _videoPlayer.gameObject.SetActive(true);
         _videoPlayer.clip = clip;
         _videoPlayer.Play();
     }
@@ -226,53 +228,6 @@ public class FirstLevelManager : MonoBehaviour
     {
         if (_videoPlayer.isPlaying) _videoPlayer.Stop();
     }
-
-    private void ShowOrderVideo()
-    {
-        //_tokenSource.Cancel();
-
-        SetVideoPlayer(_orderDesired.Clip);
-        //_tokenSource = new CancellationTokenSource();
-
-        //try
-        //{
-        //    await Task.Delay((int)_orderDesired.Clip.length * 1005, _tokenSource.Token);
-
-        //    _videoPlayer.gameObject.SetActive(false);
-
-        //    RepeatVideo();
-        //}
-        //catch (TaskCanceledException)
-        //{
-        //    StopVideoPlayer();
-        //    _videoPlayer.gameObject.SetActive(false);
-        //    _tokenSource = new CancellationTokenSource();
-        //    print("Interrupted the first time of video");
-        //    return;
-        //}
-    }
-
-    //private async void RepeatVideo()
-    //{
-    //    try
-    //    {
-    //        await Task.Delay(14000, _tokenSource.Token);
-
-    //        SetVideoPlayer(_orderDesired.Clip);
-
-    //        await Task.Delay((int)_orderDesired.Clip.length * 1005, _tokenSource.Token);
-
-    //        _videoPlayer.gameObject.SetActive(false);
-    //    }
-    //    catch (TaskCanceledException)
-    //    {
-    //        StopVideoPlayer();
-    //        _videoPlayer.gameObject.SetActive(false);
-    //        _tokenSource = new CancellationTokenSource();
-    //        print("Interrupted the second time of video");
-    //        return;
-    //    }
-    //}
     #endregion
 
     #region Pool
@@ -311,7 +266,7 @@ public class FirstLevelManager : MonoBehaviour
         if (product == null) return false;
 
         product.transform.position = _productsParent.position;
-        product.InitiateProduct(_productsAvailables.GetRandomValue());
+        product.InitiateProduct(ProductsAvailables.GetRandomValue());
 
         CheckSequenceOfSpawning(product);
 

@@ -16,7 +16,7 @@ public class Treadmill : MonoBehaviour
     private void Start()
     {
         _initialPosition = _child.position;
-        if (!_loading) Events.onGameEnded += HandleGameEnded;
+        if (!_loading) Events.Instance.onGameEnded += HandleGameEnded;
     }
 
     // Update is called once per frame

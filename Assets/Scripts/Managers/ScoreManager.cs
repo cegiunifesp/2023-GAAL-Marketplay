@@ -7,15 +7,14 @@ public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _scoreTx;
 
-    private int _score;
+    private int _score = 0;
 
     private void Start()
     {
-        _score = 0;
         HandleUpdateScore(PlayerPrefs.GetInt("SCORE"));
 
-        Events.onAddScore += HandleUpdateScore;
-        Events.onGameEnded += HandleGameEnded;
+        Events.Instance.onAddScore += HandleUpdateScore;
+        Events.Instance.onGameEnded += HandleGameEnded;
     }
 
     private void HandleUpdateScore(int amount)

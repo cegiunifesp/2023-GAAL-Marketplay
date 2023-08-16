@@ -17,8 +17,8 @@ public class Cursor : MonoBehaviour
     {
         _cam = Camera.main;
 
-        Events.onPause += HandlePause;
-        Events.onGameEnded += HandleGameEnded;
+        Events.Instance.onPause += HandlePause;
+        Events.Instance.onGameEnded += HandleGameEnded;
     }
 
     // Update is called once per frame
@@ -45,7 +45,7 @@ public class Cursor : MonoBehaviour
             {
                 if (_lastObjectSelected.TryGetComponent(out ProductLevel1 product))
                 {
-                    Events.OnProductSelected(product);
+                    if (product != null) Events.Instance.OnProductSelected(product);
                 }
                 _lastObjectSelected = null;
             }
@@ -68,6 +68,15 @@ public class Cursor : MonoBehaviour
         if (collision.gameObject.CompareTag("Product"))
         {
             _lastObjectSelected = collision.gameObject;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        GameObject objectCollided = collision.gameObject;
+        if (objectCollided.CompareTag("Product"))
+        {
+            if (_lastObjectSelected == objectCollided) _lastObjectSelected = null;
         }
     }
 }

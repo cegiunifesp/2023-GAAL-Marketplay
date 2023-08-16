@@ -1,45 +1,75 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-public static class Events
+public class Events : MonoBehaviour
 {
-    public static Action onGameStart { get; set; }
-    public static void OnGameStart()
+    private static Events _instance;
+    public static Events Instance
+    {
+        get
+        {
+            if (_instance == null) _instance = FindObjectOfType<Events>();
+            return _instance;
+        }
+        set
+        {
+            if (_instance == null) _instance = value;
+        }
+    }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    public  Action onGameStart { get; set; }
+    public void OnGameStart()
     {
         onGameStart?.Invoke();
     }
 
-    public static Action onGameEnded { get; set; }
-    public static void OnGameEnded()
+    public Action onGameEnded { get; set; }
+    public void OnGameEnded()
     {
         onGameEnded?.Invoke();
     }
 
-    public static Action<ProductLevel1> onEnqueueProduct { get; set; }
-    public static void OnEnqueueProduct(ProductLevel1 product)
+    #region Level 1
+    public Action<ProductLevel1> onEnqueueProduct { get; set; }
+    public void OnEnqueueProduct(ProductLevel1 product)
     {
         onEnqueueProduct?.Invoke(product);
     }
 
-    public static Action<ProductLevel1> onProductSelected { get; set; }
-    public static void OnProductSelected(ProductLevel1 product)
+    public Action<ProductLevel1> onProductSelected { get; set; }
+    public void OnProductSelected(ProductLevel1 product)
     {
         onProductSelected?.Invoke(product);
     }
+    #endregion
 
-    public static Action<bool> onPause { get; set; }
-    public static void OnPause(bool paused)
+    #region Level 2
+    public Action<int> onShelfCompleted { get; set; }
+    public void OnShelfCompleted(int index)
+    {
+        onShelfCompleted?.Invoke(index);
+    }
+    #endregion
+
+    public Action<bool> onPause { get; set; }
+    public void OnPause(bool paused)
     {
         onPause?.Invoke(paused);
     }
 
-    public static Action<int> onAddScore { get; set; }
-    public static void OnAddScore(int amount)
+    public Action<int> onAddScore { get; set; }
+    public void OnAddScore(int amount)
     {
         onAddScore?.Invoke(amount);
     }
-    public static void OnRemoveScore(int amount)
+    public void OnRemoveScore(int amount)
     {
         onAddScore.Invoke(-amount);
     }
