@@ -744,14 +744,12 @@ VideoPlayer:
   m_TimeUpdateMode: 1
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
   m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 01
-  m_ControlledAudioTrackCount: 1
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
   m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 1
@@ -2840,7 +2838,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Mercado GAAL
+  m_text: Marketplay
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0326e736f6625c5469eba8d532b16792, type: 2}
   m_sharedMaterial: {fileID: 8960218993550219981, guid: 0326e736f6625c5469eba8d532b16792, type: 2}
@@ -3713,7 +3711,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4130538768063806584, guid: 83b9df367e267cc429313678f605e347, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000030517578
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6274328861380466748, guid: 83b9df367e267cc429313678f605e347, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 7.257202
       objectReference: {fileID: 0}
     - target: {fileID: 7059366456817803437, guid: 83b9df367e267cc429313678f605e347, type: 3}
       propertyPath: m_Name
