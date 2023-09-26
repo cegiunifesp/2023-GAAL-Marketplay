@@ -3,15 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class PauseManager : MonoBehaviour
 {
-    private bool _muted;
-
+    [SerializeField] AudioManager _audioManager;
     [SerializeField] private GameObject _pausePanel;
     [SerializeField] private Loader _loader;
-
-    private void Awake()
-    {
-        _muted = PlayerPrefs.GetInt("MUTED") == 1;
-    }
 
     public void PauseGame()
     {
@@ -42,9 +36,7 @@ public class PauseManager : MonoBehaviour
 
     public void ToggleSound()
     {
-        _muted = !_muted;
-
-        PlayerPrefs.SetInt("MUTED", _muted ? 1 : 0);
+        _audioManager.ToggleMute();
     }
 
 }

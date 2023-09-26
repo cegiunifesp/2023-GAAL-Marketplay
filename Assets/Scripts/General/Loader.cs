@@ -1,16 +1,18 @@
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
-using System.Threading.Tasks;
 
 public class Loader : MonoBehaviour
 {
     [SerializeField] private Image _background;
     [SerializeField] private GameObject _treadmill;
     [SerializeField] private TextMeshProUGUI _loadingTx;
+
+    [SerializeField] private AudioSource _backgroundSource;
 
     private Enums.Scenes _scene;
     public static bool Loading { get; private set; }
@@ -23,6 +25,8 @@ public class Loader : MonoBehaviour
     #region Loading
     public async void LoadScene(Enums.Scenes scene, bool instantly = true)
     {
+        _backgroundSource = GameObject.Find("Audio Manager").GetComponent<AudioManager>().GetBackgroundAudioSource();
+
         if (!instantly) await Task.Delay(1000);
 
         LeanTween.scaleX(_background.gameObject, 1.0f, 0.5f).setEaseInOutQuad().setOnComplete(InitiateVisual);
@@ -43,6 +47,8 @@ public class Loader : MonoBehaviour
 
         Loading = true;
         _scene = scene;
+        float backgroundSoundTime = 0;
+
         var operation = scene switch
         {
             Enums.Scenes.Menu => SceneManager.LoadSceneAsync("Menu", LoadSceneMode.Single),
@@ -61,12 +67,15 @@ public class Loader : MonoBehaviour
             {
                 yield return new WaitForSeconds(5);
                 Debug.Log("Loading completed");
+                _backgroundSource.mute = true;
+                backgroundSoundTime = _backgroundSource.time + 0.1f;
                 operation.allowSceneActivation = true;
             }
             yield return null;
         }
 
-        SetupLevel(scene);
+        
+        SetupLevel(scene, backgroundSoundTime);
         Loading = false;
 
         LeanTween.scaleX(_background.gameObject, 0.0f, 0.3f).setEaseInOutQuad().setOnComplete(() =>
@@ -85,8 +94,9 @@ public class Loader : MonoBehaviour
         LoadScene((Enums.Scenes)destiny); 
     }
 
-    private void SetupLevel(Enums.Scenes scene)
+    private void SetupLevel(Enums.Scenes scene, float timeBackgroundSound)
     {
+        GameObject.Find("Audio Manager").GetComponent<AudioManager>().StartBackgroundAt(timeBackgroundSound);
         switch (scene)
         {
             case Enums.Scenes.Menu:

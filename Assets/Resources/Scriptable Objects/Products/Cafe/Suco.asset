@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: Suco
   <TypeProduct>k__BackingField: 0
-  <SpriteSource>k__BackingField: {fileID: 21300000, guid: e630a41541a8996c2872a3cb5d9215b8, type: 3}
+  <SpriteSource>k__BackingField: {fileID: 21300000, guid: 156636cf1f5e5c24d897d6ff7c475689, type: 3}
   <Clip>k__BackingField: {fileID: 32900000, guid: 9b8880aca9dde9272a17a15116dfb787, type: 3}
   <AdjustHorizontally>k__BackingField: 1

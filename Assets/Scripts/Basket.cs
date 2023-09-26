@@ -87,7 +87,7 @@ public class Basket : MonoBehaviour
 
                 //foreach (Order order in _orders)
                 //{
-                //    _ordersAmount[order.ProductName] = order.ProductAmount;
+                //    _ordersAmountLeft[order.ProductName] = order.ProductAmount;
                 //}
                 Events.Instance.OnRemoveScore(30);
                 return false;

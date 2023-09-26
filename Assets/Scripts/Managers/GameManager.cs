@@ -39,8 +39,6 @@ public class GameManager : MonoBehaviour
 
         ListProducts = new Dictionary<Enums.TypeProducts, List<ProductSO>> { { Enums.TypeProducts.Cafe, _breakfastProducts},
             { Enums.TypeProducts.Almoco, _lunchProducts }, {Enums.TypeProducts.Higiene,  _hygieneProducts } };
-
-        TypeSelected = (Enums.TypeProducts)Random.Range(0, 3);
     }
 
     public List<ProductSO> GetProductsAvailables()
