@@ -86,8 +86,16 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
                 }
                 else
                 {
-                    _shelf.AddProduct(this);
-                    _state = Enums.StatesDrag.OnSlot;
+                    if (_shelf.AddProduct(this))
+                    {
+                        _state = Enums.StatesDrag.OnSlot;
+                    }
+                    else
+                    {
+                        _state = Enums.StatesDrag.Initial;
+                        InitialParent();
+                        _shelf = null;
+                    }
                 }
                 break;
         }
@@ -139,14 +147,20 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
     #endregion
 
     #region Shelf Related
-    public void SetShelfReference(Shelf shelf)
+    public void SetShelfReferenceWhenDragging(Shelf shelf)
     {
-        _shelf = shelf;
+        if (_state == Enums.StatesDrag.OnDrag)
+        {
+            _shelf = shelf;
+        }
     }
 
-    public void ClearShelfReference(Shelf shelf)
+    public void ClearShelfReferenceWhenDragging(Shelf shelf)
     {
-        if (_shelf == shelf) _shelf = null;
+        if (_state == Enums.StatesDrag.OnDrag)
+        {
+            if (_shelf == shelf) _shelf = null;
+        }
     }
 
     public void AddedToShelf(float size)
