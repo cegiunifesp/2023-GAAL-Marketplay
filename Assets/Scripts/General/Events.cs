@@ -71,6 +71,6 @@ public class Events : MonoBehaviour
     }
     public void OnRemoveScore(int amount)
     {
-        onAddScore.Invoke(-amount);
+        onAddScore?.Invoke(-amount);
     }
 }

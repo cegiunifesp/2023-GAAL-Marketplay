@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using Cysharp.Threading.Tasks;
 
 public class Shelf : MonoBehaviour
 {
     private const int MaxBehindProducts = 4;
     private const int MaxFrontProducts = 5;
-    private int _frontalProductsCount;
-    private int _behindProductsCount;
+    [SerializeField] private int _frontalProductsCount;
+    [SerializeField] private int _behindProductsCount;
 
     private Dictionary<string, int> _ordersAmountLeft;
 
@@ -19,12 +20,10 @@ public class Shelf : MonoBehaviour
 
     [SerializeField] private Transform _frontalProductsParent;
     [SerializeField] private Transform _behindProductsParent;
-    [SerializeField] private TextMeshProUGUI _indexTx;
+    [SerializeField] private GameObject _correctImage;
+    [SerializeField] private GameObject _incorrectImage;
 
     [SerializeField] private Button _confirmBt;
-
-    [SerializeField] private Color _correctColor;
-    [SerializeField] private Color _wrongColor;
 
     [SerializeField] private List<Order> _orders;
 
@@ -51,14 +50,14 @@ public class Shelf : MonoBehaviour
         {
             if (_ordersAmountLeft[_orders[i].ProductName] != 0)
             {
-                ChangeIndexTextColor(correct: false);
+                ChangeCorrectImage(correct: false);
                 RemoveProductsFromShelf();
 
                 return;
             }
         }
 
-        ChangeIndexTextColor(correct: true);
+        ChangeCorrectImage(correct: true);
         ConfirmCorrectProducts();
     }
 
@@ -87,7 +86,7 @@ public class Shelf : MonoBehaviour
         return true;
     }
 
-    public void RemovedProduct(string productRemoved)
+    public void ProductReplaced(string productRemoved)
     {
         _frontalProductsCount = _frontalProductsParent.childCount;
         _behindProductsCount = _behindProductsParent.childCount;
@@ -131,41 +130,51 @@ public class Shelf : MonoBehaviour
             child.GetComponent<ProductLevel2>().SetInteractable(false);
         }
 
-        Events.Instance.OnShelfCompleted(_index);
         Events.Instance.OnAddScore(500);
+        Events.Instance.OnShelfCompleted(_index);
     }
 
     private void RemoveProductsFromShelf()
     {
-        foreach (Transform child in _frontalProductsParent)
+        int i;
+        while (_frontalProductsCount != 0 || _behindProductsCount != 0 )
         {
-            child.GetComponent<ProductLevel2>().RemoveFromShelf();
-        }
-        foreach (Transform child in _behindProductsParent)
-        {
-            child.GetComponent<ProductLevel2>().RemoveFromShelf();
+            for (i = 0; i < _frontalProductsParent.childCount; i++)
+            {
+                _frontalProductsParent.GetChild(0).GetComponent<ProductLevel2>().ShelfRemovedProduct();
+            }
+
+            for (i = 0; i < _behindProductsParent.childCount; i++)
+            {
+                _behindProductsParent.GetChild(0).GetComponent<ProductLevel2>().ShelfRemovedProduct();
+            }
+
+            _frontalProductsCount = _frontalProductsParent.childCount;
+            _behindProductsCount = _behindProductsParent.childCount;
         }
 
-        for(int i = 0; i < _ordersAmountLeft.Count; i++)
+        for (i = 0; i < _ordersAmountLeft.Count; i++)
         {
             _ordersAmountLeft[_orders[i].ProductName] = _orders[i].ProductAmount;
         }
 
-        _frontalProductsCount = 0;
-        _behindProductsCount = 0;
-
         Events.Instance.OnRemoveScore(100);
     }
 
-    private async void ChangeIndexTextColor(bool correct)
+    private async void ChangeCorrectImage(bool correct)
     {
-        _indexTx.color = !correct ? Color.red : Color.green;
+        if (correct)
+        {
+            _correctImage.SetActive(true);
+            return;
+        }
 
-        if (correct) return;
+        _incorrectImage.SetActive(true);
 
-        await Task.Delay(1000);
+        await UniTask.Delay(1000, false, PlayerLoopTiming.Update, destroyCancellationToken);
+        //await Task.Delay(1000);
 
-        _indexTx.color = Color.white;
+        _incorrectImage.SetActive(false);
     }
 
 

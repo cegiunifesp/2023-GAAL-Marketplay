@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Alface
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: Alface
-  <TypeProduct>k__BackingField: 1
+  <TypeProduct>k__BackingField: 2
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 8803578b24723a5e68b4d092c0cafc00, type: 3}
   <Clip>k__BackingField: {fileID: 32900000, guid: 867eb21f25c67c43ba1f96655efb4d6d, type: 3}
   <AdjustHorizontally>k__BackingField: 1

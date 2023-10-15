@@ -5,21 +5,36 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using Cysharp.Threading.Tasks;
 
 public class Loader : MonoBehaviour
 {
     [SerializeField] private Image _background;
-    [SerializeField] private GameObject _treadmill;
+    [SerializeField] private GameObject _productsParent;
     [SerializeField] private TextMeshProUGUI _loadingTx;
+    [SerializeField] private Canvas _canvas;
 
     [SerializeField] private AudioSource _backgroundSource;
 
+    private bool _startSpinning;
     private Enums.Scenes _scene;
     public static bool Loading { get; private set; }
+
+    private void Awake()
+    {
+        _canvas.worldCamera = Camera.main;
+    }
 
     private void Start()
     {
         DontDestroyOnLoad(this);
+    }
+
+    private void Update()
+    {
+        if (!_startSpinning) return;
+
+        _productsParent.transform.Rotate(Vector3.forward * 40 * Time.deltaTime);
     }
 
     #region Loading
@@ -27,7 +42,7 @@ public class Loader : MonoBehaviour
     {
         _backgroundSource = GameObject.Find("Audio Manager").GetComponent<AudioManager>().GetBackgroundAudioSource();
 
-        if (!instantly) await Task.Delay(1000);
+        if (!instantly) await UniTask.Delay(500, false, PlayerLoopTiming.Update, destroyCancellationToken);
 
         LeanTween.scaleX(_background.gameObject, 1.0f, 0.5f).setEaseInOutQuad().setOnComplete(InitiateVisual);
         LeanTween.value(1, 0, 1f).setOnUpdate((value) =>
@@ -43,7 +58,6 @@ public class Loader : MonoBehaviour
     private IEnumerator SetLoadingScene(Enums.Scenes scene)
     {
         yield return null;
-        print(scene);
 
         Loading = true;
         _scene = scene;
@@ -61,13 +75,11 @@ public class Loader : MonoBehaviour
         while (!operation.isDone)
         {
             var progress = Mathf.Clamp01(operation.progress / 0.9f);
-            Debug.Log("Loading progress: " + (progress * 100) + "%");
 
             if (operation.progress == 0.9f && !LeanTween.isTweening(gameObject))
             {
                 yield return new WaitForSeconds(5);
-                Debug.Log("Loading completed");
-                _backgroundSource.mute = true;
+                //Debug.Log("Loading completed");
                 backgroundSoundTime = _backgroundSource.time + 0.1f;
                 operation.allowSceneActivation = true;
             }
@@ -77,6 +89,7 @@ public class Loader : MonoBehaviour
         
         SetupLevel(scene, backgroundSoundTime);
         Loading = false;
+        _productsParent.SetActive(false);
 
         LeanTween.scaleX(_background.gameObject, 0.0f, 0.3f).setEaseInOutQuad().setOnComplete(() =>
         {
@@ -96,11 +109,11 @@ public class Loader : MonoBehaviour
 
     private void SetupLevel(Enums.Scenes scene, float timeBackgroundSound)
     {
-        GameObject.Find("Audio Manager").GetComponent<AudioManager>().StartBackgroundAt(timeBackgroundSound);
+        GameObject.Find("Audio Manager").GetComponent<AudioManager>().StartBackgroundAt(timeBackgroundSound + 0.1f);
         switch (scene)
         {
             case Enums.Scenes.Menu:
-                print("Menu");
+                //print("Menu");
                 break;
             default:
                 Events.Instance.OnGameStart();
@@ -112,7 +125,8 @@ public class Loader : MonoBehaviour
     #region Visual Part
     private void InitiateVisual()
     {
-        LeanTween.scaleY(_treadmill, 1, 0.3f).setEaseInCubic();
+        _startSpinning = true;
+        _productsParent.SetActive(true);
     }
     #endregion
 }

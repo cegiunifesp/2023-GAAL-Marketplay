@@ -1,5 +1,6 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
+using System;
 
 public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHandler, IPointerClickHandler
 {
@@ -9,6 +10,7 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
     [SerializeField] private float _speedMovement;
 
     private int _index;
+    private bool _addedToBasket;
     private Vector3 _initialPosition;
     private Vector3 _initialRotation;
     private Transform _initialParent;
@@ -93,6 +95,12 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
         });
     }
 
+    internal bool IsDragging()
+    {
+        return _state == Enums.StatesDrag.OnDrag;
+    }
+
+
     #region Events
     private void OnPointerUp()
     {
@@ -132,7 +140,7 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
-
+        return;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -156,19 +164,22 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
     }
     #endregion
 
+
     #region Basket
     private void AddedToBasket()
     {
-        gameObject.SetActive(false);
+        _addedToBasket = true;
         AdjustImage();
         Size = _defaultSize;
     }
 
     public void RemoveFromBasket()
     {
-        gameObject.SetActive(true);
-
-        if (_basket != null) _basket = null;
+        if (_basket != null)
+        {
+            _basket = null;
+            _addedToBasket = false;
+        }
         else Debug.LogError("Slot is null");
 
         InitialParent();
@@ -184,6 +195,7 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
         if (_state == Enums.StatesDrag.OnDrag)
         {
             print("Left Basket");
+            _addedToBasket = false;
             _basket = null;
         }
     }

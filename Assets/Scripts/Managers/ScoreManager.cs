@@ -22,6 +22,7 @@ public class ScoreManager : MonoBehaviour
         _score += amount;
         if (_score < 0) _score = 0;
 
+        if (_scoreTx == null) return;
         _scoreTx.text = $"Pontuação : {_score.ToString("0000")}";
     }
 

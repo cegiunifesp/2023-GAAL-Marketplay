@@ -58,10 +58,6 @@ public class SecondLevelManager : LevelManagerBase
 
     protected override void HandleEndGame()
     {
-        Events.Instance.onGameStart -= HandleStartGame;
-        Events.Instance.onPause -= HandlePause;
-        Events.Instance.onShelfCompleted -= HandleShelfCompletion;
-
         Events.Instance.OnGameEnded();
         Time.timeScale = 1;
 
@@ -70,6 +66,10 @@ public class SecondLevelManager : LevelManagerBase
             VictoryScene = FindObjectOfType<VictoryScene>();
         }
         VictoryScene.Initiate();
+
+        Events.Instance.onGameStart -= HandleStartGame;
+        Events.Instance.onPause -= HandlePause;
+        Events.Instance.onShelfCompleted -= HandleShelfCompletion;
     }
     #endregion
 

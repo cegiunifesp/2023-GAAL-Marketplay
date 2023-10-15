@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.Video;
 using UnityEngine;
 using TMPro;
+using Cysharp.Threading.Tasks;
 
 public class FirstLevelManager : LevelManagerBase
 {
@@ -190,7 +191,7 @@ public class FirstLevelManager : LevelManagerBase
     {
         if (_orderDesired == null)
         {
-            print("Order is null");
+            //print("Order is null");
             return;
         }
 
@@ -199,7 +200,7 @@ public class FirstLevelManager : LevelManagerBase
 
         if (_productsPooledThatAreNotTheOrder == 4)
         {
-            print("Forced to spawn the desired product");
+            //print("Forced to spawn the desired product");
             product.InitiateProduct(ProductsAvailables.First(t => t.ProductName == _orderDesired.ProductName));
             _productsPooledThatAreNotTheOrder = 0;
         }
@@ -210,7 +211,7 @@ public class FirstLevelManager : LevelManagerBase
         if (correct) _monitorText.color = _correctColor;
         else _monitorText.color = _wrongColor;
 
-        await Task.Delay(1000);
+        await UniTask.Delay(1000, false, PlayerLoopTiming.Update, destroyCancellationToken);
 
         _monitorText.text = ". . .";
         _monitorText.color = Color.white;

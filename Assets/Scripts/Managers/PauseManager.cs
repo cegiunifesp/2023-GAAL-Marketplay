@@ -1,11 +1,21 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
-    [SerializeField] AudioManager _audioManager;
+    [SerializeField] private AudioManager _audioManager;
     [SerializeField] private GameObject _pausePanel;
+    [SerializeField] private Toggle _soundTg;
     [SerializeField] private Loader _loader;
+
+    private bool _isMuted;
+
+    private void Start()
+    {
+        _isMuted = _audioManager.Muted;
+        _soundTg.isOn = !_isMuted;
+    }
 
     public void PauseGame()
     {
@@ -36,7 +46,8 @@ public class PauseManager : MonoBehaviour
 
     public void ToggleSound()
     {
-        _audioManager.ToggleMute();
+        _isMuted = !_isMuted;
+        _audioManager.Mute(!_isMuted);
     }
 
 }

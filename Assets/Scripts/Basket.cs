@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public class Basket : MonoBehaviour
 {
+    [SerializeField] private List<Transform> _productsParents;
     [SerializeField] private Button _confirmBt;
     [SerializeField] private Button _declaineBt;
 
+    private int _currentParentIndex;
+    private int _wrongProducts;
     private bool _hasWrongProduct;
 
     private Dictionary<string, int> _ordersAmount;
@@ -30,25 +34,33 @@ public class Basket : MonoBehaviour
         }
     }
 
-    public void AddProduct(ProductLevel3 product)
+    public void AddProduct(ProductBase product)
     {
         Transform t = product.transform;
-        t.SetParent(transform);
-        t.position = transform.position;
+        t.SetParent(_productsParents[_currentParentIndex]);
+        t.localPosition = Vector3.zero;
+        product.Size = 80;
+        //t.position = transform.position;
 
         DiscountProductAmount(product);
+
+        _currentParentIndex = (_currentParentIndex + 1) % _productsParents.Count;
     }
 
-    private void DiscountProductAmount(ProductLevel3 product)
+    private void DiscountProductAmount(ProductBase product)
     {
         if (_ordersAmount == null) return;
 
         if (_ordersAmount.ContainsKey(product.ProductName))
         {
             _ordersAmount[product.ProductName]--;
-            print($"Add {product.ProductName} Left: {_ordersAmount[product.ProductName]}");
+            //print($"Add {product.ProductName} Left: {_ordersAmount[product.ProductName]}");
         }
-        else _hasWrongProduct = true;
+        else
+        {
+            _hasWrongProduct = true;
+            _wrongProducts++;
+        }
     }
 
     private void ConfirmProducts()
@@ -56,6 +68,7 @@ public class Basket : MonoBehaviour
         if (AllProductsCorrect())
         {
             LeanTween.moveY(gameObject, transform.position.y + 0.5f, 0.25f).setEaseInQuad().setLoopPingPong(1);
+            Events.Instance.OnAddScore(500);
             Events.Instance.OnGameEnded();
             return;
         }
@@ -84,11 +97,6 @@ public class Basket : MonoBehaviour
             if (item.Value != 0)
             {
                 RemoveProductsFromBasket();
-
-                //foreach (Order order in _orders)
-                //{
-                //    _ordersAmountLeft[order.ProductName] = order.ProductAmount;
-                //}
                 Events.Instance.OnRemoveScore(30);
                 return false;
             }
@@ -99,19 +107,30 @@ public class Basket : MonoBehaviour
 
     private void RemoveProductsFromBasket()
     {
-        foreach (Transform child in transform)
+        foreach (Transform parent in _productsParents)
         {
-            var product = child.GetComponent<ProductLevel3>();
-            if (_ordersAmount.ContainsKey(product.ProductName)) _ordersAmount[product.ProductName]++;
-            product.RemoveFromBasket();
+            for (int i = 0; i < parent.childCount; i++)
+            {
+                var product = parent.GetChild(i).GetComponent<ProductLevel3>();
+                if (_ordersAmount.ContainsKey(product.ProductName)) _ordersAmount[product.ProductName]++;
+                product.RemoveFromBasket();
+                _wrongProducts--;
+
+                if(_wrongProducts == 0)
+                {
+                    _hasWrongProduct = false;
+                }
+            }
         }
+        _currentParentIndex = 0;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Product"))
         {
-            collision.gameObject.GetComponent<ProductLevel3>().SetBasket(this);
+            var product = collision.gameObject.GetComponent<ProductLevel3>();
+            product.SetBasket(this);
         }
     }
 
@@ -120,7 +139,25 @@ public class Basket : MonoBehaviour
         GameObject objectCollided = collision.gameObject;
         if (objectCollided.CompareTag("Product"))
         {
-            objectCollided.GetComponent<ProductLevel3>().ClearBasketReference();
+            var product = objectCollided.GetComponent<ProductLevel3>();
+            
+            if (product.IsDragging())
+            {
+                if (_ordersAmount.ContainsKey(product.ProductName)) _ordersAmount[product.ProductName]++;
+                else
+                {
+                    if (_wrongProducts <= 1)
+                    {
+                        _hasWrongProduct = false;
+                        _wrongProducts = 0;
+                    }
+                    else
+                    {
+                        _wrongProducts--;
+                    }
+                }
+                product.ClearBasketReference();
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<ProductSO> _lunchProducts;
     [SerializeField] private List<ProductSO> _hygieneProducts;
 
-    public Dictionary<Enums.TypeProducts, List<ProductSO>> ListProducts { get; private set; }
+    public Dictionary<Enums.TypeProducts, List<ProductSO>> ListProducts { get; private set; } = new Dictionary<Enums.TypeProducts, List<ProductSO>>();
 
     public Enums.TypeProducts TypeSelected { get; private set; }
 
@@ -37,20 +37,22 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         _instance = this;
 
-        ListProducts = new Dictionary<Enums.TypeProducts, List<ProductSO>> { { Enums.TypeProducts.Cafe, _breakfastProducts},
-            { Enums.TypeProducts.Almoco, _lunchProducts }, {Enums.TypeProducts.Higiene,  _hygieneProducts } };
+        ListProducts.Add(Enums.TypeProducts.Cafe, _breakfastProducts);
+        ListProducts.Add(Enums.TypeProducts.Almoco, _lunchProducts);
+        ListProducts.Add(Enums.TypeProducts.Higiene, _hygieneProducts);
     }
 
     public List<ProductSO> GetProductsAvailables()
     {
+        if (TypeSelected == Enums.TypeProducts.None) SetTypeSelected(0);
         return ListProducts[TypeSelected];
     }
 
     public void SetTypeSelected(int index)
     {
-        if (index == -1)
+        if (index <= 0)
         {
-            TypeSelected = (Enums.TypeProducts)Random.Range(0, 3);
+            TypeSelected = (Enums.TypeProducts)Random.Range(1, 4);
         }
         else
         {

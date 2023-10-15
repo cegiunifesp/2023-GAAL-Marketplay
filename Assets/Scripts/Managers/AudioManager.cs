@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    protected bool Muted;
+    public bool Muted { get; protected set; }
 
     [SerializeField] protected bool PlayOnAwake;
 
@@ -23,6 +23,8 @@ public class AudioManager : MonoBehaviour
     protected void CheckMute()
     {
         Muted = PlayerPrefs.GetInt("MUTED") == 1;
+
+        print($"Muted: {Muted}");
 
         if (BackgroundAudioSource != null) BackgroundAudioSource.mute = Muted;
         if (SfxAudioSource != null) SfxAudioSource.mute = Muted;

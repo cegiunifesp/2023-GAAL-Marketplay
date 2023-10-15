@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Escova
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: Escova
-  <TypeProduct>k__BackingField: 2
-  <SpriteSource>k__BackingField: {fileID: 21300000, guid: 866e62149e8bba4a4b5036a012d34e36, type: 3}
+  <TypeProduct>k__BackingField: 3
+  <SpriteSource>k__BackingField: {fileID: 21300000, guid: 0ee6a19c542e5ed4d981a130e9d9a5bf, type: 3}
   <Clip>k__BackingField: {fileID: 32900000, guid: 3f66c48bbe60a3d868d06acabbfe4c3b, type: 3}
   <AdjustHorizontally>k__BackingField: 1

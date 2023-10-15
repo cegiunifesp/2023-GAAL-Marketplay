@@ -14,21 +14,44 @@ public class MenuAudio : AudioManager
 
     private void Start()
     {
-        _toggleSoundBt.onValueChanged.AddListener((value) => Mute(!value));
         _toggleSoundBt.isOn = !Muted;
+        _toggleSoundBt.onValueChanged.AddListener((value) => Mute(!value));
+        BackgroundAudioSource.loop = true;
     }
 
     public void PlayCreditsClip()
     {
-        BackgroundAudioSource.clip = _creditsClip;
-        BackgroundAudioSource.loop = true;
-        BackgroundAudioSource.Play();
+        FadeBackgroundClip(_creditsClip);
+        //BackgroundAudioSource.clip = _creditsClip;
+        //BackgroundAudioSource.Play();
     }
 
     public void PlayBackgroundClip()
     {
-        BackgroundAudioSource.clip = _backgroundClip;
-        BackgroundAudioSource.loop = true;
-        BackgroundAudioSource.Play();
+        FadeBackgroundClip(_backgroundClip);
+        //BackgroundAudioSource.clip = _backgroundClip;
+        //BackgroundAudioSource.Play();
+    }
+
+    private void FadeBackgroundClip(AudioClip clip)
+    {
+        float tempVolume = BackgroundAudioSource.volume;
+
+        LeanTween.sequence()
+            .append(
+                LeanTween.value(tempVolume, 0.1f, 0.5f).setOnUpdate((value) =>
+                {
+                    BackgroundAudioSource.volume = value;
+                }).setOnComplete(() => {
+                    BackgroundAudioSource.clip = clip;
+                    BackgroundAudioSource.Play();
+                }))
+            .append(
+                
+                LeanTween.value(0.1f, tempVolume, 0.5f).setOnUpdate((value) =>
+                {
+                    BackgroundAudioSource.volume = value;
+                })
+            );
     }
 }

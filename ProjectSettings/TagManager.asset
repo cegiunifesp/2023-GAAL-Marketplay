@@ -8,6 +8,8 @@ TagManager:
   - Product
   - Shelf
   - Basket
+  - Shopping Cart
+  - Treadmill
   layers:
   - Default
   - TransparentFX

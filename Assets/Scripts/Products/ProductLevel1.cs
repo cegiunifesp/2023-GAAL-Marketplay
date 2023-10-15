@@ -8,11 +8,12 @@ public class ProductLevel1 : ProductBase
     private const float SpeedOverTreadmill = 1;
 
     private bool _move;
+    private bool _correctProduct = false;
+
     public VideoClip Clip => InfoFromSO.Clip;
 
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private GameObject _check;
-
 
     private void Start()
     {
@@ -35,6 +36,7 @@ public class ProductLevel1 : ProductBase
 
         _move = true;
         Interactable = true;
+        _correctProduct = false;
         _check.SetActive(false);
     }
 
@@ -77,6 +79,7 @@ public class ProductLevel1 : ProductBase
     {
         _check.SetActive(true);
         Interactable = false;
+        _correctProduct = true;
     }
 
 
@@ -89,6 +92,14 @@ public class ProductLevel1 : ProductBase
         }
     }
 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Treadmill"))
+        {
+            Interactable = false;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Limit"))
@@ -96,6 +107,15 @@ public class ProductLevel1 : ProductBase
             Events.Instance.OnEnqueueProduct(this);
             BoxCollider.isTrigger = false;
             _move = false;
+        }
+        else if (collision.gameObject.CompareTag("Shopping Cart"))
+        {
+            if (_correctProduct)
+            {
+                collision.gameObject.GetComponent<ShoppingCart>().AddItem(this);
+                Events.Instance.OnEnqueueProduct(this);
+                _move = false;
+            }
         }
     }
 }

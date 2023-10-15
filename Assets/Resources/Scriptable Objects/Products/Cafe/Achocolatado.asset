@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Achocolatado
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: Achocolatado
-  <TypeProduct>k__BackingField: 0
+  <TypeProduct>k__BackingField: 1
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: da44bc00126e447f2bd8d9a7751a0085, type: 3}
   <Clip>k__BackingField: {fileID: 32900000, guid: d4107bae1bb9e78b589fe4a087acc0eb, type: 3}
   <AdjustHorizontally>k__BackingField: 1

@@ -16,6 +16,8 @@ public class ProductBase : MonoBehaviour
     [SerializeField] protected BoxCollider2D BoxCollider;
 
     public string ProductName => InfoFromSO.ProductName;
+    public Sprite ProductSprite => InfoFromSO.SpriteSource;
+
 
     [ContextMenu("Initiate Product Manually")]
     private void Init()
@@ -57,6 +59,11 @@ public class ProductBase : MonoBehaviour
 
         if (InfoFromSO.AdjustHorizontally) ImageSource.rectTransform.sizeDelta = new Vector2(Size * proportion, Size);
         else ImageSource.rectTransform.sizeDelta = new Vector2(Size, Size / proportion);
+    }
+
+    public Vector2 GetSizeVector2()
+    {
+        return ImageSource.rectTransform.sizeDelta;
     }
 
     public void ResizeProportionally(float proportion)

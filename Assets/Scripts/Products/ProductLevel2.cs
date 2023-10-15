@@ -6,13 +6,15 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
 {
     private Enums.StatesDrag _state;
 
-    private HorizontalLayoutGroup _initialParent;
+    [SerializeField] private float _speedMovement;
     [SerializeField] private Transform _canvas;
+
+    private int _childIndex;
 
     private Camera _cam;
     private Shelf _shelf;
+    private HorizontalLayoutGroup _initialParent;
 
-    [SerializeField] private float _speedMovement;
 
     private void Update()
     {
@@ -55,14 +57,17 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
         AdjustImage();
 
         Vector3 oldPosition = transform.position;
-        Vector3 newPosition = _initialParent.transform.LastChildPosition() + Vector3.right;
+        Vector3 newPosition = _initialParent.transform.GetChild(_childIndex).position;// + Vector3.right;
 
         transform.position = oldPosition;
+        transform.SetParent(_canvas);
+
         LeanTween.move(gameObject, newPosition, 1f).setEaseOutQuad().setOnComplete(() =>
         {
             if (_state == Enums.StatesDrag.OnDrag) return;
 
             transform.SetParent(_initialParent.transform);
+            transform.SetSiblingIndex(_childIndex);
         });
     }
 
@@ -123,6 +128,7 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
         {
             case Enums.StatesDrag.Initial:
                 _state = Enums.StatesDrag.OnDrag;
+                _childIndex = transform.GetSiblingIndex();
                 transform.SetParent(_canvas);
                 break;
             case Enums.StatesDrag.OnSlot:
@@ -134,15 +140,6 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
             default:
                 break;
         }
-    }
-
-    public void ResetState()
-    {
-        if (_state == Enums.StatesDrag.OnSlot)
-        {
-            RemoveFromShelf();
-        }
-        _state = Enums.StatesDrag.Initial;
     }
     #endregion
 
@@ -174,15 +171,15 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
     {
         if (_shelf != null)
         {
-            _shelf.RemovedProduct(ProductName);
+            _shelf.ProductReplaced(ProductName);
         }
     }
 
-    public void RemoveFromShelf()
+    public void ShelfRemovedProduct()
     {
         if (_shelf != null)
         {
-            _shelf.RemovedProduct(ProductName);
+            //_shelf.ProductReplaced(ProductName);
             _shelf = null;
         }
         else
