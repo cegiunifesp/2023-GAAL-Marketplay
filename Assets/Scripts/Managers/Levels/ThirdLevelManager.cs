@@ -7,7 +7,7 @@ public class ThirdLevelManager : LevelManagerBase
     private int maxAmount = 15;
     private float _maxSize = 150;
     private Transform _productObjectsParent;
-    private List<int> _numbersLeft = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    private List<int> _numbersLeft = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 
     [Header("Products")]
@@ -31,6 +31,8 @@ public class ThirdLevelManager : LevelManagerBase
         Events.Instance.onPause += HandlePause;
         Events.Instance.onGameEnded += HandleEndGame;
 
+        Audio.StartBackground();
+
         ProductsAvailables = new List<ProductSO>();
         ProductsAvailables.AddList(GameManager.Instance.ListProducts[Enums.TypeProducts.Almoco]);
         ProductsAvailables.AddList(GameManager.Instance.ListProducts[Enums.TypeProducts.Cafe]);
@@ -42,6 +44,7 @@ public class ThirdLevelManager : LevelManagerBase
 
         CheckIfThereAreUndesiredProducts();
 
+        _personOrderUI.Initiate(_orders.ToArray());
         _basket.SetOrders(_orders);
     }
 
@@ -65,6 +68,8 @@ public class ThirdLevelManager : LevelManagerBase
 
         Time.timeScale = 1;
 
+        Audio.VictoryVolume();
+
         VictoryScene.Initiate();
     }
 
@@ -78,16 +83,11 @@ public class ThirdLevelManager : LevelManagerBase
         {
             int amountOfProduct = CheckAmountProducts(ref amountSum);
 
-            if (amountOfProduct == 0)
-            {
-                print("Um zerado");
-            }
-
             var productSelectedSO = ordersAvailables.GetRandomValue(true);
 
             if (productSelectedSO == null)
             {
-                print("Erro");
+                PauseManager.NeedToRestart();
                 break;
             }
 
@@ -105,8 +105,6 @@ public class ThirdLevelManager : LevelManagerBase
                 newProduct.InitiateProduct(productSelectedSO);
             }
         }
-
-        _personOrderUI.Initiate(_orders.ToArray());
     }
 
     private void CheckIfThereAreUndesiredProducts()

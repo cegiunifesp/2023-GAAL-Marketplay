@@ -10,19 +10,22 @@ public class MenuManager : MonoBehaviour
     private bool _firstEntry;
 
     [SerializeField] private GameObject _creditsScene;
-    [SerializeField] private GameObject[] _optionsSceneObjs;
+    [SerializeField] private GameObject _levelsSelection;
 
     [SerializeField] private Transform _shelf;
     [SerializeField] private VideoClip[] _clips;
 
     [Header("Buttons And Texts")]
-    [SerializeField] private Button _play_Level1_Bt;
+    [SerializeField] private Button _playBt;
+    [SerializeField] private Button _level1Bt;
 
     [Space(5)]
-    [SerializeField] private Button _credits_Level2_Bt;
+    [SerializeField] private Button _creditsBt;
+    [SerializeField] private Button _Level2Bt;
 
     [Space(5)]
-    [SerializeField] private Button _leave_Level3_Bt;
+    [SerializeField] private Button _leaveBt;
+    [SerializeField] private Button _level3Bt;
 
     [Space(5)]
     [SerializeField] private Button _nextTypeProductsBt;
@@ -46,9 +49,10 @@ public class MenuManager : MonoBehaviour
 
         _nextTypeProductsBt.onClick.AddListener(NextTypeProducts);
         _previousTypeProductsBt.onClick.AddListener(PreviousTypeProducts);
-        _leaveOptionsBt.onClick.AddListener(LeaveOptionsScene);
+        _leaveOptionsBt.onClick.AddListener(LeaveLevelSelectionScene);
 
         SetButtonsToMenuOptions();
+        SetLevelSelectionButtons();
     }
 
     [ContextMenu("Reset Score")]
@@ -59,46 +63,15 @@ public class MenuManager : MonoBehaviour
 
     private void SetButtonsToMenuOptions()
     {
-        #region Main Buttons
-        _play_Level1_Bt.onClick.RemoveAllListeners();
-        _play_Level1_Bt.transform.GetChild(0).gameObject.SetActive(false);
-        _play_Level1_Bt.transform.GetChild(1).gameObject.SetActive(true);
-
-        _credits_Level2_Bt.onClick.RemoveAllListeners();
-        _credits_Level2_Bt.transform.GetChild(0).gameObject.SetActive(false);
-        _credits_Level2_Bt.transform.GetChild(1).gameObject.SetActive(true);
-
-        _leave_Level3_Bt.onClick.RemoveAllListeners();
-        _leave_Level3_Bt.transform.GetChild(0).gameObject.SetActive(false);
-        _leave_Level3_Bt.transform.GetChild(1).gameObject.SetActive(true);
-
-        _play_Level1_Bt.onClick.AddListener(() => ShowOptionsScene());
-
-        _credits_Level2_Bt.onClick.AddListener(CreditsScene);
-
-        _leave_Level3_Bt.onClick.AddListener(LeaveGame);
-        #endregion
-
+        _playBt.onClick.AddListener(() => ShowLevelSelectionScene());
+        _creditsBt.onClick.AddListener(CreditsScene);
+        _leaveBt.onClick.AddListener(LeaveGame);
         _leaveCredits.onClick.AddListener(LeaveCredits);
     }
 
-    private void SetButtonsToPreGameScene()
+    private void SetLevelSelectionButtons()
     {
-
-        _play_Level1_Bt.onClick.RemoveAllListeners();
-        _play_Level1_Bt.transform.GetChild(0).gameObject.SetActive(true);
-        _play_Level1_Bt.transform.GetChild(1).gameObject.SetActive(false);
-        
-        _credits_Level2_Bt.onClick.RemoveAllListeners();
-        _credits_Level2_Bt.transform.GetChild(0).gameObject.SetActive(true);
-        _credits_Level2_Bt.transform.GetChild(1).gameObject.SetActive(false);
-
-        _leave_Level3_Bt.onClick.RemoveAllListeners();
-        _leave_Level3_Bt.transform.GetChild(0).gameObject.SetActive(true);
-        _leave_Level3_Bt.transform.GetChild(1).gameObject.SetActive(false);
-
-
-        _play_Level1_Bt.onClick.AddListener(() =>
+        _level1Bt.onClick.AddListener(() =>
         {
             _videoPlayer.gameObject.SetActive(false);
 
@@ -106,7 +79,7 @@ public class MenuManager : MonoBehaviour
             loader.LoadScene(Enums.Scenes.Chapter1, instantly: false);
         });
 
-        _credits_Level2_Bt.onClick.AddListener(() =>
+        _Level2Bt.onClick.AddListener(() =>
         {
             _videoPlayer.gameObject.SetActive(false);
 
@@ -114,7 +87,7 @@ public class MenuManager : MonoBehaviour
             loader.LoadScene(Enums.Scenes.Chapter2, instantly: false);
         });
 
-        _leave_Level3_Bt.onClick.AddListener(() =>
+        _level3Bt.onClick.AddListener(() =>
         {
             _videoPlayer.gameObject.SetActive(false);
 
@@ -164,7 +137,7 @@ public class MenuManager : MonoBehaviour
         _videoPlayer.Play();
     }
 
-    private void ShowOptionsScene()
+    private void ShowLevelSelectionScene()
     {
         if (_firstEntry)
         {
@@ -175,23 +148,14 @@ public class MenuManager : MonoBehaviour
             _firstEntry = false;
         }
 
-        ShowVideo();
-        SetButtonsToPreGameScene();
+        _levelsSelection.SetActive(true);
 
-        foreach(GameObject obj in _optionsSceneObjs)
-        {
-            obj.SetActive(true);
-        }
+        ShowVideo();
     }
 
-    private void LeaveOptionsScene()
+    private void LeaveLevelSelectionScene()
     {
-        foreach (GameObject obj in _optionsSceneObjs)
-        {
-            obj.SetActive(false);
-        }
-
-        SetButtonsToMenuOptions();
+        _levelsSelection.SetActive(false);
     }
 
     private void CreditsScene()

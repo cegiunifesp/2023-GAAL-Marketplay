@@ -1,9 +1,17 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
+    public static Action onNeedToRestart { get; set; }
+    public static void NeedToRestart()
+    {
+        onNeedToRestart?.Invoke();
+        onNeedToRestart = null;
+    }
+
     [SerializeField] private AudioManager _audioManager;
     [SerializeField] private GameObject _pausePanel;
     [SerializeField] private Toggle _soundTg;
@@ -15,6 +23,8 @@ public class PauseManager : MonoBehaviour
     {
         _isMuted = _audioManager.Muted;
         _soundTg.isOn = !_isMuted;
+
+        onNeedToRestart += RestartGame;
     }
 
     public void PauseGame()

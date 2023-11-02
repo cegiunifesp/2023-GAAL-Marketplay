@@ -7,6 +7,8 @@ public class OrderUI : MonoBehaviour
     [field: SerializeField] public Image NumberSource { get; private set; }
     [field: SerializeField] public Image ProductSource {  get; private set; }
 
+    [SerializeField] private GameObject _discard;
+
     public void Initiate(Sprite number, Sprite product)
     {
         NumberSource.sprite = number;
@@ -25,5 +27,15 @@ public class OrderUI : MonoBehaviour
 
         if (proportion < 1) ProductSource.rectTransform.sizeDelta = new Vector2(_size * proportion, _size);
         else ProductSource.rectTransform.sizeDelta = new Vector2(_size, _size / proportion);
+    }
+
+    public void DiscardProduct()
+    {
+        _discard.SetActive(true);
+    }
+
+    public void ProductAvailable()
+    {
+        _discard.SetActive(false);
     }
 }

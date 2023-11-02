@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
-using TMPro;
+
+using AYellowpaper.SerializedCollections;
 
 public class Basket : MonoBehaviour
 {
     [SerializeField] private List<Transform> _productsParents;
+    [SerializeField] private PersonOrderUI _personOrderUI;
     [SerializeField] private Button _confirmBt;
     [SerializeField] private Button _declaineBt;
 
@@ -14,8 +16,11 @@ public class Basket : MonoBehaviour
     private int _wrongProducts;
     private bool _hasWrongProduct;
 
-    private Dictionary<string, int> _ordersAmount;
-    private List<Order> _orders;
+    private List<ProductBase> _products = new List<ProductBase>();
+
+    [Space(10)]
+    [SerializedDictionary("Order Name", "Amount")]
+    public SerializedDictionary<string, int> _ordersAmount;
 
     private void Start()
     {
@@ -25,9 +30,7 @@ public class Basket : MonoBehaviour
 
     public void SetOrders(List<Order> orders)
     {
-        _orders = orders;
-
-        _ordersAmount = new Dictionary<string, int>();
+        _ordersAmount = new SerializedDictionary<string, int>();
         foreach (Order order in orders)
         {
             _ordersAmount.Add(order.ProductName, order.ProductAmount);
@@ -42,7 +45,11 @@ public class Basket : MonoBehaviour
         product.Size = 80;
         //t.position = transform.position;
 
-        DiscountProductAmount(product);
+        if (!_products.Contains(product))
+        {
+            _products.Add(product);
+            DiscountProductAmount(product);
+        }
 
         _currentParentIndex = (_currentParentIndex + 1) % _productsParents.Count;
     }
@@ -54,6 +61,10 @@ public class Basket : MonoBehaviour
         if (_ordersAmount.ContainsKey(product.ProductName))
         {
             _ordersAmount[product.ProductName]--;
+            if (_ordersAmount[product.ProductName] == 0)
+            {
+                _personOrderUI.DiscardProduct(product.ProductName);
+            }
             //print($"Add {product.ProductName} Left: {_ordersAmount[product.ProductName]}");
         }
         else
@@ -67,7 +78,7 @@ public class Basket : MonoBehaviour
     {
         if (AllProductsCorrect())
         {
-            LeanTween.moveY(gameObject, transform.position.y + 0.5f, 0.25f).setEaseInQuad().setLoopPingPong(1);
+            LeanTween.moveY(gameObject, transform.position.y + 0.5f, 0.15f).setEaseInQuad().setLoopPingPong(2);
             Events.Instance.OnAddScore(500);
             Events.Instance.OnGameEnded();
             return;
@@ -125,6 +136,35 @@ public class Basket : MonoBehaviour
         _currentParentIndex = 0;
     }
 
+    private void RemoveProductWhenDragging(ProductLevel3 product)
+    {
+        if (_ordersAmount.ContainsKey(product.ProductName))
+        {
+            if (_ordersAmount[product.ProductName] == 0)
+            {
+                _personOrderUI.LetAvailable(product.ProductName);
+            }
+            _ordersAmount[product.ProductName]++;
+        }
+        else
+        {
+            if (_wrongProducts <= 1)
+            {
+                _hasWrongProduct = false;
+                _wrongProducts = 0;
+            }
+            else
+            {
+                _wrongProducts--;
+            }
+        }
+
+        if (_products.Contains(product)) _products.Remove(product);
+
+        product.ClearBasketReference();
+    }
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Product"))
@@ -143,21 +183,9 @@ public class Basket : MonoBehaviour
             
             if (product.IsDragging())
             {
-                if (_ordersAmount.ContainsKey(product.ProductName)) _ordersAmount[product.ProductName]++;
-                else
-                {
-                    if (_wrongProducts <= 1)
-                    {
-                        _hasWrongProduct = false;
-                        _wrongProducts = 0;
-                    }
-                    else
-                    {
-                        _wrongProducts--;
-                    }
-                }
-                product.ClearBasketReference();
+                RemoveProductWhenDragging(product);
             }
         }
     }
+
 }

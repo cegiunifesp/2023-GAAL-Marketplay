@@ -21,6 +21,7 @@ public class LetterboxAdjustment : MonoBehaviour
 
         float targetAspectRatio = mainCamera.aspect;
         float currentAspectRatio = (float)Screen.width / Screen.height;
+        //print(currentAspectRatio);
 
         if (currentAspectRatio > targetAspectRatio)
         {

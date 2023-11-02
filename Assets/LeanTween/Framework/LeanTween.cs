@@ -1662,17 +1662,17 @@ public class LeanTween : MonoBehaviour {
     }
 
     /**
-    * <summary>Scale a GUI Element to a certain width and height</summary>
+    * <summary>Scale a GUI Element to a certain width and _height</summary>
     * 
     * @method LeanTween.scale (GUI)
     * @param {LTRect} LTRect ltRect LTRect object that you wish to move
-    * @param {Vector2} Vector2 to The final width and height to scale to (pixel based)
+    * @param {Vector2} Vector2 to The final width and _height to scale to (pixel based)
     * @param {float} float time The time to complete the tween in
     * @return {LTDescr} LTDescr an object that distinguishes the tween
     * @example
     * <i>Example Javascript: </i><br />
     * var bRect:LTRect = new LTRect( 0, 0, 100, 50 );<br />
-    * LeanTween.scale( bRect, Vector2(bRect.rect.width, bRect.rect.height) * 1.3, 0.25 ).setEase(LeanTweenType.easeOutBounce);<br />
+    * LeanTween.scale( bRect, Vector2(bRect.rect.width, bRect.rect._height) * 1.3, 0.25 ).setEase(LeanTweenType.easeOutBounce);<br />
     * function OnGUI(){<br />
     * &#160; if(GUI.Button(bRect.rect, "Scale")){ }<br />
     * }<br />
@@ -2972,7 +2972,7 @@ public class LTBezier {
 * @constructor
 * @param {Vector3 Array} pts A set of points that define one or many bezier paths (the paths should be passed in multiples of 4, which correspond to each individual bezier curve)<br />
 * It goes in the order: <strong>startPoint</strong>,endControl,startControl,<strong>endPoint</strong> - <strong>Note:</strong> the control for the end and start are reversed! This is just a *quirk* of the API.<br />
-* <img src="http://dentedpixel.com/assets/LTBezierExplanation.gif" width="413" height="196" style="margin-top:10px" />
+* <img src="http://dentedpixel.com/assets/LTBezierExplanation.gif" width="413" _height="196" style="margin-top:10px" />
 * @example 
 * LTBezierPath ltPath = new LTBezierPath( new Vector3[] { new Vector3(0f,0f,0f),new Vector3(1f,0f,0f), new Vector3(1f,0f,0f), new Vector3(1f,1f,0f)} );<br /><br />
 * LeanTween.move(lt, ltPath.vec3, 4.0f).setOrientToPath(true).setDelay(1f).setEase(LeanTweenType.easeInOutQuad); // animate <br />
@@ -3618,7 +3618,7 @@ public class LTSpline {
 /**
 * Animate GUI Elements by creating this object and passing the *.rect variable to the GUI method<br /><br />
 * <strong>Example Javascript: </strong><br />var bRect:LTRect = new LTRect( 0, 0, 100, 50 );<br />
-* LeanTween.scale( bRect, Vector2(bRect.rect.width, bRect.rect.height) * 1.3, 0.25 );<br />
+* LeanTween.scale( bRect, Vector2(bRect.rect.width, bRect.rect._height) * 1.3, 0.25 );<br />
 * function OnGUI(){<br />
 * &#160; if(GUI.Button(bRect.rect, "Scale")){ }<br />
 * }<br />
@@ -3635,7 +3635,7 @@ public class LTSpline {
 * @param {float} x:float X location
 * @param {float} y:float Y location
 * @param {float} width:float Width
-* @param {float} height:float Height
+* @param {float} _height:float Height
 * @param {float} alpha:float (Optional) initial alpha amount (0-1)
 * @param {float} rotation:float (Optional) initial rotation in degrees (0-360) 
 */
@@ -3853,7 +3853,7 @@ public class LTRect : System.Object{
     }
 
     public override string ToString(){
-        return "x:"+_rect.x+" y:"+_rect.y+" width:"+_rect.width+" height:"+_rect.height;
+        return "x:"+_rect.x+" y:"+_rect.y+" width:"+_rect.width+" _height:"+_rect.height;
     }
 }
 
@@ -4069,7 +4069,7 @@ public class LTGUI {
                             Debug.Log(buttonLevels[i]);
                         }*/
                         if(pressedWithinRect( buttons[i] )){
-                            hasNoOverlap = false; // there is an overlapping button that is higher
+                            hasNoOverlap = false; // there is an overlapping component that is higher
                         }
                     }
                 }

@@ -45,7 +45,10 @@ public class GameManager : MonoBehaviour
     public List<ProductSO> GetProductsAvailables()
     {
         if (TypeSelected == Enums.TypeProducts.None) SetTypeSelected(0);
-        return ListProducts[TypeSelected];
+
+        var newList = new List<ProductSO>(ListProducts[TypeSelected]);
+
+        return newList;
     }
 
     public void SetTypeSelected(int index)

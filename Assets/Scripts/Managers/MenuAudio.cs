@@ -39,7 +39,7 @@ public class MenuAudio : AudioManager
 
         LeanTween.sequence()
             .append(
-                LeanTween.value(tempVolume, 0.1f, 0.5f).setOnUpdate((value) =>
+                LeanTween.value(tempVolume, 0f, 0.5f).setOnUpdate((value) =>
                 {
                     BackgroundAudioSource.volume = value;
                 }).setOnComplete(() => {
@@ -47,8 +47,7 @@ public class MenuAudio : AudioManager
                     BackgroundAudioSource.Play();
                 }))
             .append(
-                
-                LeanTween.value(0.1f, tempVolume, 0.5f).setOnUpdate((value) =>
+                LeanTween.value(0f, tempVolume, 0.75f).setOnUpdate((value) =>
                 {
                     BackgroundAudioSource.volume = value;
                 })

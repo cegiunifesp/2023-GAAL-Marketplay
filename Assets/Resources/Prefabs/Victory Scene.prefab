@@ -167,7 +167,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 47.1
+  m_fontSize: 64.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -605,12 +605,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70
+  m_fontSize: 95.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 100
   m_fontStyle: 32
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -687,7 +687,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -27.13}
-  m_SizeDelta: {x: 694.06, y: 540.14}
+  m_SizeDelta: {x: 950.2676, y: 739.5292}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &894757435856502150
 CanvasRenderer:
@@ -739,6 +739,8 @@ GameObject:
   - component: {fileID: 1864441615153679729}
   - component: {fileID: 7932785054199789923}
   - component: {fileID: 8197147187760961484}
+  - component: {fileID: 4921499386085295151}
+  - component: {fileID: 3724466934375145258}
   m_Layer: 5
   m_Name: Home Bt
   m_TagString: Untagged
@@ -847,6 +849,34 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4921499386085295151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7096671491153488955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cac82150f96bf742b71e7ff4d94eca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickClip: {fileID: 8300000, guid: f7f177bb5f2565e489886097e2d6fa2f, type: 3}
+  _hoverClip: {fileID: 8300000, guid: cca10c11c3b71f04db757d08ece9b803, type: 3}
+--- !u!114 &3724466934375145258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7096671491153488955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cac82150f96bf742b71e7ff4d94eca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickClip: {fileID: 8300000, guid: f7f177bb5f2565e489886097e2d6fa2f, type: 3}
+  _hoverClip: {fileID: 8300000, guid: cca10c11c3b71f04db757d08ece9b803, type: 3}
 --- !u!1 &8001422774432001807
 GameObject:
   m_ObjectHideFlags: 0
@@ -859,6 +889,8 @@ GameObject:
   - component: {fileID: 1514269233441805152}
   - component: {fileID: 2479848671761556964}
   - component: {fileID: 6637438915586472545}
+  - component: {fileID: 2929771198206426344}
+  - component: {fileID: 247918133296482649}
   m_Layer: 5
   m_Name: Next Bt
   m_TagString: Untagged
@@ -967,3 +999,31 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2929771198206426344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8001422774432001807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cac82150f96bf742b71e7ff4d94eca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickClip: {fileID: 8300000, guid: f7f177bb5f2565e489886097e2d6fa2f, type: 3}
+  _hoverClip: {fileID: 8300000, guid: cca10c11c3b71f04db757d08ece9b803, type: 3}
+--- !u!114 &247918133296482649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8001422774432001807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cac82150f96bf742b71e7ff4d94eca5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickClip: {fileID: 8300000, guid: f7f177bb5f2565e489886097e2d6fa2f, type: 3}
+  _hoverClip: {fileID: 8300000, guid: cca10c11c3b71f04db757d08ece9b803, type: 3}

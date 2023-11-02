@@ -10,6 +10,7 @@ TagManager:
   - Basket
   - Shopping Cart
   - Treadmill
+  - Border
   layers:
   - Default
   - TransparentFX

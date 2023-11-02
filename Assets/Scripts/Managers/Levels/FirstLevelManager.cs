@@ -2,10 +2,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine.Video;
 using UnityEngine;
 using TMPro;
-using Cysharp.Threading.Tasks;
 
 public class FirstLevelManager : LevelManagerBase
 {
@@ -25,11 +25,10 @@ public class FirstLevelManager : LevelManagerBase
 
     private int _productsPooledThatAreNotTheOrder;
     private float _timeToActiveProducts;
+    private bool _selected;
 
     private Queue<ProductLevel1> _productsInTreadmill = new Queue<ProductLevel1>();
     private Order _orderDesired;
-
-    private CancellationTokenSource _tokenSource;
 
     private void Start()
     {
@@ -75,12 +74,12 @@ public class FirstLevelManager : LevelManagerBase
         Events.Instance.onEnqueueProduct += HandleEnqueueProduct;
         Events.Instance.onProductSelected += HandleProductSelected;
 
-        _tokenSource = new CancellationTokenSource();
-
-        ChangeShelfSprite();
-
         ProductsAvailables = GameManager.Instance.GetProductsAvailables();
         OrdersAvailables = new List<ProductSO>(ProductsAvailables);
+
+        Audio.StartBackground();
+
+        ChangeShelfSprite();
 
         GrowPool();
 
@@ -111,6 +110,8 @@ public class FirstLevelManager : LevelManagerBase
 
         if (product.ProductName == _orderDesired.ProductName)
         {
+            if (_selected) return;
+
             product.ProductCorrect();
             CorrectOrder();
         }
@@ -141,6 +142,8 @@ public class FirstLevelManager : LevelManagerBase
         _videoPlayer.Stop();
         _videoPlayer.gameObject.SetActive(false);
 
+        Audio.VictoryVolume();
+
         VictoryScene.Initiate();
     }
     #endregion
@@ -151,7 +154,6 @@ public class FirstLevelManager : LevelManagerBase
         if (OrdersAvailables.Count == 0)
         {
             HandleEndGame();
-            print("Finished");
             return;
         }
 
@@ -160,20 +162,29 @@ public class FirstLevelManager : LevelManagerBase
         _orderDesired = new Order(productDesired.ProductName, 1, productDesired.SpriteSource, productDesired.Clip);
 
         OrdersAvailables.Remove(OrdersAvailables.First(t => t.ProductName == productDesired.ProductName));
-        _leftOrdersTx.text = $"Restam {OrdersAvailables.Count+1} produtos";
+
+        if (OrdersAvailables.Count == 0)
+        {
+            _leftOrdersTx.text = $"Resta {OrdersAvailables.Count+1} produto";
+        }
+        else
+        {
+            _leftOrdersTx.text = $"Restam {OrdersAvailables.Count+1} produtos";
+        }
 
         SetVideoPlayer(_orderDesired.Clip);
 
         _monitorText.color = Color.white;
+        _selected = false;
     }
 
     private void CorrectOrder()
     {
+        _selected = true;
         Events.Instance.OnAddScore(100);
-
         ChangeMonitorTextColor(correct: true);
 
-        _tokenSource.Cancel();
+        destroyCancellationToken.ThrowIfCancellationRequested();
 
         Invoke("NewOrder", 2);
     }
@@ -184,7 +195,7 @@ public class FirstLevelManager : LevelManagerBase
 
         ChangeMonitorTextColor(correct: false);
 
-        _tokenSource.Cancel();
+        destroyCancellationToken.ThrowIfCancellationRequested();
     }
 
     private void CheckSequenceOfSpawning(ProductLevel1 product)

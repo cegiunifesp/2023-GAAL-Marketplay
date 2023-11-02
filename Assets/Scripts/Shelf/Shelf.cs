@@ -8,14 +8,6 @@ using Cysharp.Threading.Tasks;
 
 public class Shelf : MonoBehaviour
 {
-    private const int MaxBehindProducts = 4;
-    private const int MaxFrontProducts = 5;
-    [SerializeField] private int _frontalProductsCount;
-    [SerializeField] private int _behindProductsCount;
-
-    private Dictionary<string, int> _ordersAmountLeft;
-
-
     [SerializeField] private int _index;
 
     [SerializeField] private Transform _frontalProductsParent;
@@ -24,8 +16,18 @@ public class Shelf : MonoBehaviour
     [SerializeField] private GameObject _incorrectImage;
 
     [SerializeField] private Button _confirmBt;
-
     [SerializeField] private List<Order> _orders;
+
+    [SerializeField] private AudioClip _correctItems;
+    [SerializeField] private AudioClip _wrongItems;
+
+
+    private const int MaxBehindProducts = 4;
+    private const int MaxFrontProducts = 5;
+    private int _frontalProductsCount;
+    private int _behindProductsCount;
+
+    private Dictionary<string, int> _ordersAmountLeft;
 
     private void Start()
     {
@@ -52,6 +54,8 @@ public class Shelf : MonoBehaviour
             {
                 ChangeCorrectImage(correct: false);
                 RemoveProductsFromShelf();
+
+                AudioManager.OnPlaySFX(_wrongItems);
 
                 return;
             }
@@ -130,22 +134,26 @@ public class Shelf : MonoBehaviour
             child.GetComponent<ProductLevel2>().SetInteractable(false);
         }
 
+        AudioManager.OnPlaySFX(_correctItems);
+
         Events.Instance.OnAddScore(500);
         Events.Instance.OnShelfCompleted(_index);
     }
 
-    private void RemoveProductsFromShelf()
+    private async void RemoveProductsFromShelf()
     {
         int i;
         while (_frontalProductsCount != 0 || _behindProductsCount != 0 )
         {
             for (i = 0; i < _frontalProductsParent.childCount; i++)
             {
+                await UniTask.Delay(50, false, PlayerLoopTiming.Update, destroyCancellationToken);
                 _frontalProductsParent.GetChild(0).GetComponent<ProductLevel2>().ShelfRemovedProduct();
             }
 
             for (i = 0; i < _behindProductsParent.childCount; i++)
             {
+                await UniTask.Delay(50, false, PlayerLoopTiming.Update, destroyCancellationToken);
                 _behindProductsParent.GetChild(0).GetComponent<ProductLevel2>().ShelfRemovedProduct();
             }
 
@@ -172,7 +180,6 @@ public class Shelf : MonoBehaviour
         _incorrectImage.SetActive(true);
 
         await UniTask.Delay(1000, false, PlayerLoopTiming.Update, destroyCancellationToken);
-        //await Task.Delay(1000);
 
         _incorrectImage.SetActive(false);
     }

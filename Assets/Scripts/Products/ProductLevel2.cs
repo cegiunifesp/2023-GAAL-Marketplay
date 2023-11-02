@@ -51,18 +51,33 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
         base.InitiateProduct(info);
     }
 
-    private void InitialParent()
+    private void InitialParent(bool removedFromShelf = false)
     {
         Size = _defaultSize;
         AdjustImage();
 
         Vector3 oldPosition = transform.position;
-        Vector3 newPosition = _initialParent.transform.GetChild(_childIndex).position;// + Vector3.right;
+        Vector3 newPosition;
+
+        if (_initialParent.transform.childCount == 0) newPosition = _initialParent.transform.position;
+        else
+        {
+            if (removedFromShelf)
+            {
+                newPosition = _initialParent.transform.GetChild(_initialParent.transform.childCount - 1).position;
+                _childIndex = _initialParent.transform.childCount;
+            }
+            else
+            {
+                int index = _childIndex == _initialParent.transform.childCount ? _childIndex - 1 : _childIndex;
+                newPosition = _initialParent.transform.GetChild(index).position;
+            }
+        }
 
         transform.position = oldPosition;
         transform.SetParent(_canvas);
 
-        LeanTween.move(gameObject, newPosition, 1f).setEaseOutQuad().setOnComplete(() =>
+        LeanTween.move(gameObject, newPosition, 1).setEaseOutQuad().setOnComplete(() =>
         {
             if (_state == Enums.StatesDrag.OnDrag) return;
 
@@ -187,7 +202,7 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
             Debug.LogError("Slot is null");
         }
 
-        InitialParent();
+        InitialParent(true);
     }
     #endregion
 }

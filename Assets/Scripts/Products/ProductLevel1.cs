@@ -1,6 +1,4 @@
-using System.Drawing;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class ProductLevel1 : ProductBase
@@ -8,25 +6,30 @@ public class ProductLevel1 : ProductBase
     private const float SpeedOverTreadmill = 1;
 
     private bool _move;
-    private bool _correctProduct = false;
+    private bool _isCorrectProduct = false;
 
     public VideoClip Clip => InfoFromSO.Clip;
 
+
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private GameObject _check;
+
+    [Header("AudioClips")]
+    [SerializeField] private AudioClip _correctProduct;
+    [SerializeField] private AudioClip _incorrectProduct;
+    [SerializeField] private AudioClip _inTreadmill;
+    [SerializeField] private AudioClip _inCart;
 
     private void Start()
     {
         Events.Instance.onGameEnded += HandleGameEnded;
     }
 
-
     private void Update()
     {
-        if (_move)
-        {
-            transform.Translate(Vector3.right * Time.deltaTime * SpeedOverTreadmill);
-        }
+        if (!_move) return;
+
+        transform.Translate(Vector3.right * Time.deltaTime * SpeedOverTreadmill);
     }
 
 
@@ -36,7 +39,7 @@ public class ProductLevel1 : ProductBase
 
         _move = true;
         Interactable = true;
-        _correctProduct = false;
+        _isCorrectProduct = false;
         _check.SetActive(false);
     }
 
@@ -57,9 +60,11 @@ public class ProductLevel1 : ProductBase
         transform.localPosition = newPosition;
     }
 
-    public void HandleGameEnded()
+    private void HandleGameEnded()
     {
         _move = false;
+        Events.Instance.onGameEnded -= HandleGameEnded;
+
     }
 
     public void ProductIncorrect()
@@ -73,13 +78,17 @@ public class ProductLevel1 : ProductBase
         _rigidbody.AddForce(Vector2.up * Random.Range(3, 7), ForceMode2D.Impulse);
         BoxCollider.isTrigger = true;
         Interactable = false;
+
+        AudioManager.OnPlaySFX(_incorrectProduct);
     }
 
     public void ProductCorrect()
     {
         _check.SetActive(true);
         Interactable = false;
-        _correctProduct = true;
+        _isCorrectProduct = true;
+
+        AudioManager.OnPlaySFX(_correctProduct);
     }
 
 
@@ -89,6 +98,11 @@ public class ProductLevel1 : ProductBase
         {
             Events.Instance.OnEnqueueProduct(this);
             _move = false;
+        }
+
+        if (collision.gameObject.CompareTag("Treadmill"))
+        {
+            AudioManager.OnPlaySFX(_inTreadmill);
         }
     }
 
@@ -110,9 +124,10 @@ public class ProductLevel1 : ProductBase
         }
         else if (collision.gameObject.CompareTag("Shopping Cart"))
         {
-            if (_correctProduct)
+            if (_isCorrectProduct)
             {
                 collision.gameObject.GetComponent<ShoppingCart>().AddItem(this);
+                AudioManager.OnPlaySFX(_inCart);
                 Events.Instance.OnEnqueueProduct(this);
                 _move = false;
             }

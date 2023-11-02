@@ -28,6 +28,8 @@ public class SecondLevelManager : LevelManagerBase
     {
         Events.Instance.onShelfCompleted += HandleShelfCompletion;
 
+        Audio.StartBackground();
+
         ProductsAvailables = GameManager.Instance.GetProductsAvailables();
 
         _shelfsCompleted = new bool[3];
@@ -65,6 +67,9 @@ public class SecondLevelManager : LevelManagerBase
         {
             VictoryScene = FindObjectOfType<VictoryScene>();
         }
+
+        Audio.VictoryVolume();
+
         VictoryScene.Initiate();
 
         Events.Instance.onGameStart -= HandleStartGame;

@@ -244,3 +244,7 @@ MonoBehaviour:
   BoxCollider: {fileID: 6060434008596165312}
   _rigidbody: {fileID: 1355502058288117029}
   _check: {fileID: 956866838353958724}
+  _correctProduct: {fileID: 8300000, guid: 5ab580d7cef17364da32b480bf9c8dc3, type: 3}
+  _incorrectProduct: {fileID: 8300000, guid: ddebee06cd072eb4588f3ce7a5a8d668, type: 3}
+  _inTreadmill: {fileID: 8300000, guid: 9416571f5d85a8f4e980df3c861c3f99, type: 3}
+  _inCart: {fileID: 8300000, guid: 0b57fffb6ae0e464f874c55d9dc2c4db, type: 3}
