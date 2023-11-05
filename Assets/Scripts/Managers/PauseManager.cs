@@ -21,6 +21,11 @@ public class PauseManager : MonoBehaviour
 
     private void Start()
     {
+        _soundTg.onValueChanged.AddListener((value) =>
+        {
+            ToggleSound(value);
+        });
+
         _isMuted = _audioManager.Muted;
         _soundTg.isOn = !_isMuted;
 
@@ -54,10 +59,10 @@ public class PauseManager : MonoBehaviour
         loader.LoadScene(Enums.Scenes.Menu);
     }
 
-    public void ToggleSound()
+    private void ToggleSound(bool value)
     {
-        _isMuted = !_isMuted;
-        _audioManager.Mute(!_isMuted);
+        _isMuted = !value;
+        _audioManager.Mute(_isMuted);
     }
 
 }

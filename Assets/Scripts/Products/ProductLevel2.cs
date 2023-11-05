@@ -7,7 +7,7 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
     private Enums.StatesDrag _state;
 
     [SerializeField] private float _speedMovement;
-    [SerializeField] private Transform _canvas;
+    [SerializeField] private Transform _parentWhenDragging;
 
     private int _childIndex;
 
@@ -40,7 +40,7 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
     public override void InitiateProduct(ProductSO info)
     {
         _initialParent = transform.parent.GetComponent<HorizontalLayoutGroup>();
-        _canvas = GameObject.Find("Canvas").transform;
+        _parentWhenDragging = GameObject.Find("Products Parent").transform;
         _cam = Camera.main;
 
         Size = _initialParent.GetComponent<RectTransform>().rect.height;
@@ -53,6 +53,8 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
 
     private void InitialParent(bool removedFromShelf = false)
     {
+        Interactable = false;
+
         Size = _defaultSize;
         AdjustImage();
 
@@ -75,7 +77,7 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
         }
 
         transform.position = oldPosition;
-        transform.SetParent(_canvas);
+        transform.SetParent(_parentWhenDragging);
 
         LeanTween.move(gameObject, newPosition, 1).setEaseOutQuad().setOnComplete(() =>
         {
@@ -83,6 +85,7 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
 
             transform.SetParent(_initialParent.transform);
             transform.SetSiblingIndex(_childIndex);
+            Interactable = true;
         });
     }
 
@@ -144,11 +147,11 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
             case Enums.StatesDrag.Initial:
                 _state = Enums.StatesDrag.OnDrag;
                 _childIndex = transform.GetSiblingIndex();
-                transform.SetParent(_canvas);
+                transform.SetParent(_parentWhenDragging);
                 break;
             case Enums.StatesDrag.OnSlot:
                 _state = Enums.StatesDrag.OnDrag;
-                transform.SetParent(_canvas);
+                transform.SetParent(_parentWhenDragging);
                 AdjustImage();
                 Replacing();
                 break;

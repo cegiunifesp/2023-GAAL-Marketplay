@@ -123,14 +123,18 @@ public class Basket : MonoBehaviour
             for (int i = 0; i < parent.childCount; i++)
             {
                 var product = parent.GetChild(i).GetComponent<ProductLevel3>();
-                if (_ordersAmount.ContainsKey(product.ProductName)) _ordersAmount[product.ProductName]++;
+                if (_ordersAmount.ContainsKey(product.ProductName))
+                {
+                    if (_ordersAmount[product.ProductName] == 0) _personOrderUI.LetAvailable(product.ProductName);
+                    _ordersAmount[product.ProductName]++;
+                }
+
                 product.RemoveFromBasket();
                 _wrongProducts--;
 
-                if(_wrongProducts == 0)
-                {
-                    _hasWrongProduct = false;
-                }
+                if (_wrongProducts == 0) _hasWrongProduct = false;
+
+                if (_products.Contains(product)) _products.Remove(product);
             }
         }
         _currentParentIndex = 0;
