@@ -15,5 +15,7 @@ MonoBehaviour:
   <ProductName>k__BackingField: "Sab\xE3o"
   <TypeProduct>k__BackingField: 3
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 37d5534b69031d343a2c2d30003c2421, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: 8b7e7583275590a8d88287da5d851bc0, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Higiene/sabao.ogv
+    <Clip>k__BackingField: {fileID: 32900000, guid: 195abbbc99f37b148917b4bb945a401c, type: 3}
   <AdjustHorizontally>k__BackingField: 0

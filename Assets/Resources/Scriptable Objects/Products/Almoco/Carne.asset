@@ -15,5 +15,7 @@ MonoBehaviour:
   <ProductName>k__BackingField: Carne
   <TypeProduct>k__BackingField: 2
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: b3fd2abbb96ec520787f8d96ec7a0dce, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: 59013cbf52c12a52dafc2c733a298eb5, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Almoco/carn.ogv
+    <Clip>k__BackingField: {fileID: 32900000, guid: d92f4151126ff8e4497e490b66123ea3, type: 3}
   <AdjustHorizontally>k__BackingField: 1

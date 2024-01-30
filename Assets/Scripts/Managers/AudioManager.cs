@@ -1,16 +1,13 @@
-using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public static Action<AudioClip, float, bool> onPlaySFX { get; set; }
-    public static void OnPlaySFX(AudioClip clip, float volume = -1, bool loop = false)
+    public static Action<AudioClip, float, bool, bool> onPlaySFX { get; set; }
+    public static void OnPlaySFX(AudioClip clip, float volume = -1, bool loop = false, bool Override = true)
     {
-        onPlaySFX?.Invoke(clip, volume, loop);
+        onPlaySFX?.Invoke(clip, volume, loop, Override);
     }
 
     public static Action<AudioClip, float, bool> onPlayUI { get; set; }
@@ -23,6 +20,10 @@ public class AudioManager : MonoBehaviour
     public bool Muted { get; protected set; }
 
     [SerializeField] protected bool PlayOnAwake;
+    [SerializeField] protected float sfxVolume;
+    [SerializeField] protected float backgroundVolume;
+    [SerializeField] protected float uiVolume;
+
 
     [SerializeField] protected AudioSource BackgroundAudioSource;
     [SerializeField] protected AudioSource AmbienceAudioSource;
@@ -33,6 +34,10 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
+        if (BackgroundAudioSource != null) BackgroundAudioSource.volume = backgroundVolume;
+        if (SfxAudioSource != null) SfxAudioSource.volume = sfxVolume;
+        if (UiAudioSource != null) UiAudioSource.volume = uiVolume;
+
         BackgroundAudioSource.playOnAwake = PlayOnAwake;
 
         CheckMute();
@@ -90,9 +95,11 @@ public class AudioManager : MonoBehaviour
         Mute(!Muted);
     }
 
-    public void PlaySFXSound(AudioClip clip, float volume, bool loop = false)
+    public void PlaySFXSound(AudioClip clip, float volume, bool loop = false, bool Override = false)
     {
         if (SfxAudioSource == null || clip == null) return;
+
+        if (SfxAudioSource.isPlaying && !Override) return;
 
         SfxAudioSource.volume = volume == -1 ? SfxAudioSource.volume : volume;
         SfxAudioSource.PlayOneShot(clip);

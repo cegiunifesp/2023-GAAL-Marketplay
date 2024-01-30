@@ -2,7 +2,6 @@ using System.Threading;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using UnityEngine;
-using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _levelsSelection;
 
     [SerializeField] private Transform _shelf;
-    [SerializeField] private VideoClip[] _clips;
+    [SerializeField] private VideoInfo[] _videos;
 
     [Header("Buttons And Texts")]
     [SerializeField] private Button _playBt;
@@ -37,7 +36,6 @@ public class MenuManager : MonoBehaviour
 
     [Header("Others")]
     [SerializeField] MenuAudio _menuAudio;
-    [SerializeField] private VideoPlayer _videoPlayer;
     [SerializeField] private Loader _loader;
 
 
@@ -73,7 +71,7 @@ public class MenuManager : MonoBehaviour
     {
         _level1Bt.onClick.AddListener(() =>
         {
-            _videoPlayer.gameObject.SetActive(false);
+            VideoManager.Instance.StopVideo();
 
             var loader = Instantiate(_loader);
             loader.LoadScene(Enums.Scenes.Chapter1, instantly: false);
@@ -81,7 +79,7 @@ public class MenuManager : MonoBehaviour
 
         _Level2Bt.onClick.AddListener(() =>
         {
-            _videoPlayer.gameObject.SetActive(false);
+            VideoManager.Instance.StopVideo();
 
             var loader = Instantiate(_loader);
             loader.LoadScene(Enums.Scenes.Chapter2, instantly: false);
@@ -89,7 +87,7 @@ public class MenuManager : MonoBehaviour
 
         _level3Bt.onClick.AddListener(() =>
         {
-            _videoPlayer.gameObject.SetActive(false);
+            VideoManager.Instance.StopVideo();
 
             var loader = Instantiate(_loader);
             loader.LoadScene(Enums.Scenes.Chapter3, instantly: false);
@@ -106,8 +104,7 @@ public class MenuManager : MonoBehaviour
 
         _shelf.GetChild(_typeIndex - 1).gameObject.SetActive(true);
 
-        ShowVideo();
-
+        VideoManager.Instance.ShowVideo(_videos[_typeIndex - 1]);
         GameManager.Instance.SetTypeSelected(_typeIndex);
     }
 
@@ -120,21 +117,8 @@ public class MenuManager : MonoBehaviour
 
         _shelf.GetChild(_typeIndex - 1).gameObject.SetActive(true);
 
-        ShowVideo();
-
+        VideoManager.Instance.ShowVideo(_videos[_typeIndex - 1]);
         GameManager.Instance.SetTypeSelected(_typeIndex);
-    }
-
-    private void ShowVideo()
-    {
-        if (_videoPlayer.isPlaying)
-        {
-            _videoPlayer.Stop();
-        }
-
-        _videoPlayer.clip = _clips[_typeIndex - 1];
-        _videoPlayer.gameObject.SetActive(true);
-        _videoPlayer.Play();
     }
 
     private void ShowLevelSelectionScene()
@@ -150,7 +134,7 @@ public class MenuManager : MonoBehaviour
 
         _levelsSelection.SetActive(true);
 
-        ShowVideo();
+        VideoManager.Instance.ShowVideo(_videos[_typeIndex - 1]);
     }
 
     private void LeaveLevelSelectionScene()

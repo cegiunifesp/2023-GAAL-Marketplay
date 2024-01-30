@@ -56,7 +56,6 @@ public class Shelf : MonoBehaviour
                 RemoveProductsFromShelf();
 
                 AudioManager.OnPlaySFX(_wrongItems);
-
                 return;
             }
         }

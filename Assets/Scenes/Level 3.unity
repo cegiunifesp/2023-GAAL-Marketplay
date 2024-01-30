@@ -289,6 +289,7 @@ MonoBehaviour:
   ImageSource: {fileID: 3557023}
   Rect: {fileID: 3557020}
   BoxCollider: {fileID: 3557022}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &56566875
@@ -695,6 +696,7 @@ MonoBehaviour:
   ImageSource: {fileID: 76836806}
   Rect: {fileID: 76836803}
   BoxCollider: {fileID: 76836805}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &113664643
@@ -1101,6 +1103,7 @@ MonoBehaviour:
   ImageSource: {fileID: 144775057}
   Rect: {fileID: 144775054}
   BoxCollider: {fileID: 144775056}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &162421219
@@ -1269,6 +1272,7 @@ MonoBehaviour:
   ImageSource: {fileID: 162421223}
   Rect: {fileID: 162421220}
   BoxCollider: {fileID: 162421222}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &184890184
@@ -1514,6 +1518,7 @@ MonoBehaviour:
   ImageSource: {fileID: 192135995}
   Rect: {fileID: 192135992}
   BoxCollider: {fileID: 192135994}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &196479222
@@ -1682,6 +1687,7 @@ MonoBehaviour:
   ImageSource: {fileID: 196479226}
   Rect: {fileID: 196479223}
   BoxCollider: {fileID: 196479225}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &259836178
@@ -1850,6 +1856,7 @@ MonoBehaviour:
   ImageSource: {fileID: 259836182}
   Rect: {fileID: 259836179}
   BoxCollider: {fileID: 259836181}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &311513519
@@ -2062,6 +2069,7 @@ MonoBehaviour:
   ImageSource: {fileID: 321428709}
   Rect: {fileID: 321428706}
   BoxCollider: {fileID: 321428708}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &380084352
@@ -2094,6 +2102,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayOnAwake: 1
+  sfxVolume: 0.7
+  backgroundVolume: 0.7
+  uiVolume: 1
   BackgroundAudioSource: {fileID: 1456569920}
   AmbienceAudioSource: {fileID: 1000021353}
   SfxAudioSource: {fileID: 56566876}
@@ -2328,6 +2339,7 @@ MonoBehaviour:
   ImageSource: {fileID: 396644502}
   Rect: {fileID: 396644499}
   BoxCollider: {fileID: 396644501}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &436459953
@@ -2496,6 +2508,7 @@ MonoBehaviour:
   ImageSource: {fileID: 436459957}
   Rect: {fileID: 436459954}
   BoxCollider: {fileID: 436459956}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &504152182
@@ -2664,6 +2677,7 @@ MonoBehaviour:
   ImageSource: {fileID: 504152186}
   Rect: {fileID: 504152183}
   BoxCollider: {fileID: 504152185}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &512860502
@@ -2832,6 +2846,7 @@ MonoBehaviour:
   ImageSource: {fileID: 512860506}
   Rect: {fileID: 512860503}
   BoxCollider: {fileID: 512860505}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &585996881
@@ -3000,6 +3015,7 @@ MonoBehaviour:
   ImageSource: {fileID: 585996885}
   Rect: {fileID: 585996882}
   BoxCollider: {fileID: 585996884}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &663654308
@@ -3243,6 +3259,7 @@ MonoBehaviour:
   ImageSource: {fileID: 666540404}
   Rect: {fileID: 666540401}
   BoxCollider: {fileID: 666540403}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &696198399
@@ -3411,6 +3428,7 @@ MonoBehaviour:
   ImageSource: {fileID: 696198403}
   Rect: {fileID: 696198400}
   BoxCollider: {fileID: 696198402}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &700232023
@@ -3658,6 +3676,7 @@ MonoBehaviour:
   ImageSource: {fileID: 739019624}
   Rect: {fileID: 739019621}
   BoxCollider: {fileID: 739019623}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &744636524
@@ -3870,6 +3889,7 @@ MonoBehaviour:
   ImageSource: {fileID: 751362870}
   Rect: {fileID: 751362867}
   BoxCollider: {fileID: 751362869}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &896086934
@@ -4038,6 +4058,7 @@ MonoBehaviour:
   ImageSource: {fileID: 896086938}
   Rect: {fileID: 896086935}
   BoxCollider: {fileID: 896086937}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &908853248
@@ -4206,6 +4227,7 @@ MonoBehaviour:
   ImageSource: {fileID: 908853252}
   Rect: {fileID: 908853249}
   BoxCollider: {fileID: 908853251}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &923850881
@@ -4449,6 +4471,7 @@ MonoBehaviour:
   ImageSource: {fileID: 927046236}
   Rect: {fileID: 927046233}
   BoxCollider: {fileID: 927046235}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &936986235
@@ -5042,6 +5065,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1026877135}
   Rect: {fileID: 1026877132}
   BoxCollider: {fileID: 1026877134}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1067701304
@@ -5210,6 +5234,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1067701308}
   Rect: {fileID: 1067701305}
   BoxCollider: {fileID: 1067701307}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1075155994
@@ -5529,6 +5554,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1115351360}
   Rect: {fileID: 1115351357}
   BoxCollider: {fileID: 1115351359}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1169063596
@@ -5697,6 +5723,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1169063600}
   Rect: {fileID: 1169063597}
   BoxCollider: {fileID: 1169063599}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1177918536
@@ -5865,6 +5892,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1177918540}
   Rect: {fileID: 1177918537}
   BoxCollider: {fileID: 1177918539}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1210882911
@@ -6033,6 +6061,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1210882915}
   Rect: {fileID: 1210882912}
   BoxCollider: {fileID: 1210882914}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1322258631
@@ -6201,6 +6230,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1322258635}
   Rect: {fileID: 1322258632}
   BoxCollider: {fileID: 1322258634}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1383323039
@@ -6647,6 +6677,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1503820104}
   Rect: {fileID: 1503820101}
   BoxCollider: {fileID: 1503820103}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1518783796
@@ -6915,6 +6946,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1538520087}
   Rect: {fileID: 1538520084}
   BoxCollider: {fileID: 1538520086}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1560190460
@@ -7327,6 +7359,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1651605074}
   Rect: {fileID: 1651605071}
   BoxCollider: {fileID: 1651605073}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1669287165
@@ -7539,6 +7572,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1722115544}
   Rect: {fileID: 1722115541}
   BoxCollider: {fileID: 1722115543}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1744023732
@@ -7707,6 +7741,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1744023736}
   Rect: {fileID: 1744023733}
   BoxCollider: {fileID: 1744023735}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1748148549
@@ -7875,6 +7910,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1748148553}
   Rect: {fileID: 1748148550}
   BoxCollider: {fileID: 1748148552}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1761012123
@@ -8087,6 +8123,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1771012166}
   Rect: {fileID: 1771012163}
   BoxCollider: {fileID: 1771012165}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1772604461
@@ -8255,6 +8292,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1772604465}
   Rect: {fileID: 1772604462}
   BoxCollider: {fileID: 1772604464}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1777023958
@@ -8423,6 +8461,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1777023962}
   Rect: {fileID: 1777023959}
   BoxCollider: {fileID: 1777023961}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1777091664
@@ -8490,6 +8529,8 @@ MonoBehaviour:
   _personOrderUI: {fileID: 1536769971831383594}
   _confirmBt: {fileID: 1560190462}
   _declaineBt: {fileID: 1075155996}
+  _correctProducts: {fileID: 8300000, guid: 5ce78e909167d0341b2ec93170c32772, type: 3}
+  _incorrectProducts: {fileID: 8300000, guid: e36e434c5f8fbb248a89c250c14b6ca8, type: 3}
   _ordersAmount:
     _serializedList: []
 --- !u!61 &1777091667
@@ -8848,6 +8889,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1804789815}
   Rect: {fileID: 1804789812}
   BoxCollider: {fileID: 1804789814}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1806302346
@@ -9016,6 +9058,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1806302350}
   Rect: {fileID: 1806302347}
   BoxCollider: {fileID: 1806302349}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1816666570
@@ -9298,6 +9341,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1830922511}
   Rect: {fileID: 1830922508}
   BoxCollider: {fileID: 1830922510}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1879187984
@@ -9541,6 +9585,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1883165033}
   Rect: {fileID: 1883165030}
   BoxCollider: {fileID: 1883165032}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1886555822
@@ -9777,6 +9822,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1920688436}
   Rect: {fileID: 1920688433}
   BoxCollider: {fileID: 1920688435}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1947709964
@@ -9945,6 +9991,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1947709968}
   Rect: {fileID: 1947709965}
   BoxCollider: {fileID: 1947709967}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1957231573
@@ -10113,6 +10160,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1957231577}
   Rect: {fileID: 1957231574}
   BoxCollider: {fileID: 1957231576}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1971452821
@@ -10281,6 +10329,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1971452825}
   Rect: {fileID: 1971452822}
   BoxCollider: {fileID: 1971452824}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1974148514
@@ -10449,6 +10498,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1974148518}
   Rect: {fileID: 1974148515}
   BoxCollider: {fileID: 1974148517}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1978708232
@@ -10617,6 +10667,7 @@ MonoBehaviour:
   ImageSource: {fileID: 1978708236}
   Rect: {fileID: 1978708233}
   BoxCollider: {fileID: 1978708235}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &1988968245
@@ -10829,6 +10880,7 @@ MonoBehaviour:
   ImageSource: {fileID: 2011787222}
   Rect: {fileID: 2011787219}
   BoxCollider: {fileID: 2011787221}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &2033236029
@@ -10997,6 +11049,7 @@ MonoBehaviour:
   ImageSource: {fileID: 2033236033}
   Rect: {fileID: 2033236030}
   BoxCollider: {fileID: 2033236032}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!1 &2123352430
@@ -11165,6 +11218,7 @@ MonoBehaviour:
   ImageSource: {fileID: 2123352434}
   Rect: {fileID: 2123352431}
   BoxCollider: {fileID: 2123352433}
+  _hoverClip: {fileID: 8300000, guid: 8c05de1e7872d5a49b8e24f1ce7f57be, type: 3}
   _intermediateParent: {fileID: 700232024}
   _speedMovement: 6
 --- !u!224 &1536769971831383593 stripped

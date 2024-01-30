@@ -8,8 +8,6 @@ public class ProductLevel1 : ProductBase
     private bool _move;
     private bool _isCorrectProduct = false;
 
-    public VideoClip Clip => InfoFromSO.Clip;
-
 
     [SerializeField] private Rigidbody2D _rigidbody;
     [SerializeField] private GameObject _check;

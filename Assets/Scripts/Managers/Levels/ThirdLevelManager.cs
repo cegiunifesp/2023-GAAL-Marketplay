@@ -91,7 +91,7 @@ public class ThirdLevelManager : LevelManagerBase
                 break;
             }
 
-            Order newOrder = new Order(productSelectedSO.ProductName, amountOfProduct, productSelectedSO.SpriteSource, null);
+            Order newOrder = new Order(productSelectedSO.ProductName, amountOfProduct, productSelectedSO.SpriteSource);
             _orders.Add(newOrder);
 
             for(int i = 0; i < amountOfProduct; i++)

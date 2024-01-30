@@ -12,6 +12,9 @@ public class Basket : MonoBehaviour
     [SerializeField] private Button _confirmBt;
     [SerializeField] private Button _declaineBt;
 
+    [SerializeField] private AudioClip _correctProducts;
+    [SerializeField] private AudioClip _incorrectProducts;
+
     private int _currentParentIndex;
     private int _wrongProducts;
     private bool _hasWrongProduct;
@@ -78,11 +81,14 @@ public class Basket : MonoBehaviour
     {
         if (AllProductsCorrect())
         {
+            AudioManager.OnPlaySFX(_correctProducts);
             LeanTween.moveY(gameObject, transform.position.y + 0.5f, 0.15f).setEaseInQuad().setLoopPingPong(2);
             Events.Instance.OnAddScore(500);
             Events.Instance.OnGameEnded();
             return;
         }
+
+        AudioManager.OnPlaySFX(_incorrectProducts);
 
         transform.eulerAngles = Vector3.forward * 10;
         LeanTween.rotateZ(gameObject, -10, 0.2f).setLoopPingPong(1).setOnComplete(() =>

@@ -15,5 +15,7 @@ MonoBehaviour:
   <ProductName>k__BackingField: "A\xE7\xFAcar"
   <TypeProduct>k__BackingField: 1
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 97f1bc61decc25144bc20766edc77eb4, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: d9903ece3a4ac00a6b7e7fddab9a0750, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Cafe/acucar.ogv
+    <Clip>k__BackingField: {fileID: 32900000, guid: da2d3b28950aa7f408bce51d5fc01316, type: 3}
   <AdjustHorizontally>k__BackingField: 0

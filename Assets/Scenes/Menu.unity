@@ -294,7 +294,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 316.00024, y: -59.910004}
+  m_AnchoredPosition: {x: 316.00024, y: -55}
   m_SizeDelta: {x: 429.88, y: 176.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6168042
@@ -850,17 +850,17 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 207617336}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 937119735}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 36, y: 133}
-  m_SizeDelta: {x: 324.83, y: 501.59}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.521, y: 0.3708148}
+  m_AnchorMax: {x: 0.521, y: 0.3708148}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 323.83, y: 501.59}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!328 &207617338
 VideoPlayer:
   m_ObjectHideFlags: 0
@@ -879,7 +879,7 @@ VideoPlayer:
   m_TargetMaterialProperty: <noninit>
   m_RenderMode: 2
   m_AspectRatio: 0
-  m_DataSource: 0
+  m_DataSource: 1
   m_TimeUpdateMode: 1
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 0
@@ -1658,7 +1658,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 671.84, y: -2021.585}
+  m_AnchoredPosition: {x: 671.84, y: -1964.925}
   m_SizeDelta: {x: 1283.68, y: 56.67}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &666185975
@@ -1819,6 +1819,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayOnAwake: 1
+  sfxVolume: 0
+  backgroundVolume: 0.6
+  uiVolume: 0.4
   BackgroundAudioSource: {fileID: 739537407}
   AmbienceAudioSource: {fileID: 0}
   SfxAudioSource: {fileID: 0}
@@ -2367,9 +2370,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1252515625}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 1790.62, y: 70}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -90, y: 70}
   m_SizeDelta: {x: 93.81, y: 114.05}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &844443793
@@ -2605,8 +2608,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 671.84, y: -689.97}
-  m_SizeDelta: {x: 1283.68, y: 1359.94}
+  m_AnchoredPosition: {x: 671.84, y: -661.64}
+  m_SizeDelta: {x: 1283.68, y: 1303.28}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1029623452
 MonoBehaviour:
@@ -2633,8 +2636,8 @@ MonoBehaviour:
     Dr. Vanessa Andrade Pereira\n\nArte:\nJonathan Andrade de Oliveira\nLav\xEDnia
     Ferreira Novais\n\nGame Design:\nCassiano Zeferino Maia Siqueira de Paiva\nGabriel
     Amaral Silva\n\nM\xFAsica & Sons:\nKevin Louren\xE7o Tom\xE9\nMarcos Lucas da
-    Silva\n\nPrograma\xE7\xE3o:\nArthur Gon\xE7alves\nGabriel Henrique Silva\nGuilherme
-    de Oliveira Sousa\n\nTester:\nGuilherme Aguiar Christ\nGuilherme de Souza Sabbado"
+    Silva\n\nPrograma\xE7\xE3o:\nArthur Gon\xE7alves\nGabriel Henrique Silva\n\nTester:\nGuilherme
+    Aguiar Christ\nGuilherme de Souza Sabbado"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0326e736f6625c5469eba8d532b16792, type: 2}
   m_sharedMaterial: {fileID: 8960218993550219981, guid: 0326e736f6625c5469eba8d532b16792, type: 2}
@@ -3048,7 +3051,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 2059.92}
+  m_SizeDelta: {x: 0, y: 2003.2601}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1207071509
 MonoBehaviour:
@@ -3885,7 +3888,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 671.84, y: -1681.595}
+  m_AnchoredPosition: {x: 671.84, y: -1624.935}
   m_SizeDelta: {x: 1283.68, y: 623.31}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1860801436
@@ -4116,9 +4119,9 @@ RectTransform:
   - {fileID: 7281453}
   m_Father: {fileID: 544892620}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -953, y: -549}
+  m_AnchorMin: {x: 0.77300006, y: 0.80200005}
+  m_AnchorMax: {x: 0.77300006, y: 0.80200005}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1545.03, y: 987.69995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1946672707
@@ -4271,9 +4274,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1252515625}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 1336.3, y: 70}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -587.68, y: 70}
   m_SizeDelta: {x: 93.02, y: 112.89}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1996916832
@@ -4420,10 +4423,13 @@ MonoBehaviour:
   _creditsScene: {fileID: 544892619}
   _levelsSelection: {fileID: 1596053342}
   _shelf: {fileID: 1990492703}
-  _clips:
-  - {fileID: 32900000, guid: 5ce1395546c8cda399d6c11fba54b663, type: 3}
-  - {fileID: 32900000, guid: 0f21a68735440c779a50f3e6c54b76d1, type: 3}
-  - {fileID: 32900000, guid: 125c2867c167132e7b4377d7fce093a1, type: 3}
+  _videos:
+  - <Url>k__BackingField: Cafe/cafe.mp4
+    <Clip>k__BackingField: {fileID: 32900000, guid: aa38143ee9486824e97eae5350112122, type: 3}
+  - <Url>k__BackingField: Almoco/almoco.mp4
+    <Clip>k__BackingField: {fileID: 32900000, guid: 2f8bbe7ad72ff974faf43d7c9eb1ebfd, type: 3}
+  - <Url>k__BackingField: Higiene/higiene_pessoal.mp4
+    <Clip>k__BackingField: {fileID: 32900000, guid: 9a66788d13fa0cf43b25e8bb62148b3c, type: 3}
   _playBt: {fileID: 2059416273}
   _level1Bt: {fileID: 4905527}
   _creditsBt: {fileID: 6168042}
@@ -4435,7 +4441,6 @@ MonoBehaviour:
   _leaveOptionsBt: {fileID: 2146652013}
   _leaveCredits: {fileID: 7281454}
   _menuAudio: {fileID: 702391652}
-  _videoPlayer: {fileID: 207617338}
   _loader: {fileID: 1564487087685776734, guid: e43faa6e30566a8408c6d6c73fb1d2a8, type: 3}
 --- !u!114 &2002588492
 MonoBehaviour:
@@ -4487,7 +4492,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 316, y: 165}
+  m_AnchoredPosition: {x: 316, y: 169.91}
   m_SizeDelta: {x: 429.88, y: 176.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2059416273
@@ -4596,6 +4601,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2079945380}
   - component: {fileID: 2079945379}
+  - component: {fileID: 2079945381}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -4615,6 +4621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d164c2ce0013df4fb2166c1d2eef738, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <UrlVideo>k__BackingField: 0
   _breakfastProducts:
   - {fileID: 11400000, guid: 6954d7bfb0611924b9e03908e2d150e4, type: 2}
   - {fileID: 11400000, guid: a4b89c374a0f2924ca70f89bc96a4529, type: 2}
@@ -4653,6 +4660,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2079945381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2079945378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b669ef53c7f54a449afd78d3334f226, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _videoPlayer: {fileID: 207617338}
+  _videoFormat: 0
 --- !u!1 &2146652009
 GameObject:
   m_ObjectHideFlags: 0

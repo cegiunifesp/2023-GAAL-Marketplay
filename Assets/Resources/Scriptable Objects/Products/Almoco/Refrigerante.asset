@@ -15,5 +15,7 @@ MonoBehaviour:
   <ProductName>k__BackingField: Refrigerante
   <TypeProduct>k__BackingField: 2
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: c711634b2562dc377b75d5cad4487ab4, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: c1e813b19919066b48a14870a3dd18fa, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Almoco/refri.ogv
+    <Clip>k__BackingField: {fileID: 32900000, guid: 5da8bcc456a95f14e907521d9bebb324, type: 3}
   <AdjustHorizontally>k__BackingField: 1

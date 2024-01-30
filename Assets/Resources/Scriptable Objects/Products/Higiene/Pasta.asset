@@ -15,5 +15,7 @@ MonoBehaviour:
   <ProductName>k__BackingField: Pasta de dente
   <TypeProduct>k__BackingField: 3
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 2ed5d530cfdbdb14ca052f2ec6925b32, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: 40b5de735f112ea049f90185f89aec7c, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Higiene/pasta_de_dente.ogv
+    <Clip>k__BackingField: {fileID: 32900000, guid: 8893135727053994796b6038ae525ff7, type: 3}
   <AdjustHorizontally>k__BackingField: 1

@@ -6,6 +6,7 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
 {
     private Enums.StatesDrag _state;
 
+    [SerializeField] private AudioClip _hoverClip;
     [SerializeField] private Transform _intermediateParent;
     [SerializeField] private float _speedMovement;
 
@@ -163,6 +164,7 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
         switch (_state)
         {
             case Enums.StatesDrag.Initial:
+                AudioManager.OnPlaySFX(_hoverClip, -1, false, false);
                 _state = Enums.StatesDrag.OnDrag;
                 transform.SetParent(_intermediateParent);
                 break;

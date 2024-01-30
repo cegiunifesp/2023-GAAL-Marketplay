@@ -1,9 +1,6 @@
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using UnityEngine.Video;
 using UnityEngine;
 using TMPro;
 
@@ -21,7 +18,6 @@ public class FirstLevelManager : LevelManagerBase
 
     [Header("Others")]
     [SerializeField] private TextMeshProUGUI _leftOrdersTx;
-    [SerializeField] private VideoPlayer _videoPlayer;
 
     private int _productsPooledThatAreNotTheOrder;
     private float _timeToActiveProducts;
@@ -33,7 +29,7 @@ public class FirstLevelManager : LevelManagerBase
     private void Start()
     {
         Events.Instance.onGameStart += HandleStartGame;
-        _videoPlayer.gameObject.SetActive(false);
+        //_videoPlayer.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -93,12 +89,12 @@ public class FirstLevelManager : LevelManagerBase
         if (paused)
         {
             Time.timeScale = 0;
-            _videoPlayer.Pause();
+            VideoManager.Instance.PauseVideo();
         }
         else
         {
             Time.timeScale = 1;
-            _videoPlayer.Play();
+            VideoManager.Instance.UnpauseVideo();
         }
     }
 
@@ -139,8 +135,8 @@ public class FirstLevelManager : LevelManagerBase
 
         Events.Instance.OnGameEnded();
         _gameEnded = true;
-        _videoPlayer.Stop();
-        _videoPlayer.gameObject.SetActive(false);
+
+        VideoManager.Instance.StopVideo();
 
         Audio.VictoryVolume();
 
@@ -159,7 +155,7 @@ public class FirstLevelManager : LevelManagerBase
 
         var productDesired = OrdersAvailables.GetRandomValue();
 
-        _orderDesired = new Order(productDesired.ProductName, 1, productDesired.SpriteSource, productDesired.Clip);
+        _orderDesired = new Order(productDesired.ProductName, 1, productDesired.SpriteSource);
 
         OrdersAvailables.Remove(OrdersAvailables.First(t => t.ProductName == productDesired.ProductName));
 
@@ -172,7 +168,9 @@ public class FirstLevelManager : LevelManagerBase
             _leftOrdersTx.text = $"Restam {OrdersAvailables.Count+1} produtos";
         }
 
-        SetVideoPlayer(_orderDesired.Clip);
+        //string url = productDesired.Clip.Substring(0, productDesired.Clip.Length - 3) + "mp4";
+        VideoManager.Instance.ShowVideo(productDesired.VideoInfo);
+        //SetVideoPlayer(url, productDesired.Video);
 
         _monitorText.color = Color.white;
         _selected = false;
@@ -230,17 +228,25 @@ public class FirstLevelManager : LevelManagerBase
     #endregion
 
     #region Video
-    private void SetVideoPlayer(VideoClip clip)
-    {
-        _videoPlayer.gameObject.SetActive(true);
-        _videoPlayer.clip = clip;
-        _videoPlayer.Play();
-    }
+    //private void SetVideoPlayer(string url, VideoClip clip)
+    //{
+    //    _videoPlayer.gameObject.SetActive(true);
+    //    if ( GameManager.Instance.UrlVideo)
+    //    {
+    //        _videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, url);
+    //    }
+    //    else
+    //    {
+    //        _videoPlayer.clip = clip;
+    //    }
+    //    _videoPlayer.Prepare();
+    //    _videoPlayer.Play();
+    //}
 
-    private void StopVideoPlayer()
-    {
-        if (_videoPlayer.isPlaying) _videoPlayer.Stop();
-    }
+    //private void StopVideoPlayer()
+    //{
+    //    if (_videoPlayer.isPlaying) _videoPlayer.Stop();
+    //}
     #endregion
 
     #region Pool

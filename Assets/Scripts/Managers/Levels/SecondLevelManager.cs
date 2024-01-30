@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SecondLevelManager : LevelManagerBase
 {
@@ -14,6 +15,8 @@ public class SecondLevelManager : LevelManagerBase
     [SerializeField] private ShelfOrderUI[] _shelfOrders;
 
     [Header("Others")]
+    [SerializeField] private float speedScroll;
+    [SerializeField] private Scrollbar _scrollbar;
     [SerializeField] private Sprite[] _numbers;
     [field: SerializeField] public Shelf[] Shelfs { get; private set; }
 
@@ -78,6 +81,15 @@ public class SecondLevelManager : LevelManagerBase
     }
     #endregion
 
+    public void AdvanceScroll()
+    {
+        _scrollbar.value += Time.deltaTime * speedScroll;
+    }
+
+    public void DreceaseScroll()
+    {
+        _scrollbar.value -= Time.deltaTime * speedScroll;
+    }
 
     private void CreateOrders()
     {
@@ -101,7 +113,7 @@ public class SecondLevelManager : LevelManagerBase
                     print("Erro");
                 }
 
-                Order newOrder = new Order(productSelected.ProductName, amountOfProduct, productSelected.SpriteSource, null);
+                Order newOrder = new Order(productSelected.ProductName, amountOfProduct, productSelected.SpriteSource);
                 orders.Add(newOrder);
                 products.Add(productSelected);
                 productsAmounts.Add(amountOfProduct);
@@ -117,10 +129,10 @@ public class SecondLevelManager : LevelManagerBase
 
     private void SetOrderInSomeRandomPaper(Shelf shelf, List<Order> orders)
     {
-        var paperOrder = _shelfOrders.GetRandomValue();
+        var paperOrder = _shelfOrders[shelf.GetIndex() - 1];
         while (paperOrder.Initiated)
         {
-            paperOrder = _shelfOrders.GetRandomValue();
+            paperOrder = _shelfOrders[shelf.GetIndex() - 1];
         }
 
         paperOrder.Initiate(shelf.GetIndex(), orders.ToArray(), _numbers);
