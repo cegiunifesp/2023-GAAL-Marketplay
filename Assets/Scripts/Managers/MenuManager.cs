@@ -2,6 +2,7 @@ using System.Threading;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class MenuManager : MonoBehaviour
 {
@@ -16,19 +17,16 @@ public class MenuManager : MonoBehaviour
 
     [Header("Buttons And Texts")]
     [SerializeField] private Button _playBt;
-    [SerializeField] private Button _level1Bt;
-
-    [Space(5)]
     [SerializeField] private Button _creditsBt;
-    [SerializeField] private Button _Level2Bt;
-
-    [Space(5)]
     [SerializeField] private Button _leaveBt;
-    [SerializeField] private Button _level3Bt;
 
     [Space(5)]
-    [SerializeField] private Button _nextTypeProductsBt;
-    [SerializeField] private Button _previousTypeProductsBt;
+    [SerializeField] private Button _breakfastBt;
+    [SerializeField] private Button _lunchBt;
+    [SerializeField] private Button _hygieneBt;
+
+    [Space(5)]
+    [SerializeField] private Button _startGameplayBt;
     [SerializeField] private Button _leaveOptionsBt;
 
     [Space(5)]
@@ -38,6 +36,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] MenuAudio _menuAudio;
     [SerializeField] private Loader _loader;
 
+    private int _lastTypeSelected;
 
     private void Awake()
     {
@@ -45,8 +44,7 @@ public class MenuManager : MonoBehaviour
 
         ResetScore();
 
-        _nextTypeProductsBt.onClick.AddListener(NextTypeProducts);
-        _previousTypeProductsBt.onClick.AddListener(PreviousTypeProducts);
+        _startGameplayBt.onClick.AddListener(StartChapter1Scene);
         _leaveOptionsBt.onClick.AddListener(LeaveLevelSelectionScene);
 
         SetButtonsToMenuOptions();
@@ -69,56 +67,39 @@ public class MenuManager : MonoBehaviour
 
     private void SetLevelSelectionButtons()
     {
-        _level1Bt.onClick.AddListener(() =>
+        _breakfastBt.onClick.AddListener(() =>
         {
-            VideoManager.Instance.StopVideo();
-
-            var loader = Instantiate(_loader);
-            loader.LoadScene(Enums.Scenes.Chapter1, instantly: false);
+            TypeSelected(1);
         });
 
-        _Level2Bt.onClick.AddListener(() =>
+        _lunchBt.onClick.AddListener(() =>
         {
-            VideoManager.Instance.StopVideo();
-
-            var loader = Instantiate(_loader);
-            loader.LoadScene(Enums.Scenes.Chapter2, instantly: false);
+            TypeSelected(2);
         });
 
-        _level3Bt.onClick.AddListener(() =>
+        _hygieneBt.onClick.AddListener(() =>
         {
-            VideoManager.Instance.StopVideo();
-
-            var loader = Instantiate(_loader);
-            loader.LoadScene(Enums.Scenes.Chapter3, instantly: false);
+            TypeSelected(3);
         });
 
     }
 
-    private void NextTypeProducts()
+    private void StartChapter1Scene()
     {
-        _shelf.GetChild(_typeIndex - 1).gameObject.SetActive(false);
+        VideoManager.Instance.StopVideo();
 
-        _typeIndex = (_typeIndex + 1) % 4;
-        if (_typeIndex == 0) _typeIndex++;
-
-        _shelf.GetChild(_typeIndex - 1).gameObject.SetActive(true);
-
-        VideoManager.Instance.ShowVideo(_videos[_typeIndex - 1]);
-        GameManager.Instance.SetTypeSelected(_typeIndex);
+        var loader = Instantiate(_loader);
+        loader.LoadScene(Enums.Scenes.Chapter1, instantly: false);
     }
 
-    private void PreviousTypeProducts()
+    private void TypeSelected(int typeIndex)
     {
-        _shelf.GetChild(_typeIndex - 1).gameObject.SetActive(false);
+        if (_lastTypeSelected > 0 ) _shelf.GetChild(_lastTypeSelected - 1).gameObject.SetActive(false);
+        _shelf.GetChild(typeIndex - 1).gameObject.SetActive(true);
+        _lastTypeSelected = typeIndex;
 
-        _typeIndex -= 1;
-        if (_typeIndex <= 0) _typeIndex = 3;
-
-        _shelf.GetChild(_typeIndex - 1).gameObject.SetActive(true);
-
-        VideoManager.Instance.ShowVideo(_videos[_typeIndex - 1]);
-        GameManager.Instance.SetTypeSelected(_typeIndex);
+        VideoManager.Instance.ShowVideo(_videos[typeIndex - 1]);
+        GameManager.Instance.SetTypeSelected(typeIndex);
     }
 
     private void ShowLevelSelectionScene()
