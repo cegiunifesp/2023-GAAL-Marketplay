@@ -72,6 +72,7 @@ public class VideoManager : MonoBehaviour
         {
             Enums.VideoFormat.MP4 => videoUrl.Substring(0, videoUrl.Length - 3) + "mp4",
             Enums.VideoFormat.OGV => videoUrl.Substring(0, videoUrl.Length - 3) + "ogv",
+            Enums.VideoFormat.WAV => videoUrl.Substring(0, videoUrl.Length - 3) + "wav",
             _ => videoUrl
         };
 

@@ -294,7 +294,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 316.00024, y: -55}
+  m_AnchoredPosition: {x: 316.00024, y: -197.91}
   m_SizeDelta: {x: 429.88, y: 176.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6168042
@@ -878,7 +878,7 @@ VideoPlayer:
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: <noninit>
   m_RenderMode: 2
-  m_AspectRatio: 0
+  m_AspectRatio: 5
   m_DataSource: 1
   m_TimeUpdateMode: 1
   m_PlaybackSpeed: 1
@@ -2762,7 +2762,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1103164964
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4431,7 +4431,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 316, y: 169.91}
+  m_AnchoredPosition: {x: 316, y: 27}
   m_SizeDelta: {x: 429.88, y: 176.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2059416273
@@ -4560,7 +4560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d164c2ce0013df4fb2166c1d2eef738, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <UrlVideo>k__BackingField: 0
+  <UrlVideo>k__BackingField: 1
   _breakfastProducts:
   - {fileID: 11400000, guid: 6954d7bfb0611924b9e03908e2d150e4, type: 2}
   - {fileID: 11400000, guid: a4b89c374a0f2924ca70f89bc96a4529, type: 2}

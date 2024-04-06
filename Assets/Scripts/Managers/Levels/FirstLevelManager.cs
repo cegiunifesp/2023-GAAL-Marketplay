@@ -227,28 +227,6 @@ public class FirstLevelManager : LevelManagerBase
     }
     #endregion
 
-    #region Video
-    //private void SetVideoPlayer(string url, VideoClip clip)
-    //{
-    //    _videoPlayer.gameObject.SetActive(true);
-    //    if ( GameManager.Instance.UrlVideo)
-    //    {
-    //        _videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, url);
-    //    }
-    //    else
-    //    {
-    //        _videoPlayer.clip = clip;
-    //    }
-    //    _videoPlayer.Prepare();
-    //    _videoPlayer.Play();
-    //}
-
-    //private void StopVideoPlayer()
-    //{
-    //    if (_videoPlayer.isPlaying) _videoPlayer.Stop();
-    //}
-    #endregion
-
     #region Pool
     private void GrowPool()
     {

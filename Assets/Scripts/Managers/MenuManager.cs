@@ -94,7 +94,12 @@ public class MenuManager : MonoBehaviour
 
     private void TypeSelected(int typeIndex)
     {
-        if (_lastTypeSelected > 0 ) _shelf.GetChild(_lastTypeSelected - 1).gameObject.SetActive(false);
+        if (_lastTypeSelected > 0)
+        {
+            _shelf.GetChild(0).gameObject.SetActive(false);
+            _shelf.GetChild(1).gameObject.SetActive(false);
+            _shelf.GetChild(2).gameObject.SetActive(false);
+        }
         _shelf.GetChild(typeIndex - 1).gameObject.SetActive(true);
         _lastTypeSelected = typeIndex;
 
