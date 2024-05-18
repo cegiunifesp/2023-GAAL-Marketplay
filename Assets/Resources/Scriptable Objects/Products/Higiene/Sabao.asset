@@ -17,5 +17,6 @@ MonoBehaviour:
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 37d5534b69031d343a2c2d30003c2421, type: 3}
   <VideoInfo>k__BackingField:
     <Url>k__BackingField: Higiene/sabao.ogv
+    <Duration>k__BackingField: 4.5
     <Clip>k__BackingField: {fileID: 32900000, guid: 195abbbc99f37b148917b4bb945a401c, type: 3}
   <AdjustHorizontally>k__BackingField: 0

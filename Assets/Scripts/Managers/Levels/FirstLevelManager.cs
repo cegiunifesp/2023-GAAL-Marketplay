@@ -168,12 +168,10 @@ public class FirstLevelManager : LevelManagerBase
             _leftOrdersTx.text = $"Restam {OrdersAvailables.Count+1} produtos";
         }
 
-        //string url = productDesired.Clip.Substring(0, productDesired.Clip.Length - 3) + "mp4";
-        VideoManager.Instance.ShowVideo(productDesired.VideoInfo);
-        //SetVideoPlayer(url, productDesired.Video);
-
         _monitorText.color = Color.white;
         _selected = false;
+
+        VideoManager.Instance.NewVideo(productDesired.VideoInfo);
     }
 
     private void CorrectOrder()

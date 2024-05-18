@@ -17,6 +17,7 @@ public class ProductSO : ScriptableObject
 public struct VideoInfo
 {
     [field: SerializeField] public string Url { get; private set; }
+    [field: SerializeField] public float Duration { get; private set; }
     [field: SerializeField] public VideoClip Clip { get; private set; }
 
 }

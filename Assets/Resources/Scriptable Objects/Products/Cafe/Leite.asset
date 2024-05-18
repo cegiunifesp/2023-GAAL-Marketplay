@@ -17,5 +17,6 @@ MonoBehaviour:
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: db55db59cf87239e79ae0a05cd1d872d, type: 3}
   <VideoInfo>k__BackingField:
     <Url>k__BackingField: cafe/leite.ogv
+    <Duration>k__BackingField: 4.5
     <Clip>k__BackingField: {fileID: 32900000, guid: b559612452ab6c542a2b3a20e757efc9, type: 3}
   <AdjustHorizontally>k__BackingField: 1

@@ -17,5 +17,6 @@ MonoBehaviour:
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: ffeb8e2814275959ea6d0e8e287aac79, type: 3}
   <VideoInfo>k__BackingField:
     <Url>k__BackingField: cafe/manteiga.ogv
+    <Duration>k__BackingField: 4.5
     <Clip>k__BackingField: {fileID: 32900000, guid: 3fdb3dfb1a6e0c742b8da13ccf411091, type: 3}
   <AdjustHorizontally>k__BackingField: 0

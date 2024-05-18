@@ -103,7 +103,7 @@ public class MenuManager : MonoBehaviour
         _shelf.GetChild(typeIndex - 1).gameObject.SetActive(true);
         _lastTypeSelected = typeIndex;
 
-        VideoManager.Instance.ShowVideo(_videos[typeIndex - 1]);
+        VideoManager.Instance.NewVideo(_videos[typeIndex - 1]);
         GameManager.Instance.SetTypeSelected(typeIndex);
     }
 
@@ -120,7 +120,7 @@ public class MenuManager : MonoBehaviour
 
         _levelsSelection.SetActive(true);
 
-        VideoManager.Instance.ShowVideo(_videos[_typeIndex - 1]);
+        VideoManager.Instance.NewVideo(_videos[_typeIndex - 1]);
     }
 
     private void LeaveLevelSelectionScene()

@@ -17,5 +17,6 @@ MonoBehaviour:
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 39287851a3c121ce9ace84ef4bbc70cb, type: 3}
   <VideoInfo>k__BackingField:
     <Url>k__BackingField: Almoco/feijao.ogv
+    <Duration>k__BackingField: 4.5
     <Clip>k__BackingField: {fileID: 32900000, guid: a1304863b4d426d4d8f4c4cd15bcd7e6, type: 3}
   <AdjustHorizontally>k__BackingField: 1

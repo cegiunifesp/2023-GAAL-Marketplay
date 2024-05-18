@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
-using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
 
 public class Loader : MonoBehaviour
 {

@@ -17,5 +17,6 @@ MonoBehaviour:
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: e93970dd497687459a428fbb59de030b, type: 3}
   <VideoInfo>k__BackingField:
     <Url>k__BackingField: Higiene/shampoo.ogv
+    <Duration>k__BackingField: 4.5
     <Clip>k__BackingField: {fileID: 32900000, guid: 3a1881357c482a741968cd2f6cc21b95, type: 3}
   <AdjustHorizontally>k__BackingField: 1
