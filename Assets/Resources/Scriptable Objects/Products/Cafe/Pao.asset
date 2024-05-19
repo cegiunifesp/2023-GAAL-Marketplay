@@ -16,7 +16,7 @@ MonoBehaviour:
   <TypeProduct>k__BackingField: 1
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: ea5008fe42945f0dbaada3f335cedbe8, type: 3}
   <VideoInfo>k__BackingField:
-    <Url>k__BackingField: Cafe/pao.ogv
+    <Url>k__BackingField: Cafe/novo_pao.mp4
     <Duration>k__BackingField: 4.5
-    <Clip>k__BackingField: {fileID: 32900000, guid: 722d7bd1199cd1b4cadc0f3dcc079c17, type: 3}
+    <Clip>k__BackingField: {fileID: 32900000, guid: 287cf13023e98144ca33c333a3765209, type: 3}
   <AdjustHorizontally>k__BackingField: 1

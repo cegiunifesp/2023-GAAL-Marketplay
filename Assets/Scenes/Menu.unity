@@ -4364,15 +4364,15 @@ MonoBehaviour:
   _levelsSelection: {fileID: 1596053342}
   _shelf: {fileID: 1990492703}
   _videos:
-  - <Url>k__BackingField: Cafe/cafe.mp4
+  - <Url>k__BackingField: Cafe/novo_cafe.mp4
     <Duration>k__BackingField: 5
-    <Clip>k__BackingField: {fileID: 32900000, guid: aa38143ee9486824e97eae5350112122, type: 3}
-  - <Url>k__BackingField: Almoco/almoco.mp4
+    <Clip>k__BackingField: {fileID: 32900000, guid: 49c2ed0c74089ee45bc9b8abfc5afba4, type: 3}
+  - <Url>k__BackingField: Almoco/novo_almoco.mp4
     <Duration>k__BackingField: 5
-    <Clip>k__BackingField: {fileID: 32900000, guid: 2f8bbe7ad72ff974faf43d7c9eb1ebfd, type: 3}
-  - <Url>k__BackingField: Higiene/higiene_pessoal.mp4
+    <Clip>k__BackingField: {fileID: 32900000, guid: b3480cbca8875cc48b07db7f25cb9eb6, type: 3}
+  - <Url>k__BackingField: Higiene/novo_higiene_pessoal.mp4
     <Duration>k__BackingField: 5
-    <Clip>k__BackingField: {fileID: 32900000, guid: 9a66788d13fa0cf43b25e8bb62148b3c, type: 3}
+    <Clip>k__BackingField: {fileID: 32900000, guid: b8550e98f08260540821ea1508eaddc0, type: 3}
   _playBt: {fileID: 2059416273}
   _creditsBt: {fileID: 6168042}
   _leaveBt: {fileID: 1103164965}

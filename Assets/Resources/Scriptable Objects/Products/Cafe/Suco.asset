@@ -16,7 +16,7 @@ MonoBehaviour:
   <TypeProduct>k__BackingField: 1
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 156636cf1f5e5c24d897d6ff7c475689, type: 3}
   <VideoInfo>k__BackingField:
-    <Url>k__BackingField: Cafe/suco.ogv
+    <Url>k__BackingField: Cafe/novo_suco.mp4
     <Duration>k__BackingField: 4.5
-    <Clip>k__BackingField: {fileID: 32900000, guid: 6275baddd22528e46a6e90a209297487, type: 3}
+    <Clip>k__BackingField: {fileID: 32900000, guid: 9acdf722f63130b4e8b779bd3301ad9e, type: 3}
   <AdjustHorizontally>k__BackingField: 1
