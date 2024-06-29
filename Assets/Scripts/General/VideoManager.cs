@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 using UnityEngine.Video;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
-using TMPro;
-using System.Threading;
 
 public class VideoManager : MonoBehaviour
 {
@@ -26,6 +23,7 @@ public class VideoManager : MonoBehaviour
     private void Start()
     {
         _shown = false;
+        _videoPlayer.source = GameManager.Instance.UrlVideo ? VideoSource.Url : VideoSource.VideoClip;
         _videoPlayer.gameObject.SetActive(_shown);
     }
 
@@ -50,7 +48,15 @@ public class VideoManager : MonoBehaviour
 
         if (GameManager.Instance.UrlVideo)
         {
-            _videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, GetCorrectUrl(_videoInfo.Url));
+
+            string url = _videoFormat switch
+            {
+                Enums.VideoFormat.MP4 => _videoInfo.Url + _videoInfo.Clip.name + ".mp4",
+                Enums.VideoFormat.OGV => _videoInfo.Url + _videoInfo.Clip.name + ".ogv",
+                Enums.VideoFormat.WAV => _videoInfo.Url + _videoInfo.Clip.name + ".wav",
+                _ => _videoInfo.Url + _videoInfo.Clip.name + ".mp4"
+            };
+            _videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, GetCorrectUrl(url));
         }
         else
         {

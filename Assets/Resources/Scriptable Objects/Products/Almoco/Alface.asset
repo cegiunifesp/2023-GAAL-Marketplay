@@ -16,7 +16,7 @@ MonoBehaviour:
   <TypeProduct>k__BackingField: 2
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 8803578b24723a5e68b4d092c0cafc00, type: 3}
   <VideoInfo>k__BackingField:
-    <Url>k__BackingField: Almoco/novo_alface.mp4
+    <Url>k__BackingField: Almoco/
     <Duration>k__BackingField: 4.5
-    <Clip>k__BackingField: {fileID: 32900000, guid: d247e6db9618ba841ac4d7d027ab4e51, type: 3}
+    <Clip>k__BackingField: {fileID: 32900000, guid: 02345fecc9f2a6a4a959a8caf6785da3, type: 3}
   <AdjustHorizontally>k__BackingField: 1

@@ -16,7 +16,7 @@ MonoBehaviour:
   <TypeProduct>k__BackingField: 3
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: e93970dd497687459a428fbb59de030b, type: 3}
   <VideoInfo>k__BackingField:
-    <Url>k__BackingField: Higiene/novo_shampoo.mp4
+    <Url>k__BackingField: Higiene/
     <Duration>k__BackingField: 4.5
-    <Clip>k__BackingField: {fileID: 32900000, guid: 99c143d1a717f5e41a0d333f8968fcfa, type: 3}
+    <Clip>k__BackingField: {fileID: 32900000, guid: b03854b2c18f11b4ba905272f22c1c47, type: 3}
   <AdjustHorizontally>k__BackingField: 1

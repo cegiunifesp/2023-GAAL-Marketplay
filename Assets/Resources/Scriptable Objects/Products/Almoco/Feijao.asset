@@ -16,7 +16,7 @@ MonoBehaviour:
   <TypeProduct>k__BackingField: 2
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 39287851a3c121ce9ace84ef4bbc70cb, type: 3}
   <VideoInfo>k__BackingField:
-    <Url>k__BackingField: Almoco/novo_feijao.mp4
+    <Url>k__BackingField: Almoco/
     <Duration>k__BackingField: 4.5
-    <Clip>k__BackingField: {fileID: 32900000, guid: b69cfdb6aa8f1ec4687d5c4a415a384d, type: 3}
+    <Clip>k__BackingField: {fileID: 32900000, guid: e7ad9648fb47e8a4d9e8a5bd7738a65e, type: 3}
   <AdjustHorizontally>k__BackingField: 1

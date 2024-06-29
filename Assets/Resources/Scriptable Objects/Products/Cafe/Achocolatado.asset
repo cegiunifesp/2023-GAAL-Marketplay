@@ -16,7 +16,7 @@ MonoBehaviour:
   <TypeProduct>k__BackingField: 1
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: da44bc00126e447f2bd8d9a7751a0085, type: 3}
   <VideoInfo>k__BackingField:
-    <Url>k__BackingField: Cafe/novo_achocolatado.mp4
+    <Url>k__BackingField: Cafe/
     <Duration>k__BackingField: 4.5
-    <Clip>k__BackingField: {fileID: 32900000, guid: 729b209250dbcf64c9280f2a2861c785, type: 3}
+    <Clip>k__BackingField: {fileID: 32900000, guid: b3e3045725aaadb40b7fa0aa829118f2, type: 3}
   <AdjustHorizontally>k__BackingField: 1

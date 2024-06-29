@@ -16,7 +16,7 @@ MonoBehaviour:
   <TypeProduct>k__BackingField: 3
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 919da97f15b4aaf40a88e63db4c8ac86, type: 3}
   <VideoInfo>k__BackingField:
-    <Url>k__BackingField: Higiene/novo_protetor_solar.mp4
+    <Url>k__BackingField: Higiene/
     <Duration>k__BackingField: 4.5
-    <Clip>k__BackingField: {fileID: 32900000, guid: 31552ff0c464ee14db34378a3883d0ff, type: 3}
+    <Clip>k__BackingField: {fileID: 32900000, guid: 18c46f98b776ccb409e8a0372788506e, type: 3}
   <AdjustHorizontally>k__BackingField: 1

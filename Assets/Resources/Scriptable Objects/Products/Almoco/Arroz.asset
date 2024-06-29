@@ -16,7 +16,7 @@ MonoBehaviour:
   <TypeProduct>k__BackingField: 2
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: ded2f211db18a4de9a6b85ea2e0ca83d, type: 3}
   <VideoInfo>k__BackingField:
-    <Url>k__BackingField: Almoco/novo_arroz.mp4
+    <Url>k__BackingField: Almoco/
     <Duration>k__BackingField: 4.5
-    <Clip>k__BackingField: {fileID: 32900000, guid: c2724bd2566858f4d81476dba5c49322, type: 3}
+    <Clip>k__BackingField: {fileID: 32900000, guid: 02345fecc9f2a6a4a959a8caf6785da3, type: 3}
   <AdjustHorizontally>k__BackingField: 1
