@@ -1,6 +1,8 @@
 # Marketplay
 Venha testar seus conhecimentos de Libras enquanto faz compras em um supermercado virtual. Você consegue acertar todos os produtos?
 
+<img width="1194" height="668" alt="image" src="https://github.com/user-attachments/assets/8b1f156c-9259-4c91-ad6c-dd251ef55c3c" />
+
 # Guia para programação
 Abaixo estão algumas indicações de como deve ser escrito o código com a finalidade de garantir clareza, eficiência e organização. Ajude na legibilidade do código que muito provávelmente terá de ser alterado no futuro.
 
