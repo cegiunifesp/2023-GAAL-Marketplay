@@ -1,6 +1,6 @@
 # Marketplay
 Venha testar seus conhecimentos de Libras enquanto faz compras em um supermercado virtual. Você consegue acertar todos os produtos?
-
+A VERSÃO ATUAL DO JOGO NO MOMENTO NÃO REFLETE A FINAL DISPONÍVEL NO WEBSITE
 <img width="1194" height="668" alt="image" src="https://github.com/user-attachments/assets/8b1f156c-9259-4c91-ad6c-dd251ef55c3c" />
 
 # Guia para programação
