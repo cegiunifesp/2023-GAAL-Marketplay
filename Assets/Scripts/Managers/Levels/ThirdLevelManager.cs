@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ThirdLevelManager : LevelManagerBase
 {
-    private int maxAmount = 15;
+    private int _maxAmount = 15;
     private float _maxSize = 150;
     private Transform _productObjectsParent;
     private List<int> _numbersLeft = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -79,7 +79,7 @@ public class ThirdLevelManager : LevelManagerBase
         int amountSum = 0;
         var ordersAvailables = GameManager.Instance.GetProductsAvailables();
 
-        while (amountSum < maxAmount)
+        while (amountSum < _maxAmount)
         {
             int amountOfProduct = CheckAmountProducts(ref amountSum);
 
@@ -144,9 +144,9 @@ public class ThirdLevelManager : LevelManagerBase
     {
         int amountOfProduct = _numbersLeft.GetRandomValue(true);
 
-        if (amountSum + amountOfProduct > maxAmount)
+        if (amountSum + amountOfProduct > _maxAmount)
         {
-            amountOfProduct = maxAmount - amountSum;
+            amountOfProduct = _maxAmount - amountSum;
             amountSum += amountOfProduct;
         }
         else

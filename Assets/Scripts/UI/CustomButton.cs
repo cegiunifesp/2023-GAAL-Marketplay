@@ -9,12 +9,12 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
     [SerializeField] private AudioClip _clickClip;
     [SerializeField] private AudioClip _hoverClip;
 
-    private Selectable component;
+    private Selectable _component;
 
     // Start is called before the first frame update
     void Start()
     {
-        component = GetComponent<Selectable>();
+        _component = GetComponent<Selectable>();
     }
 
 
@@ -26,14 +26,14 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!component.interactable || _clickClip == null) return;
+        if (!_component.interactable || _clickClip == null) return;
 
         AudioManager.OnPlayUI(_clickClip, 0.6f);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (!component.interactable || _hoverClip == null) return;
+        if (!_component.interactable || _hoverClip == null) return;
 
         AudioManager.OnPlayUI(_hoverClip, 0.2f);
     }

@@ -13,7 +13,7 @@ public class VideoManager : MonoBehaviour
     private VideoInfo _videoInfo;
 
     private bool _shown;
-    private CancellationTokenSource cts = new CancellationTokenSource();
+    private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
     private void Awake()
     {
@@ -30,8 +30,8 @@ public class VideoManager : MonoBehaviour
     public void NewVideo(VideoInfo videoInfo)
     {
         _videoInfo = videoInfo;
-        cts.Cancel();
-        cts = new CancellationTokenSource();
+        _cancellationTokenSource.Cancel();
+        _cancellationTokenSource = new CancellationTokenSource();
 
         ShowVideo();
     }
@@ -66,7 +66,7 @@ public class VideoManager : MonoBehaviour
         _videoPlayer.gameObject.SetActive(true);
         _videoPlayer.Play();
 
-        await UniTask.Delay((int)(_videoInfo.Duration * 1000), false, PlayerLoopTiming.Update, cts.Token);
+        await UniTask.Delay((int)(_videoInfo.Duration * 1000), false, PlayerLoopTiming.Update, _cancellationTokenSource.Token);
         
         ShowVideo();
     }

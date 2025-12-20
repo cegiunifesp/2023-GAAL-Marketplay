@@ -3,7 +3,7 @@ using UnityEngine.Video;
 
 public class ProductLevel1 : ProductBase
 {
-    private const float SpeedOverTreadmill = 1;
+    private const float _speedOverTreadmill = 1;
 
     private bool _move;
     private bool _isCorrectProduct = false;
@@ -27,7 +27,7 @@ public class ProductLevel1 : ProductBase
     {
         if (!_move) return;
 
-        transform.Translate(Vector3.right * Time.deltaTime * SpeedOverTreadmill);
+        transform.Translate(Vector3.right * Time.deltaTime * _speedOverTreadmill);
     }
 
 
