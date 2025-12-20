@@ -36,6 +36,23 @@ public class Events : MonoBehaviour
         onGameEnded?.Invoke();
     }
 
+    public Action<bool> onPause { get; set; }
+    public void OnPause(bool paused)
+    {
+        onPause?.Invoke(paused);
+    }
+
+    public Action<int> onAddScore { get; set; }
+    public void OnAddScore(int amount)
+    {
+        onAddScore?.Invoke(amount);
+    }
+    public void OnRemoveScore(int amount)
+    {
+        onAddScore?.Invoke(-amount);
+    }
+
+
     #region Level 1
     public Action<ProductLevel1> onEnqueueProduct { get; set; }
     public void OnEnqueueProduct(ProductLevel1 product)
@@ -58,19 +75,4 @@ public class Events : MonoBehaviour
     }
     #endregion
 
-    public Action<bool> onPause { get; set; }
-    public void OnPause(bool paused)
-    {
-        onPause?.Invoke(paused);
-    }
-
-    public Action<int> onAddScore { get; set; }
-    public void OnAddScore(int amount)
-    {
-        onAddScore?.Invoke(amount);
-    }
-    public void OnRemoveScore(int amount)
-    {
-        onAddScore.Invoke(-amount);
-    }
 }

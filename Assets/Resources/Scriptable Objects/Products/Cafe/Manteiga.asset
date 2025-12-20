@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Manteiga
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: Manteiga
-  <TypeProduct>k__BackingField: 0
+  <TypeProduct>k__BackingField: 1
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: ffeb8e2814275959ea6d0e8e287aac79, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: dd5fde457155cdcefbe7b7beac8ad9b8, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Cafe/
+    <Duration>k__BackingField: 4.5
+    <Clip>k__BackingField: {fileID: 32900000, guid: 37680b5b5bcb1ec43adda24d38187eeb, type: 3}
   <AdjustHorizontally>k__BackingField: 0

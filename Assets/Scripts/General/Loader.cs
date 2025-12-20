@@ -1,88 +1,109 @@
 using System;
-using System.Collections;
-using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using Cysharp.Threading.Tasks;
 
 public class Loader : MonoBehaviour
 {
     [SerializeField] private Image _background;
-    [SerializeField] private GameObject _treadmill;
+    [SerializeField] private GameObject _productsParent;
     [SerializeField] private TextMeshProUGUI _loadingTx;
+    [SerializeField] private Canvas _canvas;
 
-    [SerializeField] private AudioSource _backgroundSource;
+    [SerializeField] private AudioManager _backgroundSource;
 
+    private bool _startSpinning;
     private Enums.Scenes _scene;
     public static bool Loading { get; private set; }
+
+    private void Awake()
+    {
+        _canvas.worldCamera = Camera.main;
+    }
 
     private void Start()
     {
         DontDestroyOnLoad(this);
     }
 
+    private void Update()
+    {
+        if (!_startSpinning) return;
+
+        _productsParent.transform.Rotate(Vector3.forward * 40 * Time.deltaTime);
+    }
+
     #region Loading
     public async void LoadScene(Enums.Scenes scene, bool instantly = true)
     {
-        _backgroundSource = GameObject.Find("Audio Manager").GetComponent<AudioManager>().GetBackgroundAudioSource();
+        StartCoroutine(GameObject.Find("Audio Manager").GetComponent<AudioManager>().FadeAllSounds());
 
-        if (!instantly) await Task.Delay(1000);
+        if (!instantly) await UniTask.Delay(500, false, PlayerLoopTiming.Update, destroyCancellationToken);
 
-        LeanTween.scaleX(_background.gameObject, 1.0f, 0.5f).setEaseInOutQuad().setOnComplete(InitiateVisual);
-        LeanTween.value(1, 0, 1f).setOnUpdate((value) =>
+        LeanTween.scaleX(_background.gameObject, 1.0f, 0.5f).setEaseInOutQuad().setOnComplete(() =>
         {
-            Color textColor = _loadingTx.color;
-            textColor.a = value;
-            _loadingTx.color = textColor;
-        }).setLoopPingPong();
+            InitiateVisual();
+            SetLoadingScene(scene);
 
-        StartCoroutine(SetLoadingScene(scene));
+            LeanTween.value(1, 0, 1f).setOnUpdate((value) =>
+            {
+                Color textColor = _loadingTx.color;
+                textColor.a = value;
+                _loadingTx.color = textColor;
+            }).setLoopPingPong();
+        });
     }
 
-    private IEnumerator SetLoadingScene(Enums.Scenes scene)
+    private void SetLoadingScene(Enums.Scenes scene)
     {
-        yield return null;
-        print(scene);
+        _backgroundSource.StartBackground();
 
         Loading = true;
         _scene = scene;
-        float backgroundSoundTime = 0;
 
-        var operation = scene switch
-        {
-            Enums.Scenes.Menu => SceneManager.LoadSceneAsync("Menu", LoadSceneMode.Single),
-            Enums.Scenes.Chapter1 => SceneManager.LoadSceneAsync("Level 1", LoadSceneMode.Single),
-            Enums.Scenes.Chapter2 => SceneManager.LoadSceneAsync("Level 2", LoadSceneMode.Single),
-            Enums.Scenes.Chapter3 => SceneManager.LoadSceneAsync("Level 3", LoadSceneMode.Single),
-            _ => throw new ArgumentOutOfRangeException(nameof(scene), scene, null)
-        };
+        var sceneName = GetSceneName(scene);
+        var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
         operation.allowSceneActivation = false;
-        while (!operation.isDone)
+
+        LeanTween.value(0, 1, 5f).setOnComplete(async () =>
         {
-            var progress = Mathf.Clamp01(operation.progress / 0.9f);
-            Debug.Log("Loading progress: " + (progress * 100) + "%");
+            operation.allowSceneActivation = true;
 
-            if (operation.progress == 0.9f && !LeanTween.isTweening(gameObject))
-            {
-                yield return new WaitForSeconds(5);
-                Debug.Log("Loading completed");
-                _backgroundSource.mute = true;
-                backgroundSoundTime = _backgroundSource.time + 0.1f;
-                operation.allowSceneActivation = true;
-            }
-            yield return null;
-        }
+            StartCoroutine(_backgroundSource.FadeAllSounds());
 
-        
-        SetupLevel(scene, backgroundSoundTime);
-        Loading = false;
+            await UniTask.Delay(500, false, PlayerLoopTiming.Update, destroyCancellationToken);
 
-        LeanTween.scaleX(_background.gameObject, 0.0f, 0.3f).setEaseInOutQuad().setOnComplete(() =>
-        {
-            LeanTween.cancel(gameObject);
-            Destroy(gameObject);
+            PerformExitAnimation();
+
+            Loading = false;
+            _productsParent.SetActive(false);
+            SetupLevel(scene);
         });
+    }
+
+    private string GetSceneName(Enums.Scenes scene)
+    {
+        switch (scene)
+        {
+            case Enums.Scenes.Menu: return "Menu";
+            case Enums.Scenes.Chapter1: return "Level 1";
+            case Enums.Scenes.Chapter2: return "Level 2";
+            case Enums.Scenes.Chapter3: return "Level 3";
+            default: throw new ArgumentOutOfRangeException(nameof(scene), scene, null);
+        }
+    }
+
+    private void PerformExitAnimation()
+    {
+        LeanTween.scaleX(_background.gameObject, 0.0f, 0.5f)
+            .setEaseInOutQuad()
+            .setOnComplete(() =>
+            {
+                LeanTween.cancel(gameObject);
+                Destroy(gameObject);
+            });
     }
 
     public void NextLevel()
@@ -94,13 +115,12 @@ public class Loader : MonoBehaviour
         LoadScene((Enums.Scenes)destiny); 
     }
 
-    private void SetupLevel(Enums.Scenes scene, float timeBackgroundSound)
+    private void SetupLevel(Enums.Scenes scene)
     {
-        GameObject.Find("Audio Manager").GetComponent<AudioManager>().StartBackgroundAt(timeBackgroundSound);
         switch (scene)
         {
             case Enums.Scenes.Menu:
-                print("Menu");
+                //print("Menu");
                 break;
             default:
                 Events.Instance.OnGameStart();
@@ -112,7 +132,8 @@ public class Loader : MonoBehaviour
     #region Visual Part
     private void InitiateVisual()
     {
-        LeanTween.scaleY(_treadmill, 1, 0.3f).setEaseInCubic();
+        _startSpinning = true;
+        _productsParent.SetActive(true);
     }
     #endregion
 }

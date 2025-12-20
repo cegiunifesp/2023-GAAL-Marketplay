@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Leite
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: Leite
-  <TypeProduct>k__BackingField: 0
+  <TypeProduct>k__BackingField: 1
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: db55db59cf87239e79ae0a05cd1d872d, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: 46b62fa70b37a1318ab2807d03805950, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Cafe/
+    <Duration>k__BackingField: 4.5
+    <Clip>k__BackingField: {fileID: 32900000, guid: 3bfbf9e1cdb33024194276f5d6748c26, type: 3}
   <AdjustHorizontally>k__BackingField: 1

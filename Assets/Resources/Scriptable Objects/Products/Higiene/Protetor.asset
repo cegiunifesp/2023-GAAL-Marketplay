@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Protetor
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: Protetor
-  <TypeProduct>k__BackingField: 2
-  <SpriteSource>k__BackingField: {fileID: 21300000, guid: 94ff9c805b5b19a4ca058cd9aeb8243f, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: 6c154234308fc3a4990035924ea4afa7, type: 3}
+  <TypeProduct>k__BackingField: 3
+  <SpriteSource>k__BackingField: {fileID: 21300000, guid: 919da97f15b4aaf40a88e63db4c8ac86, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Higiene/
+    <Duration>k__BackingField: 4.5
+    <Clip>k__BackingField: {fileID: 32900000, guid: 18c46f98b776ccb409e8a0372788506e, type: 3}
   <AdjustHorizontally>k__BackingField: 1

@@ -1,16 +1,22 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
+using System;
 
 public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHandler, IPointerClickHandler
 {
     private Enums.StatesDrag _state;
 
-    [SerializeField] private Transform _canvas;
+    [SerializeField] private AudioClip _hoverClip;
+    [SerializeField] private Transform _intermediateParent;
     [SerializeField] private float _speedMovement;
 
     private int _index;
+
+    private bool _leftBorder = true;
+
     private Vector3 _initialPosition;
     private Vector3 _initialRotation;
+
     private Transform _initialParent;
 
     private Camera _cam;
@@ -83,15 +89,31 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
         Size = _defaultSize;
         AdjustImage();
 
-        LeanTween.move(gameObject, _initialPosition, 1f).setEaseOutQuad().setOnComplete(() =>
+        if (_leftBorder)
         {
-            if (_state == Enums.StatesDrag.OnDrag) return;
+            LeanTween.move(gameObject, _initialPosition, 1.5f).setEaseOutQuad().setOnComplete(() =>
+            {
+                if (_state == Enums.StatesDrag.OnDrag) return;
 
-            transform.SetParent(_initialParent.transform);
-            transform.SetSiblingIndex(_index);
+                transform.SetParent(_initialParent);
+                transform.SetSiblingIndex(_index);
+                transform.eulerAngles = _initialRotation;
+            });
+        }
+        else
+        {
+            transform.SetParent(_initialParent);
             transform.eulerAngles = _initialRotation;
-        });
+            _initialPosition = transform.position;
+        }
+
     }
+
+    internal bool IsDragging()
+    {
+        return _state == Enums.StatesDrag.OnDrag;
+    }
+
 
     #region Events
     private void OnPointerUp()
@@ -132,7 +154,7 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
-
+        return;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -142,12 +164,13 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
         switch (_state)
         {
             case Enums.StatesDrag.Initial:
+                AudioManager.OnPlaySFX(_hoverClip, -1, false, false);
                 _state = Enums.StatesDrag.OnDrag;
-                transform.SetParent(_canvas);
+                transform.SetParent(_intermediateParent);
                 break;
             case Enums.StatesDrag.OnSlot:
                 _state = Enums.StatesDrag.OnDrag;
-                transform.SetParent(_canvas);
+                transform.SetParent(_intermediateParent);
                 AdjustImage();
                 break;
             default:
@@ -156,19 +179,20 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
     }
     #endregion
 
+
     #region Basket
     private void AddedToBasket()
     {
-        gameObject.SetActive(false);
         AdjustImage();
         Size = _defaultSize;
     }
 
     public void RemoveFromBasket()
     {
-        gameObject.SetActive(true);
-
-        if (_basket != null) _basket = null;
+        if (_basket != null)
+        {
+            _basket = null;
+        }
         else Debug.LogError("Slot is null");
 
         InitialParent();
@@ -183,9 +207,19 @@ public class ProductLevel3 : ProductBase, IPointerEnterHandler, IPointerDownHand
     {
         if (_state == Enums.StatesDrag.OnDrag)
         {
-            print("Left Basket");
+            //print("Left Basket");
             _basket = null;
         }
     }
     #endregion
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Border")) _leftBorder = false;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Border")) _leftBorder = true;
+    }
 }

@@ -6,6 +6,7 @@ public abstract class LevelManagerBase : MonoBehaviour
 {
     [Header("Base")]
     [SerializeField] protected VictoryScene VictoryScene;
+    [SerializeField] protected AudioManager Audio;
 
     protected bool _gameStarted;
     protected bool _gameEnded;

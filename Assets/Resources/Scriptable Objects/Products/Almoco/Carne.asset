@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Carne
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: Carne
-  <TypeProduct>k__BackingField: 1
+  <TypeProduct>k__BackingField: 2
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: b3fd2abbb96ec520787f8d96ec7a0dce, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: 59013cbf52c12a52dafc2c733a298eb5, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Almoco/
+    <Duration>k__BackingField: 4.5
+    <Clip>k__BackingField: {fileID: 32900000, guid: a319cf9cfdf9fad4aa4ada83ffb79d13, type: 3}
   <AdjustHorizontally>k__BackingField: 1

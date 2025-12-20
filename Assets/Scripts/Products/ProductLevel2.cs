@@ -6,13 +6,15 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
 {
     private Enums.StatesDrag _state;
 
-    private HorizontalLayoutGroup _initialParent;
-    [SerializeField] private Transform _canvas;
+    [SerializeField] private float _speedMovement;
+    [SerializeField] private Transform _parentWhenDragging;
+
+    private int _childIndex;
 
     private Camera _cam;
     private Shelf _shelf;
+    private HorizontalLayoutGroup _initialParent;
 
-    [SerializeField] private float _speedMovement;
 
     private void Update()
     {
@@ -38,7 +40,7 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
     public override void InitiateProduct(ProductSO info)
     {
         _initialParent = transform.parent.GetComponent<HorizontalLayoutGroup>();
-        _canvas = GameObject.Find("Canvas").transform;
+        _parentWhenDragging = GameObject.Find("Products Parent").transform;
         _cam = Camera.main;
 
         Size = _initialParent.GetComponent<RectTransform>().rect.height;
@@ -49,20 +51,41 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
         base.InitiateProduct(info);
     }
 
-    private void InitialParent()
+    private void InitialParent(bool removedFromShelf = false)
     {
+        Interactable = false;
+
         Size = _defaultSize;
         AdjustImage();
 
         Vector3 oldPosition = transform.position;
-        Vector3 newPosition = _initialParent.transform.LastChildPosition() + Vector3.right;
+        Vector3 newPosition;
+
+        if (_initialParent.transform.childCount == 0) newPosition = _initialParent.transform.position;
+        else
+        {
+            if (removedFromShelf)
+            {
+                newPosition = _initialParent.transform.GetChild(_initialParent.transform.childCount - 1).position;
+                _childIndex = _initialParent.transform.childCount;
+            }
+            else
+            {
+                int index = _childIndex == _initialParent.transform.childCount ? _childIndex - 1 : _childIndex;
+                newPosition = _initialParent.transform.GetChild(index).position;
+            }
+        }
 
         transform.position = oldPosition;
-        LeanTween.move(gameObject, newPosition, 1f).setEaseOutQuad().setOnComplete(() =>
+        transform.SetParent(_parentWhenDragging);
+
+        LeanTween.move(gameObject, newPosition, 1).setEaseOutQuad().setOnComplete(() =>
         {
             if (_state == Enums.StatesDrag.OnDrag) return;
 
             transform.SetParent(_initialParent.transform);
+            transform.SetSiblingIndex(_childIndex);
+            Interactable = true;
         });
     }
 
@@ -123,26 +146,18 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
         {
             case Enums.StatesDrag.Initial:
                 _state = Enums.StatesDrag.OnDrag;
-                transform.SetParent(_canvas);
+                _childIndex = transform.GetSiblingIndex();
+                transform.SetParent(_parentWhenDragging);
                 break;
             case Enums.StatesDrag.OnSlot:
                 _state = Enums.StatesDrag.OnDrag;
-                transform.SetParent(_canvas);
+                transform.SetParent(_parentWhenDragging);
                 AdjustImage();
                 Replacing();
                 break;
             default:
                 break;
         }
-    }
-
-    public void ResetState()
-    {
-        if (_state == Enums.StatesDrag.OnSlot)
-        {
-            RemoveFromShelf();
-        }
-        _state = Enums.StatesDrag.Initial;
     }
     #endregion
 
@@ -174,15 +189,15 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
     {
         if (_shelf != null)
         {
-            _shelf.RemovedProduct(ProductName);
+            _shelf.ProductReplaced(ProductName);
         }
     }
 
-    public void RemoveFromShelf()
+    public void ShelfRemovedProduct()
     {
         if (_shelf != null)
         {
-            _shelf.RemovedProduct(ProductName);
+            //_shelf.ProductReplaced(ProductName);
             _shelf = null;
         }
         else
@@ -190,7 +205,7 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
             Debug.LogError("Slot is null");
         }
 
-        InitialParent();
+        InitialParent(true);
     }
     #endregion
 }

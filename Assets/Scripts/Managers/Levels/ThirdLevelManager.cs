@@ -5,8 +5,9 @@ using UnityEngine;
 public class ThirdLevelManager : LevelManagerBase
 {
     private int maxAmount = 15;
+    private float _maxSize = 150;
     private Transform _productObjectsParent;
-    private List<int> _numbersLeft = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    private List<int> _numbersLeft = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
 
     [Header("Products")]
@@ -30,6 +31,8 @@ public class ThirdLevelManager : LevelManagerBase
         Events.Instance.onPause += HandlePause;
         Events.Instance.onGameEnded += HandleEndGame;
 
+        Audio.StartBackground();
+
         ProductsAvailables = new List<ProductSO>();
         ProductsAvailables.AddList(GameManager.Instance.ListProducts[Enums.TypeProducts.Almoco]);
         ProductsAvailables.AddList(GameManager.Instance.ListProducts[Enums.TypeProducts.Cafe]);
@@ -39,8 +42,9 @@ public class ThirdLevelManager : LevelManagerBase
 
         SetOrder();
 
-        CheckIfThereAreRemainingUndesired();
+        CheckIfThereAreUndesiredProducts();
 
+        _personOrderUI.Initiate(_orders.ToArray());
         _basket.SetOrders(_orders);
     }
 
@@ -64,6 +68,8 @@ public class ThirdLevelManager : LevelManagerBase
 
         Time.timeScale = 1;
 
+        Audio.VictoryVolume();
+
         VictoryScene.Initiate();
     }
 
@@ -77,15 +83,15 @@ public class ThirdLevelManager : LevelManagerBase
         {
             int amountOfProduct = CheckAmountProducts(ref amountSum);
 
-            var productSelected = ordersAvailables.GetRandomValue(true);
+            var productSelectedSO = ordersAvailables.GetRandomValue(true);
 
-            if (productSelected == null)
+            if (productSelectedSO == null)
             {
-                print("Erro");
+                PauseManager.NeedToRestart();
                 break;
             }
 
-            Order newOrder = new Order(productSelected.ProductName, amountOfProduct, productSelected.SpriteSource, null);
+            Order newOrder = new Order(productSelectedSO.ProductName, amountOfProduct, productSelectedSO.SpriteSource);
             _orders.Add(newOrder);
 
             for(int i = 0; i < amountOfProduct; i++)
@@ -95,14 +101,13 @@ public class ThirdLevelManager : LevelManagerBase
                 var rect = newProduct.GetComponent<RectTransform>().rect;
 
                 newProduct.Size = rect.height > rect.width ? rect.width : rect.height;
-                newProduct.InitiateProduct(productSelected);
+                if (newProduct.Size > _maxSize) newProduct.Size = _maxSize;
+                newProduct.InitiateProduct(productSelectedSO);
             }
         }
-
-        _personOrderUI.Initiate(_orders.ToArray());
     }
 
-    private void CheckIfThereAreRemainingUndesired()
+    private void CheckIfThereAreUndesiredProducts()
     {
         Dictionary<string, int> ordersAmount = new Dictionary<string, int>();
         foreach (var order in _orders)

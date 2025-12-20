@@ -1,11 +1,36 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
-    [SerializeField] AudioManager _audioManager;
+    public static Action onNeedToRestart { get; set; }
+    public static void NeedToRestart()
+    {
+        onNeedToRestart?.Invoke();
+        onNeedToRestart = null;
+    }
+
+    [SerializeField] private AudioManager _audioManager;
     [SerializeField] private GameObject _pausePanel;
+    [SerializeField] private Toggle _soundTg;
     [SerializeField] private Loader _loader;
+
+    private bool _isMuted;
+
+    private void Start()
+    {
+        _soundTg.onValueChanged.AddListener((value) =>
+        {
+            ToggleSound(value);
+        });
+
+        _isMuted = _audioManager.Muted;
+        _soundTg.isOn = !_isMuted;
+
+        onNeedToRestart += RestartGame;
+    }
 
     public void PauseGame()
     {
@@ -34,9 +59,10 @@ public class PauseManager : MonoBehaviour
         loader.LoadScene(Enums.Scenes.Menu);
     }
 
-    public void ToggleSound()
+    private void ToggleSound(bool value)
     {
-        _audioManager.ToggleMute();
+        _isMuted = !value;
+        _audioManager.Mute(_isMuted);
     }
 
 }

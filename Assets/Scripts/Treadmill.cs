@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Treadmill : MonoBehaviour
@@ -7,16 +5,34 @@ public class Treadmill : MonoBehaviour
     [SerializeField] private float _limitX = 260;
     [SerializeField] private float _speedRolling = 1;
 
-    [SerializeField] private bool _loading;
     [SerializeField] private Transform _child;
+
+    [SerializeField] private RectTransform _rectCollider;
+    [SerializeField] private BoxCollider2D _collider;
 
     private bool _stopRolling;
     private Vector3 _initialPosition;
 
+    private AudioSource _audioSource;
+
     private void Start()
     {
+        _collider.size = new Vector2(_rectCollider.rect.width, _rectCollider.rect.height);
+
         _initialPosition = _child.position;
-        if (!_loading) Events.Instance.onGameEnded += HandleGameEnded;
+
+        _audioSource = GetComponent<AudioSource>();
+
+        Events.Instance.onPause += Paused;
+        Events.Instance.onGameStart += GameStarted;
+        Events.Instance.onGameEnded += HandleGameEnded;
+    }
+
+    private void OnDisable()
+    {
+        Events.Instance.onPause -= Paused;
+        Events.Instance.onGameStart -= GameStarted;
+        Events.Instance.onGameEnded -= HandleGameEnded;
     }
 
     // Update is called once per frame
@@ -31,8 +47,28 @@ public class Treadmill : MonoBehaviour
         }
     }
 
-    public void HandleGameEnded()
+    private void GameStarted()
+    {
+        _audioSource.Play();
+    }
+
+    private void Paused(bool value)
+    {
+        if (value)
+        {
+            _stopRolling = true;
+            _audioSource.Stop();
+        }
+        else
+        {
+            _stopRolling = false;
+            _audioSource.Play();
+        }
+    }
+
+    private void HandleGameEnded()
     {
         _stopRolling = true;
+        _audioSource.Stop();
     }
 }

@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Macarrao
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: "Macarr\xE3o"
-  <TypeProduct>k__BackingField: 1
+  <TypeProduct>k__BackingField: 2
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 396671da55e1897d3a6af3089017dd49, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: daae5dce473829c25aeb75ab715fe271, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Almoco/
+    <Duration>k__BackingField: 4.5
+    <Clip>k__BackingField: {fileID: 32900000, guid: 3760c8b6c395bcf4ba93495109b40277, type: 3}
   <AdjustHorizontally>k__BackingField: 1

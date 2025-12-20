@@ -11,13 +11,13 @@ public class Order
     [field: SerializeField] public int ProductAmount { get; private set; }
 
     public Sprite ProductSprite;
-    public VideoClip Clip { get; private set; }
+    //public string Url { get; private set; }
 
-    public Order(string productName, int amount, Sprite sprite, VideoClip clip)
+    public Order(string productName, int amount, Sprite sprite)
     {
         ProductName = productName;
         ProductAmount = amount;
         ProductSprite = sprite;
-        Clip = clip;
+        //Url = clip;
     }
 }

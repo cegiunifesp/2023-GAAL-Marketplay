@@ -2,7 +2,7 @@ using System.Threading;
 using UnityEngine.Video;
 using UnityEngine.UI;
 using UnityEngine;
-using TMPro;
+using Unity.VisualScripting;
 
 public class MenuManager : MonoBehaviour
 {
@@ -10,36 +10,33 @@ public class MenuManager : MonoBehaviour
     private bool _firstEntry;
 
     [SerializeField] private GameObject _creditsScene;
+    [SerializeField] private GameObject _levelsSelection;
 
     [SerializeField] private Transform _shelf;
-    [SerializeField] private VideoClip[] _clips;
+    [SerializeField] private VideoInfo[] _videos;
 
     [Header("Buttons And Texts")]
-    [SerializeField] private Button _play_Level1_Bt;
-    [SerializeField] private TextMeshProUGUI _play_Level1_Tx;
+    [SerializeField] private Button _playBt;
+    [SerializeField] private Button _creditsBt;
+    [SerializeField] private Button _leaveBt;
 
     [Space(5)]
-    [SerializeField] private Button _credits_Level2_Bt;
-    [SerializeField] private TextMeshProUGUI _credits_Level2_Tx;
+    [SerializeField] private Button _breakfastBt;
+    [SerializeField] private Button _lunchBt;
+    [SerializeField] private Button _hygieneBt;
 
     [Space(5)]
-    [SerializeField] private Button _leave_Level3_Bt;
-    [SerializeField] private TextMeshProUGUI _leave_Level3_Tx;
-
-    [Space(5)]
-    [SerializeField] private Button _nextTypeProductsBt;
-    [SerializeField] private Button _previousTypeProductsBt;
+    [SerializeField] private Button _startGameplayBt;
     [SerializeField] private Button _leaveOptionsBt;
 
     [Space(5)]
     [SerializeField] private Button _leaveCredits;
-    [SerializeField] private TextMeshProUGUI _monitorTx;
 
     [Header("Others")]
     [SerializeField] MenuAudio _menuAudio;
-    [SerializeField] private VideoPlayer _videoPlayer;
     [SerializeField] private Loader _loader;
 
+    private int _lastTypeSelected;
 
     private void Awake()
     {
@@ -47,11 +44,11 @@ public class MenuManager : MonoBehaviour
 
         ResetScore();
 
-        _nextTypeProductsBt.onClick.AddListener(NextTypeProducts);
-        _previousTypeProductsBt.onClick.AddListener(PreviousTypeProducts);
-        _leaveOptionsBt.onClick.AddListener(LeaveOptionsScene);
+        _startGameplayBt.onClick.AddListener(StartChapter1Scene);
+        _leaveOptionsBt.onClick.AddListener(LeaveLevelSelectionScene);
 
         SetButtonsToMenuOptions();
+        SetLevelSelectionButtons();
     }
 
     [ContextMenu("Reset Score")]
@@ -62,127 +59,73 @@ public class MenuManager : MonoBehaviour
 
     private void SetButtonsToMenuOptions()
     {
-        #region Main Buttons
-        _play_Level1_Bt.onClick.RemoveAllListeners();
-        _play_Level1_Tx.text = "Jogar";
-
-        _credits_Level2_Bt.onClick.RemoveAllListeners();
-        _credits_Level2_Tx.text = "Créditos";
-
-        _leave_Level3_Bt.onClick.RemoveAllListeners();
-        _leave_Level3_Tx.text = "Sair";
-
-        _play_Level1_Bt.onClick.AddListener(() => ShowOptionsScene());
-
-        _credits_Level2_Bt.onClick.AddListener(() => Invoke("CreditsScene", 1));
-
-        _leave_Level3_Bt.onClick.AddListener(LeaveGame);
-        #endregion
-
+        _playBt.onClick.AddListener(() => ShowLevelSelectionScene());
+        _creditsBt.onClick.AddListener(CreditsScene);
+        _leaveBt.onClick.AddListener(LeaveGame);
         _leaveCredits.onClick.AddListener(LeaveCredits);
     }
 
-    private void SetButtonsToChapters()
+    private void SetLevelSelectionButtons()
     {
-        _play_Level1_Bt.onClick.RemoveAllListeners();
-        _play_Level1_Tx.text = "Fase 1";
-        _credits_Level2_Bt.onClick.RemoveAllListeners();
-        _credits_Level2_Tx.text = "Fase 2";
-        _leave_Level3_Bt.onClick.RemoveAllListeners();
-        _leave_Level3_Tx.text = "Fase 3";
-
-        _play_Level1_Bt.onClick.AddListener(() =>
+        _breakfastBt.onClick.AddListener(() =>
         {
-            _videoPlayer.gameObject.SetActive(false);
-
-            var loader = Instantiate(_loader);
-            loader.LoadScene(Enums.Scenes.Chapter1, instantly: false);
+            TypeSelected(1);
         });
 
-        _credits_Level2_Bt.onClick.AddListener(() =>
+        _lunchBt.onClick.AddListener(() =>
         {
-            _videoPlayer.gameObject.SetActive(false);
-
-            var loader = Instantiate(_loader);
-            loader.LoadScene(Enums.Scenes.Chapter2, instantly: false);
+            TypeSelected(2);
         });
 
-        _leave_Level3_Bt.onClick.AddListener(() =>
+        _hygieneBt.onClick.AddListener(() =>
         {
-            _videoPlayer.gameObject.SetActive(false);
-
-            var loader = Instantiate(_loader);
-            loader.LoadScene(Enums.Scenes.Chapter3, instantly: false);
+            TypeSelected(3);
         });
 
     }
 
-    private void NextTypeProducts()
+    private void StartChapter1Scene()
     {
-        _shelf.GetChild(_typeIndex).gameObject.SetActive(false);
-        _typeIndex = (_typeIndex + 1) % 3;
-        _shelf.GetChild(_typeIndex).gameObject.SetActive(true);
+        VideoManager.Instance.StopVideo();
 
-        ShowVideo();
-
-        GameManager.Instance.SetTypeSelected(_typeIndex);
+        var loader = Instantiate(_loader);
+        loader.LoadScene(Enums.Scenes.Chapter1, instantly: false);
     }
 
-    private void PreviousTypeProducts()
+    private void TypeSelected(int typeIndex)
     {
-        _shelf.GetChild(_typeIndex).gameObject.SetActive(false);
-
-        _typeIndex -= 1;
-        if (_typeIndex < 0) _typeIndex = 2;
-
-        _shelf.GetChild(_typeIndex).gameObject.SetActive(true);
-
-        ShowVideo();
-
-        GameManager.Instance.SetTypeSelected(_typeIndex);
-    }
-
-    private void ShowVideo()
-    {
-        if (_videoPlayer.isPlaying)
+        if (_lastTypeSelected > 0)
         {
-            _videoPlayer.Stop();
+            _shelf.GetChild(0).gameObject.SetActive(false);
+            _shelf.GetChild(1).gameObject.SetActive(false);
+            _shelf.GetChild(2).gameObject.SetActive(false);
         }
+        _shelf.GetChild(typeIndex - 1).gameObject.SetActive(true);
+        _lastTypeSelected = typeIndex;
 
-        _videoPlayer.clip = _clips[_typeIndex];
-        _videoPlayer.gameObject.SetActive(true);
-        _videoPlayer.Play();
+        VideoManager.Instance.NewVideo(_videos[typeIndex - 1]);
+        GameManager.Instance.SetTypeSelected(typeIndex);
     }
 
-    private void ShowOptionsScene()
+    private void ShowLevelSelectionScene()
     {
-        _monitorTx.text = "Escolha qual tipo de produto deseja";
-
-        _nextTypeProductsBt.gameObject.SetActive(true);
-        _previousTypeProductsBt.gameObject.SetActive(true);
-        _leaveOptionsBt.gameObject.SetActive(true);
-
         if (_firstEntry)
         {
             GameManager.Instance.SetTypeSelected(-1);
             _typeIndex = (int)GameManager.Instance.TypeSelected;
-            _shelf.GetChild(_typeIndex).gameObject.SetActive(true);
-
-            ShowVideo();
+            _shelf.GetChild(_typeIndex - 1).gameObject.SetActive(true);
 
             _firstEntry = false;
         }
 
-        SetButtonsToChapters();
+        _levelsSelection.SetActive(true);
+
+        VideoManager.Instance.NewVideo(_videos[_typeIndex - 1]);
     }
 
-    private void LeaveOptionsScene()
+    private void LeaveLevelSelectionScene()
     {
-        _nextTypeProductsBt.gameObject.SetActive(false);
-        _previousTypeProductsBt.gameObject.SetActive(false);
-        _leaveOptionsBt.gameObject.SetActive(false);
-
-        SetButtonsToMenuOptions();
+        _levelsSelection.SetActive(false);
     }
 
     private void CreditsScene()

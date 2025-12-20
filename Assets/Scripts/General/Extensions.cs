@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public static class Extensions
 {
@@ -52,9 +54,32 @@ public static class Extensions
         return item;
     }
 
+    public static void FadesIn(this AudioSource audio, float time = 1)
+    {
+        if (audio == null) return;
+
+        float volume = audio.volume;
+        audio.Play();
+        LeanTween.value(0, volume, time).setOnUpdate((value) =>
+        {
+            audio.volume = value;
+        });
+    }
+
+    public static void FadesOut(this AudioSource audio, Action action, float time = 1)
+    {
+        if (audio == null) return;
+
+        float volume = audio.volume;
+        LeanTween.value(volume, 0, time).setOnUpdate((value) =>
+        {
+            audio.volume = value;
+        }).setOnComplete(() => action?.Invoke());
+    }
+
     public static void DeleteChildren(this Transform parent)
     {
-        foreach (Transform child in parent) Object.DestroyImmediate(child.gameObject);
+        foreach (Transform child in parent) UnityEngine.Object.DestroyImmediate(child.gameObject);
     }
 
     public static Vector3 LastChildPosition(this Transform parent)

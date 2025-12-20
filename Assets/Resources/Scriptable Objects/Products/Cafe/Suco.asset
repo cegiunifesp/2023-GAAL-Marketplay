@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Suco
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: Suco
-  <TypeProduct>k__BackingField: 0
+  <TypeProduct>k__BackingField: 1
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: 156636cf1f5e5c24d897d6ff7c475689, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: 9b8880aca9dde9272a17a15116dfb787, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Cafe/
+    <Duration>k__BackingField: 4.5
+    <Clip>k__BackingField: {fileID: 32900000, guid: 60a64786db09df4448da8bc818fbcd46, type: 3}
   <AdjustHorizontally>k__BackingField: 1

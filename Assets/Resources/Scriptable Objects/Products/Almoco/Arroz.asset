@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Arroz
   m_EditorClassIdentifier: 
   <ProductName>k__BackingField: Arroz
-  <TypeProduct>k__BackingField: 1
+  <TypeProduct>k__BackingField: 2
   <SpriteSource>k__BackingField: {fileID: 21300000, guid: ded2f211db18a4de9a6b85ea2e0ca83d, type: 3}
-  <Clip>k__BackingField: {fileID: 32900000, guid: 298d2b53ba0e5204b85b3a6d7de3646f, type: 3}
+  <VideoInfo>k__BackingField:
+    <Url>k__BackingField: Almoco/
+    <Duration>k__BackingField: 4.5
+    <Clip>k__BackingField: {fileID: 32900000, guid: eedf63d9936e8aa44a7378c9359e56e2, type: 3}
   <AdjustHorizontally>k__BackingField: 1

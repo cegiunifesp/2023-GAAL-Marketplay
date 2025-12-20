@@ -1,8 +1,6 @@
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using UnityEngine.Video;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using TMPro;
 
@@ -20,20 +18,18 @@ public class FirstLevelManager : LevelManagerBase
 
     [Header("Others")]
     [SerializeField] private TextMeshProUGUI _leftOrdersTx;
-    [SerializeField] private VideoPlayer _videoPlayer;
 
     private int _productsPooledThatAreNotTheOrder;
     private float _timeToActiveProducts;
+    private bool _selected;
 
     private Queue<ProductLevel1> _productsInTreadmill = new Queue<ProductLevel1>();
     private Order _orderDesired;
 
-    private CancellationTokenSource _tokenSource;
-
     private void Start()
     {
         Events.Instance.onGameStart += HandleStartGame;
-        _videoPlayer.gameObject.SetActive(false);
+        //_videoPlayer.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -74,12 +70,12 @@ public class FirstLevelManager : LevelManagerBase
         Events.Instance.onEnqueueProduct += HandleEnqueueProduct;
         Events.Instance.onProductSelected += HandleProductSelected;
 
-        _tokenSource = new CancellationTokenSource();
-
-        ChangeShelfSprite();
-
         ProductsAvailables = GameManager.Instance.GetProductsAvailables();
         OrdersAvailables = new List<ProductSO>(ProductsAvailables);
+
+        Audio.StartBackground();
+
+        ChangeShelfSprite();
 
         GrowPool();
 
@@ -93,12 +89,12 @@ public class FirstLevelManager : LevelManagerBase
         if (paused)
         {
             Time.timeScale = 0;
-            _videoPlayer.Pause();
+            VideoManager.Instance.PauseVideo();
         }
         else
         {
             Time.timeScale = 1;
-            _videoPlayer.Play();
+            VideoManager.Instance.UnpauseVideo();
         }
     }
 
@@ -110,6 +106,8 @@ public class FirstLevelManager : LevelManagerBase
 
         if (product.ProductName == _orderDesired.ProductName)
         {
+            if (_selected) return;
+
             product.ProductCorrect();
             CorrectOrder();
         }
@@ -137,8 +135,10 @@ public class FirstLevelManager : LevelManagerBase
 
         Events.Instance.OnGameEnded();
         _gameEnded = true;
-        _videoPlayer.Stop();
-        _videoPlayer.gameObject.SetActive(false);
+
+        VideoManager.Instance.StopVideo();
+
+        Audio.VictoryVolume();
 
         VictoryScene.Initiate();
     }
@@ -150,29 +150,37 @@ public class FirstLevelManager : LevelManagerBase
         if (OrdersAvailables.Count == 0)
         {
             HandleEndGame();
-            print("Finished");
             return;
         }
 
         var productDesired = OrdersAvailables.GetRandomValue();
 
-        _orderDesired = new Order(productDesired.ProductName, 1, productDesired.SpriteSource, productDesired.Clip);
+        _orderDesired = new Order(productDesired.ProductName, 1, productDesired.SpriteSource);
 
         OrdersAvailables.Remove(OrdersAvailables.First(t => t.ProductName == productDesired.ProductName));
-        _leftOrdersTx.text = $"Restam {OrdersAvailables.Count+1} produtos";
 
-        SetVideoPlayer(_orderDesired.Clip);
+        if (OrdersAvailables.Count == 0)
+        {
+            _leftOrdersTx.text = $"Resta {OrdersAvailables.Count+1} produto";
+        }
+        else
+        {
+            _leftOrdersTx.text = $"Restam {OrdersAvailables.Count+1} produtos";
+        }
 
         _monitorText.color = Color.white;
+        _selected = false;
+
+        VideoManager.Instance.NewVideo(productDesired.VideoInfo);
     }
 
     private void CorrectOrder()
     {
+        _selected = true;
         Events.Instance.OnAddScore(100);
-
         ChangeMonitorTextColor(correct: true);
 
-        _tokenSource.Cancel();
+        destroyCancellationToken.ThrowIfCancellationRequested();
 
         Invoke("NewOrder", 2);
     }
@@ -183,14 +191,14 @@ public class FirstLevelManager : LevelManagerBase
 
         ChangeMonitorTextColor(correct: false);
 
-        _tokenSource.Cancel();
+        destroyCancellationToken.ThrowIfCancellationRequested();
     }
 
     private void CheckSequenceOfSpawning(ProductLevel1 product)
     {
         if (_orderDesired == null)
         {
-            print("Order is null");
+            //print("Order is null");
             return;
         }
 
@@ -199,7 +207,7 @@ public class FirstLevelManager : LevelManagerBase
 
         if (_productsPooledThatAreNotTheOrder == 4)
         {
-            print("Forced to spawn the desired product");
+            //print("Forced to spawn the desired product");
             product.InitiateProduct(ProductsAvailables.First(t => t.ProductName == _orderDesired.ProductName));
             _productsPooledThatAreNotTheOrder = 0;
         }
@@ -210,24 +218,10 @@ public class FirstLevelManager : LevelManagerBase
         if (correct) _monitorText.color = _correctColor;
         else _monitorText.color = _wrongColor;
 
-        await Task.Delay(1000);
+        await UniTask.Delay(1000, false, PlayerLoopTiming.Update, destroyCancellationToken);
 
         _monitorText.text = ". . .";
         _monitorText.color = Color.white;
-    }
-    #endregion
-
-    #region Video
-    private void SetVideoPlayer(VideoClip clip)
-    {
-        _videoPlayer.gameObject.SetActive(true);
-        _videoPlayer.clip = clip;
-        _videoPlayer.Play();
-    }
-
-    private void StopVideoPlayer()
-    {
-        if (_videoPlayer.isPlaying) _videoPlayer.Stop();
     }
     #endregion
 
