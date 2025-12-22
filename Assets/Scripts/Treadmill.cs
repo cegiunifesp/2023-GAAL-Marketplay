@@ -30,6 +30,8 @@ public class Treadmill : MonoBehaviour
 
     private void OnDisable()
     {
+        if (Events.Instance == null) return;
+
         Events.Instance.onPause -= Paused;
         Events.Instance.onGameStart -= GameStarted;
         Events.Instance.onGameEnded -= HandleGameEnded;

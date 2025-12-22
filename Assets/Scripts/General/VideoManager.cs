@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Threading;
 using UnityEngine.Video;
 using UnityEngine;
@@ -31,6 +32,7 @@ public class VideoManager : MonoBehaviour
     {
         _videoInfo = videoInfo;
         _cancellationTokenSource.Cancel();
+        _cancellationTokenSource.Dispose();
         _cancellationTokenSource = new CancellationTokenSource();
 
         ShowVideo();
@@ -38,6 +40,8 @@ public class VideoManager : MonoBehaviour
 
     public async void ShowVideo()
     {
+        if (_videoPlayer == null) return;
+
         StopVideo();
 
         if (!_shown)
@@ -63,29 +67,63 @@ public class VideoManager : MonoBehaviour
             _videoPlayer.clip = _videoInfo.Clip;
         }
 
-        _videoPlayer.gameObject.SetActive(true);
-        _videoPlayer.Play();
+        if (_videoPlayer != null)
+        {
+            _videoPlayer.gameObject.SetActive(true);
+            _videoPlayer.Play();
+        }
 
-        await UniTask.Delay((int)(_videoInfo.Duration * 1000), false, PlayerLoopTiming.Update, _cancellationTokenSource.Token);
-        
+        try
+        {
+            await UniTask.Delay((int)(_videoInfo.Duration * 1000), false, PlayerLoopTiming.Update, _cancellationTokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
+
+        if (_videoPlayer == null) return;
+
         ShowVideo();
     }
 
     public void StopVideo()
     {
         _shown = false;
-        _videoPlayer?.Stop();
-        _videoPlayer?.gameObject.SetActive(_shown);
+
+        if (_videoPlayer == null) return;
+
+        if (_videoPlayer.gameObject != null)
+        {
+            _videoPlayer.Stop();
+            _videoPlayer.gameObject.SetActive(_shown);
+        }
     }
 
     public void PauseVideo()
     {
+        if (_videoPlayer == null) return;
+
         _videoPlayer.Pause();
     }
 
     public void UnpauseVideo()
     {
+        if (_videoPlayer == null) return;
+
         _videoPlayer.Play();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+
+        try
+        {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+        }
+        catch { }
     }
 
     private string GetCorrectUrl(string videoUrl)
