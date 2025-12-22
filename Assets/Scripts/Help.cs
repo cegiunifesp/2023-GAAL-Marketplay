@@ -12,7 +12,7 @@ public class Help : MonoBehaviour
     [ContextMenu("Execute")]
     private void Execute()
     {
-        var buttons = FindObjectsOfType<Selectable>();
+        var buttons = UnityEngine.Object.FindObjectsByType<Selectable>(FindObjectsSortMode.None);
         foreach (var button in buttons)
         {
             if ( !button.TryGetComponent(out CustomButton comp))

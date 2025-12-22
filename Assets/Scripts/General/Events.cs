@@ -10,7 +10,7 @@ public class Events : MonoBehaviour
     {
         get
         {
-            if (_instance == null) _instance = FindObjectOfType<Events>();
+            if (_instance == null) _instance = FindFirstObjectByType<Events>();
             return _instance;
         }
         set

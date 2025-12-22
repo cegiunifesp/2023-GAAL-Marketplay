@@ -68,7 +68,7 @@ public class SecondLevelManager : LevelManagerBase
 
         if (VictoryScene == null)
         {
-            VictoryScene = FindObjectOfType<VictoryScene>();
+            VictoryScene = FindFirstObjectByType<VictoryScene>();
         }
 
         Audio.VictoryVolume();
