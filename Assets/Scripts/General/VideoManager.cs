@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.IO;
 using System.Threading;
 using UnityEngine.Video;
 using UnityEngine;
@@ -52,7 +53,6 @@ public class VideoManager : MonoBehaviour
 
         if (GameManager.Instance.UrlVideo)
         {
-
             string url = _videoFormat switch
             {
                 Enums.VideoFormat.MP4 => _videoInfo.Url + _videoInfo.Clip.name + ".mp4",
@@ -60,7 +60,31 @@ public class VideoManager : MonoBehaviour
                 Enums.VideoFormat.WAV => _videoInfo.Url + _videoInfo.Clip.name + ".wav",
                 _ => _videoInfo.Url + _videoInfo.Clip.name + ".mp4"
             };
-            _videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, GetCorrectUrl(url));
+
+            string candidatePath = Path.Combine(Application.streamingAssetsPath, GetCorrectUrl(url));
+
+            if (File.Exists(candidatePath))
+            {
+                // Use file URL (ensure forward slashes)
+                string fileUrl = "file:///" + candidatePath.Replace('\\', '/');
+                _videoPlayer.url = fileUrl;
+                _videoPlayer.source = VideoSource.Url;
+            }
+            else
+            {
+                // Try loading from Resources/Videos (Editor and builds)
+                var resourceClip = Resources.Load<VideoClip>("Videos/" + _videoInfo.Clip.name);
+                if (resourceClip != null)
+                {
+                    _videoPlayer.source = VideoSource.VideoClip;
+                    _videoPlayer.clip = resourceClip;
+                }
+                else
+                {
+                    Debug.LogWarning($"Video file not found at StreamingAssets path '{candidatePath}' and not present in Resources/Videos/{_videoInfo.Clip.name}");
+                    return;
+                }
+            }
         }
         else
         {
