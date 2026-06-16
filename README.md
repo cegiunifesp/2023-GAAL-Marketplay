@@ -6,7 +6,7 @@ A VERSÃO ATUAL DO JOGO NO MOMENTO NÃO REFLETE A FINAL DISPONÍVEL NO WEBSITE
 # Guia para programação
 Abaixo estão algumas indicações de como deve ser escrito o código com a finalidade de garantir clareza, eficiência e organização. Ajude na legibilidade do código que muito provávelmente terá de ser alterado no futuro.
 
-VERSÃO DO UNITY: 2022.3.62f3 [LTS]
+VERSÃO DO UNITY: 2023.2.22f1 [LTS]
 
 ## Dicas gerais
 * Utilize funções pontuais que atinjam um objetivo consistentemente: o requisito pode mudar, mas com um código bem preparado você poderá alterar apenas parâmetros para atingir um novo objetivo, sem necessidade de reescrever o código.
