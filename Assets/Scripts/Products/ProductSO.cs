@@ -1,4 +1,3 @@
-using UnityEngine.Video;
 using UnityEngine;
 using System;
 
@@ -18,6 +17,5 @@ public struct VideoInfo
 {
     [field: SerializeField] public string Url { get; private set; }
     [field: SerializeField] public float Duration { get; private set; }
-    [field: SerializeField] public VideoClip Clip { get; private set; }
-
+    [field: SerializeField] public string FileName { get; private set; }
 }

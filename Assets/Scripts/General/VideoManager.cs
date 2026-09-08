@@ -25,7 +25,7 @@ public class VideoManager : MonoBehaviour
     private void Start()
     {
         _shown = false;
-        _videoPlayer.source = GameManager.Instance.UrlVideo ? VideoSource.Url : VideoSource.VideoClip;
+        _videoPlayer.source = VideoSource.Url;
         _videoPlayer.gameObject.SetActive(_shown);
     }
 
@@ -51,45 +51,15 @@ public class VideoManager : MonoBehaviour
             _videoPlayer.gameObject.SetActive(_shown);
         }
 
-        if (GameManager.Instance.UrlVideo)
+        string relativePath = GetRelativeStreamingPath();
+        if (string.IsNullOrEmpty(relativePath))
         {
-            string url = _videoFormat switch
-            {
-                Enums.VideoFormat.MP4 => _videoInfo.Url + _videoInfo.Clip.name + ".mp4",
-                Enums.VideoFormat.OGV => _videoInfo.Url + _videoInfo.Clip.name + ".ogv",
-                Enums.VideoFormat.WAV => _videoInfo.Url + _videoInfo.Clip.name + ".wav",
-                _ => _videoInfo.Url + _videoInfo.Clip.name + ".mp4"
-            };
-
-            string candidatePath = Path.Combine(Application.streamingAssetsPath, GetCorrectUrl(url));
-
-            if (File.Exists(candidatePath))
-            {
-                // Use file URL (ensure forward slashes)
-                string fileUrl = "file:///" + candidatePath.Replace('\\', '/');
-                _videoPlayer.url = fileUrl;
-                _videoPlayer.source = VideoSource.Url;
-            }
-            else
-            {
-                // Try loading from Resources/Videos (Editor and builds)
-                var resourceClip = Resources.Load<VideoClip>("Videos/" + _videoInfo.Clip.name);
-                if (resourceClip != null)
-                {
-                    _videoPlayer.source = VideoSource.VideoClip;
-                    _videoPlayer.clip = resourceClip;
-                }
-                else
-                {
-                    Debug.LogWarning($"Video file not found at StreamingAssets path '{candidatePath}' and not present in Resources/Videos/{_videoInfo.Clip.name}");
-                    return;
-                }
-            }
+            Debug.LogWarning("VideoInfo is missing a folder or file name.");
+            return;
         }
-        else
-        {
-            _videoPlayer.clip = _videoInfo.Clip;
-        }
+
+        _videoPlayer.source = VideoSource.Url;
+        _videoPlayer.url = GetStreamingUrl(relativePath);
 
         if (_videoPlayer != null)
         {
@@ -150,16 +120,48 @@ public class VideoManager : MonoBehaviour
         catch { }
     }
 
-    private string GetCorrectUrl(string videoUrl)
+    private string GetRelativeStreamingPath()
     {
-        string url = _videoFormat switch
+        if (string.IsNullOrEmpty(_videoInfo.Url) || string.IsNullOrEmpty(_videoInfo.FileName))
         {
-            Enums.VideoFormat.MP4 => videoUrl.Substring(0, videoUrl.Length - 3) + "mp4",
-            Enums.VideoFormat.OGV => videoUrl.Substring(0, videoUrl.Length - 3) + "ogv",
-            Enums.VideoFormat.WAV => videoUrl.Substring(0, videoUrl.Length - 3) + "wav",
-            _ => videoUrl
+            return null;
+        }
+
+        string extension = _videoFormat switch
+        {
+            Enums.VideoFormat.OGV => ".ogv",
+            Enums.VideoFormat.WAV => ".wav",
+            _ => ".mp4"
         };
 
-        return url;
+        string fileName = _videoInfo.FileName;
+        if (!HasVideoExtension(fileName))
+        {
+            fileName += extension;
+        }
+
+        return Path.Combine(_videoInfo.Url, fileName);
+    }
+
+    private static bool HasVideoExtension(string fileName)
+    {
+        return fileName.EndsWith(".mp4", StringComparison.OrdinalIgnoreCase)
+            || fileName.EndsWith(".ogv", StringComparison.OrdinalIgnoreCase)
+            || fileName.EndsWith(".wav", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string GetStreamingUrl(string relativePath)
+    {
+        string path = Path.Combine(Application.streamingAssetsPath, relativePath).Replace('\\', '/');
+
+        // Android and WebGL already provide a usable URL (jar: / http). Other platforms need a file URL.
+#if !UNITY_ANDROID && !UNITY_WEBGL
+        if (!path.Contains("://"))
+        {
+            path = "file:///" + path;
+        }
+#endif
+
+        return path;
     }
 }

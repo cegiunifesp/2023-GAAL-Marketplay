@@ -22,8 +22,6 @@ public class GameManager : MonoBehaviour
             if (_instance == null) _instance = value;
         }
     }
-    [field: SerializeField] public bool UrlVideo { get; private set; }
-
     [SerializeField] private List<ProductSO> _breakfastProducts;
     [SerializeField] private List<ProductSO> _lunchProducts;
     [SerializeField] private List<ProductSO> _hygieneProducts;
