@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     }
     [SerializeField] private List<ProductSO> _breakfastProducts;
     [SerializeField] private List<ProductSO> _lunchProducts;
+    // Hygiene currently has 6 playable items. Toilet paper appears on shelf art
+    // (papelHigienico.png) but must stay out of gameplay until a dedicated Libras video exists.
     [SerializeField] private List<ProductSO> _hygieneProducts;
 
     public Dictionary<Enums.TypeProducts, List<ProductSO>> ListProducts { get; private set; } = new Dictionary<Enums.TypeProducts, List<ProductSO>>();

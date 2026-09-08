@@ -45,17 +45,17 @@ public class VideoManager : MonoBehaviour
 
         StopVideo();
 
-        if (!_shown)
-        {
-            _shown = true;
-            _videoPlayer.gameObject.SetActive(_shown);
-        }
-
         string relativePath = GetRelativeStreamingPath();
         if (string.IsNullOrEmpty(relativePath))
         {
             Debug.LogWarning("VideoInfo is missing a folder or file name.");
             return;
+        }
+
+        if (!_shown)
+        {
+            _shown = true;
+            _videoPlayer.gameObject.SetActive(_shown);
         }
 
         _videoPlayer.source = VideoSource.Url;

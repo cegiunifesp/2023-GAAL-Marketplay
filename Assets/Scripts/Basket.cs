@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 using UnityEngine;
-
-using AYellowpaper.SerializedCollections;
+using UnityEngine.UI;
 
 public class Basket : MonoBehaviour
 {
@@ -16,14 +13,9 @@ public class Basket : MonoBehaviour
     [SerializeField] private AudioClip _incorrectProducts;
 
     private int _currentParentIndex;
-    private int _wrongProducts;
-    private bool _hasWrongProduct;
-
-    private List<ProductBase> _products = new List<ProductBase>();
-
-    [Space(10)]
-    [SerializedDictionary("Order Name", "Amount")]
-    public SerializedDictionary<string, int> _ordersAmount;
+    private readonly List<ProductBase> _products = new List<ProductBase>();
+    private readonly Dictionary<string, int> _requiredAmounts = new Dictionary<string, int>();
+    private readonly Dictionary<string, int> _remainingAmounts = new Dictionary<string, int>();
 
     private void Start()
     {
@@ -33,11 +25,16 @@ public class Basket : MonoBehaviour
 
     public void SetOrders(List<Order> orders)
     {
-        _ordersAmount = new SerializedDictionary<string, int>();
+        _requiredAmounts.Clear();
+        _remainingAmounts.Clear();
+
         foreach (Order order in orders)
         {
-            _ordersAmount.Add(order.ProductName, order.ProductAmount);
+            _requiredAmounts[order.ProductName] = order.ProductAmount;
+            _remainingAmounts[order.ProductName] = order.ProductAmount;
         }
+
+        RefreshOrderProgress();
     }
 
     public void AddProduct(ProductBase product)
@@ -46,35 +43,14 @@ public class Basket : MonoBehaviour
         t.SetParent(_productsParents[_currentParentIndex]);
         t.localPosition = Vector3.zero;
         product.Size = 80;
-        //t.position = transform.position;
 
         if (!_products.Contains(product))
         {
             _products.Add(product);
-            DiscountProductAmount(product);
         }
 
         _currentParentIndex = (_currentParentIndex + 1) % _productsParents.Count;
-    }
-
-    private void DiscountProductAmount(ProductBase product)
-    {
-        if (_ordersAmount == null) return;
-
-        if (_ordersAmount.ContainsKey(product.ProductName))
-        {
-            _ordersAmount[product.ProductName]--;
-            if (_ordersAmount[product.ProductName] == 0)
-            {
-                _personOrderUI.DiscardProduct(product.ProductName);
-            }
-            //print($"Add {product.ProductName} Left: {_ordersAmount[product.ProductName]}");
-        }
-        else
-        {
-            _hasWrongProduct = true;
-            _wrongProducts++;
-        }
+        RefreshOrderProgress();
     }
 
     private void ConfirmProducts()
@@ -99,19 +75,11 @@ public class Basket : MonoBehaviour
 
     private bool AllProductsCorrect()
     {
-        if (_ordersAmount == null) return false;
+        RefreshOrderProgress();
 
-        if (_hasWrongProduct)
+        foreach (var remaining in _remainingAmounts)
         {
-            _hasWrongProduct = false;
-            RemoveProductsFromBasket();
-            Events.Instance.OnRemoveScore(30);
-            return false;
-        }
-
-        foreach (var item in _ordersAmount)
-        {
-            if (item.Value != 0)
+            if (remaining.Value != 0)
             {
                 RemoveProductsFromBasket();
                 Events.Instance.OnRemoveScore(30);
@@ -119,61 +87,81 @@ public class Basket : MonoBehaviour
             }
         }
 
+        int extraItems = _products.Count - GetRequiredTotal();
+        if (extraItems != 0)
+        {
+            RemoveProductsFromBasket();
+            Events.Instance.OnRemoveScore(30);
+            return false;
+        }
+
         return true;
     }
 
     private void RemoveProductsFromBasket()
     {
-        foreach (Transform parent in _productsParents)
+        var productsToReturn = new List<ProductLevel3>();
+        for (int i = 0; i < _products.Count; i++)
         {
-            for (int i = 0; i < parent.childCount; i++)
+            if (_products[i] is ProductLevel3 product)
             {
-                var product = parent.GetChild(i).GetComponent<ProductLevel3>();
-                if (_ordersAmount.ContainsKey(product.ProductName))
-                {
-                    if (_ordersAmount[product.ProductName] == 0) _personOrderUI.LetAvailable(product.ProductName);
-                    _ordersAmount[product.ProductName]++;
-                }
-
-                product.RemoveFromBasket();
-                _wrongProducts--;
-
-                if (_wrongProducts == 0) _hasWrongProduct = false;
-
-                if (_products.Contains(product)) _products.Remove(product);
+                productsToReturn.Add(product);
             }
         }
+
+        _products.Clear();
         _currentParentIndex = 0;
+
+        for (int i = 0; i < productsToReturn.Count; i++)
+        {
+            productsToReturn[i].RemoveFromBasket();
+        }
+
+        RefreshOrderProgress();
     }
 
-    private void RemoveProductWhenDragging(ProductLevel3 product)
+    private void RefreshOrderProgress()
     {
-        if (_ordersAmount.ContainsKey(product.ProductName))
+        if (_requiredAmounts.Count == 0) return;
+
+        foreach (var required in _requiredAmounts)
         {
-            if (_ordersAmount[product.ProductName] == 0)
-            {
-                _personOrderUI.LetAvailable(product.ProductName);
-            }
-            _ordersAmount[product.ProductName]++;
+            _remainingAmounts[required.Key] = required.Value;
         }
-        else
+
+        for (int i = 0; i < _products.Count; i++)
         {
-            if (_wrongProducts <= 1)
+            ProductBase product = _products[i];
+            if (product == null) continue;
+
+            if (_remainingAmounts.ContainsKey(product.ProductName))
             {
-                _hasWrongProduct = false;
-                _wrongProducts = 0;
+                _remainingAmounts[product.ProductName]--;
+            }
+        }
+
+        foreach (var remaining in _remainingAmounts)
+        {
+            if (remaining.Value == 0)
+            {
+                _personOrderUI.DiscardProduct(remaining.Key);
             }
             else
             {
-                _wrongProducts--;
+                _personOrderUI.LetAvailable(remaining.Key);
             }
         }
-
-        if (_products.Contains(product)) _products.Remove(product);
-
-        product.ClearBasketReference();
     }
 
+    private int GetRequiredTotal()
+    {
+        int total = 0;
+        foreach (var required in _requiredAmounts)
+        {
+            total += required.Value;
+        }
+        return total;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -186,16 +174,17 @@ public class Basket : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        GameObject objectCollided = collision.gameObject;
-        if (objectCollided.CompareTag("Product"))
-        {
-            var product = objectCollided.GetComponent<ProductLevel3>();
-            
-            if (product.IsDragging())
-            {
-                RemoveProductWhenDragging(product);
-            }
-        }
-    }
+        if (!collision.gameObject.CompareTag("Product")) return;
 
+        var product = collision.gameObject.GetComponent<ProductLevel3>();
+        if (product == null || !product.IsDragging()) return;
+
+        if (_products.Contains(product))
+        {
+            _products.Remove(product);
+            RefreshOrderProgress();
+        }
+
+        product.ClearBasketReference();
+    }
 }

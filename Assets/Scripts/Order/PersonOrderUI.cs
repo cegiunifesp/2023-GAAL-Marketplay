@@ -44,18 +44,25 @@ public class PersonOrderUI : MonoBehaviour
         foreach (Order order in orders)
         {
             var newOrder = Instantiate(_orderPrefab, _ordersParent);
-            newOrder.Initiate(_numbersSprite[order.ProductAmount], order.ProductSprite);
+            int numberIndex = Mathf.Clamp(order.ProductAmount, 0, _numbersSprite.Length - 1);
+            newOrder.Initiate(_numbersSprite[numberIndex], order.ProductSprite);
             _orders.Add(order.ProductName, newOrder);
         }
     }
 
     public void DiscardProduct(string productName)
     {
-        _orders[productName].DiscardProduct();
+        if (_orders.TryGetValue(productName, out OrderUI order))
+        {
+            order.DiscardProduct();
+        }
     }
 
     public void LetAvailable(string productName)
     {
-        _orders[productName].ProductAvailable();
+        if (_orders.TryGetValue(productName, out OrderUI order))
+        {
+            order.ProductAvailable();
+        }
     }
 }

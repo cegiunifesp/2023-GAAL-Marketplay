@@ -1,14 +1,12 @@
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ThirdLevelManager : LevelManagerBase
 {
-    private int _maxAmount = 15;
-    private float _maxSize = 150;
-    private Transform _productObjectsParent;
-    private List<int> _numbersLeft = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
+    private const int MaxVisibleProducts = 24;
+    private const int MaxOrderItems = 12;
+    private const int MaxOrderTypes = 3;
 
     [Header("Products")]
     [SerializeField] private List<ProductLevel3> _productsObjects;
@@ -24,7 +22,6 @@ public class ThirdLevelManager : LevelManagerBase
         Events.Instance.onGameStart += HandleStartGame;
     }
 
-
     [ContextMenu("Initiate Manually")]
     protected override void HandleStartGame()
     {
@@ -38,11 +35,7 @@ public class ThirdLevelManager : LevelManagerBase
         ProductsAvailables.AddList(GameManager.Instance.ListProducts[Enums.TypeProducts.Cafe]);
         ProductsAvailables.AddList(GameManager.Instance.ListProducts[Enums.TypeProducts.Higiene]);
 
-        _productObjectsParent = _productsObjects[0].transform.parent;
-
         SetOrder();
-
-        CheckIfThereAreUndesiredProducts();
 
         _personOrderUI.Initiate(_orders.ToArray());
         _basket.SetOrders(_orders);
@@ -50,14 +43,7 @@ public class ThirdLevelManager : LevelManagerBase
 
     protected override void HandlePause(bool paused)
     {
-        if (paused)
-        {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
-        }
+        Time.timeScale = paused ? 0 : 1;
     }
 
     protected override void HandleEndGame()
@@ -76,84 +62,80 @@ public class ThirdLevelManager : LevelManagerBase
     private void SetOrder()
     {
         _orders = new List<Order>();
+
+        List<ProductLevel3> slots = _productsObjects.Where(p => p != null).ToList();
+        Shuffle(slots);
+
+        for (int i = 0; i < slots.Count; i++)
+        {
+            bool visible = i < MaxVisibleProducts;
+            slots[i].gameObject.SetActive(visible);
+        }
+
+        slots.RemoveAll(p => !p.gameObject.activeSelf);
+
+        List<ProductSO> ordersAvailables = GameManager.Instance.GetProductsAvailables();
+        List<int> numbersLeft = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+        int distractorSlots = Mathf.Max(4, slots.Count / 3);
+        int maxOrderItems = Mathf.Min(MaxOrderItems, slots.Count - distractorSlots);
+        if (maxOrderItems < 3) maxOrderItems = Mathf.Max(1, slots.Count / 2);
+
         int amountSum = 0;
-        var ordersAvailables = GameManager.Instance.GetProductsAvailables();
-
-        while (amountSum < _maxAmount)
+        while (amountSum < maxOrderItems && _orders.Count < MaxOrderTypes && ordersAvailables.Count > 0)
         {
-            int amountOfProduct = CheckAmountProducts(ref amountSum);
+            int amountOfProduct = PickOrderAmount(numbersLeft, maxOrderItems - amountSum);
+            if (amountOfProduct <= 0) break;
 
-            var productSelectedSO = ordersAvailables.GetRandomValue(true);
+            ProductSO productSelectedSO = ordersAvailables.GetRandomValue(true);
+            if (productSelectedSO == null) break;
 
-            if (productSelectedSO == null)
-            {
-                PauseManager.NeedToRestart();
-                break;
-            }
-
-            Order newOrder = new Order(productSelectedSO.ProductName, amountOfProduct, productSelectedSO.SpriteSource);
-            _orders.Add(newOrder);
-
-            for(int i = 0; i < amountOfProduct; i++)
-            {
-                ProductLevel3 newProduct = _productsObjects.GetRandomValue(true);
-
-                var rect = newProduct.GetComponent<RectTransform>().rect;
-
-                newProduct.Size = rect.height > rect.width ? rect.width : rect.height;
-                if (newProduct.Size > _maxSize) newProduct.Size = _maxSize;
-                newProduct.InitiateProduct(productSelectedSO);
-            }
-        }
-    }
-
-    private void CheckIfThereAreUndesiredProducts()
-    {
-        Dictionary<string, int> ordersAmount = new Dictionary<string, int>();
-        foreach (var order in _orders)
-        {
-            ordersAmount.Add(order.ProductName, order.ProductAmount);
-        }
-
-        foreach (Transform child in _productObjectsParent)
-        {
-            var product = child.GetComponent<ProductLevel3>();
-            string name = product.ProductName;
-
-            if (ordersAmount.ContainsKey(name))
-            {
-                if (ordersAmount[name] - 1 < 0)
-                {
-                    var newProduct = ProductsAvailables.GetRandomValue();
-
-                    while (ordersAmount.ContainsKey(newProduct.ProductName))
-                    {
-                        newProduct = ProductsAvailables.GetRandomValue();
-                    }
-
-                    product.InitiateProduct(newProduct);
-                }
-                else ordersAmount[name]--;
-            }
-
-            if (!product.IsInteractable()) product.MakeItInteractable();
-        }
-    }
-
-    private int CheckAmountProducts(ref int amountSum)
-    {
-        int amountOfProduct = _numbersLeft.GetRandomValue(true);
-
-        if (amountSum + amountOfProduct > _maxAmount)
-        {
-            amountOfProduct = _maxAmount - amountSum;
-            amountSum += amountOfProduct;
-        }
-        else
-        {
+            _orders.Add(new Order(productSelectedSO.ProductName, amountOfProduct, productSelectedSO.SpriteSource));
             amountSum += amountOfProduct;
         }
 
-        return amountOfProduct;
+        int slotIndex = 0;
+        foreach (Order order in _orders)
+        {
+            ProductSO productSO = ProductsAvailables.First(p => p.ProductName == order.ProductName);
+            for (int i = 0; i < order.ProductAmount && slotIndex < slots.Count; i++)
+            {
+                slots[slotIndex].InitiateProduct(productSO);
+                slotIndex++;
+            }
+        }
+
+        List<ProductSO> distractors = ProductsAvailables
+            .Where(p => _orders.All(order => order.ProductName != p.ProductName))
+            .ToList();
+
+        while (slotIndex < slots.Count)
+        {
+            ProductSO distractor = distractors.Count > 0
+                ? distractors.GetRandomValue()
+                : ProductsAvailables.GetRandomValue();
+
+            slots[slotIndex].InitiateProduct(distractor);
+            slotIndex++;
+        }
+    }
+
+    private static int PickOrderAmount(List<int> numbersLeft, int remaining)
+    {
+        if (remaining <= 0) return 0;
+
+        int amount = numbersLeft.Count > 0 ? numbersLeft.GetRandomValue(true) : Random.Range(1, Mathf.Min(4, remaining) + 1);
+        if (amount <= 0) amount = 1;
+        if (amount > remaining) amount = remaining;
+        return amount;
+    }
+
+    private static void Shuffle<T>(IList<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (list[i], list[j]) = (list[j], list[i]);
+        }
     }
 }

@@ -1,33 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class CustomCursor : MonoBehaviour
 {
     [SerializeField] private float _swingIntensity;
     [SerializeField] private Animator _anim;
+    [SerializeField] private Collider2D _scannerCollider;
 
     private bool _stopWorking;
     private Vector3 _lastMousePosition;
 
     private Camera _cam;
-    private GameObject _lastObjectSelected;
 
     private void Start()
     {
         _cam = Camera.main;
+        if (_scannerCollider == null) _scannerCollider = GetComponent<Collider2D>();
 
         Events.Instance.onPause += HandlePause;
         Events.Instance.onGameEnded += HandleGameEnded;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (_stopWorking) return;
-
 
         Vector3 currentMousePosition = _cam.ScreenToWorldPoint(Input.mousePosition);
         Vector3 mousedelta = currentMousePosition - _lastMousePosition;
@@ -38,26 +33,47 @@ public class CustomCursor : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
         _lastMousePosition = currentMousePosition;
 
-
         Vector2 newPosition = _cam.ScreenToWorldPoint(Input.mousePosition);
         transform.position = newPosition;
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (_lastObjectSelected != null)
+            TryScanProductAtCursor();
+        }
+    }
+
+    private void TryScanProductAtCursor()
+    {
+        if (_scannerCollider == null) return;
+
+        Physics2D.SyncTransforms();
+
+        float radius = Mathf.Max(_scannerCollider.bounds.extents.x, _scannerCollider.bounds.extents.y);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radius);
+
+        ProductLevel1 closestProduct = null;
+        float closestDistance = float.MaxValue;
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            Collider2D hit = hits[i];
+            if (hit == null || hit == _scannerCollider) continue;
+            if (!hit.CompareTag("Product")) continue;
+            if (!hit.TryGetComponent(out ProductLevel1 product)) continue;
+            if (!product.IsInteractable()) continue;
+
+            float distance = Vector2.Distance(transform.position, hit.transform.position);
+            if (distance < closestDistance)
             {
-                if (_lastObjectSelected.TryGetComponent(out ProductLevel1 product))
-                {
-                    if (product != null)
-                    {
-                        Events.Instance.OnProductSelected(product);
-                        _anim.SetTrigger("Scan");
-                    }
-                }
-                _lastObjectSelected = null;
+                closestDistance = distance;
+                closestProduct = product;
             }
         }
 
+        if (closestProduct == null) return;
+
+        Events.Instance.OnProductSelected(closestProduct);
+        _anim.SetTrigger("Scan");
     }
 
     private void HandlePause(bool paused)
@@ -68,22 +84,5 @@ public class CustomCursor : MonoBehaviour
     private void HandleGameEnded()
     {
         _stopWorking = true;
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Product"))
-        {
-            _lastObjectSelected = collision.gameObject;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        GameObject objectCollided = collision.gameObject;
-        if (objectCollided.CompareTag("Product"))
-        {
-            if (_lastObjectSelected == objectCollided) _lastObjectSelected = null;
-        }
     }
 }
