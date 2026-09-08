@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
-using TMPro;
 using Cysharp.Threading.Tasks;
 
 public class Shelf : MonoBehaviour
@@ -48,20 +46,61 @@ public class Shelf : MonoBehaviour
 
     private void CheckProductsInShelf()
     {
-        for (int i = 0; i < _ordersAmountLeft.Count; i++)
+        if (!AllProductsCorrect())
         {
-            if (_ordersAmountLeft[_orders[i].ProductName] != 0)
-            {
-                ChangeCorrectImage(correct: false);
-                RemoveProductsFromShelf();
+            ChangeCorrectImage(correct: false);
+            RemoveProductsFromShelf();
 
-                AudioManager.OnPlaySFX(_wrongItems);
-                return;
-            }
+            AudioManager.OnPlaySFX(_wrongItems);
+            return;
         }
 
         ChangeCorrectImage(correct: true);
         ConfirmCorrectProducts();
+    }
+
+    private bool AllProductsCorrect()
+    {
+        if (_orders == null || _orders.Count == 0) return false;
+
+        Dictionary<string, int> remaining = new Dictionary<string, int>();
+        foreach (Order order in _orders)
+        {
+            remaining[order.ProductName] = order.ProductAmount;
+        }
+
+        int extraItems = 0;
+        CountProductsOnParent(_behindProductsParent, remaining, ref extraItems);
+        CountProductsOnParent(_frontalProductsParent, remaining, ref extraItems);
+
+        if (extraItems != 0) return false;
+
+        foreach (var leftover in remaining)
+        {
+            if (leftover.Value != 0) return false;
+        }
+
+        return true;
+    }
+
+    private static void CountProductsOnParent(Transform parent, Dictionary<string, int> remaining, ref int extraItems)
+    {
+        if (parent == null) return;
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            ProductLevel2 product = parent.GetChild(i).GetComponent<ProductLevel2>();
+            if (product == null) continue;
+
+            if (remaining.ContainsKey(product.ProductName))
+            {
+                remaining[product.ProductName]--;
+            }
+            else
+            {
+                extraItems++;
+            }
+        }
     }
 
 
@@ -141,31 +180,57 @@ public class Shelf : MonoBehaviour
 
     private async void RemoveProductsFromShelf()
     {
-        int i;
-        while (_frontalProductsCount != 0 || _behindProductsCount != 0 )
+        List<ProductLevel2> productsToReturn = new List<ProductLevel2>();
+        CollectProducts(_frontalProductsParent, productsToReturn);
+        CollectProducts(_behindProductsParent, productsToReturn);
+
+        for (int i = 0; i < productsToReturn.Count; i++)
         {
-            for (i = 0; i < _frontalProductsParent.childCount; i++)
+            try
             {
                 await UniTask.Delay(50, false, PlayerLoopTiming.Update, destroyCancellationToken);
-                _frontalProductsParent.GetChild(0).GetComponent<ProductLevel2>().ShelfRemovedProduct();
             }
-
-            for (i = 0; i < _behindProductsParent.childCount; i++)
+            catch (OperationCanceledException)
             {
-                await UniTask.Delay(50, false, PlayerLoopTiming.Update, destroyCancellationToken);
-                _behindProductsParent.GetChild(0).GetComponent<ProductLevel2>().ShelfRemovedProduct();
+                return;
             }
 
-            _frontalProductsCount = _frontalProductsParent.childCount;
-            _behindProductsCount = _behindProductsParent.childCount;
+            ProductLevel2 product = productsToReturn[i];
+            if (product == null) continue;
+
+            product.ShelfRemovedProduct();
         }
 
-        for (i = 0; i < _ordersAmountLeft.Count; i++)
+        _frontalProductsCount = _frontalProductsParent != null ? _frontalProductsParent.childCount : 0;
+        _behindProductsCount = _behindProductsParent != null ? _behindProductsParent.childCount : 0;
+
+        if (_orders != null && _ordersAmountLeft != null)
         {
-            _ordersAmountLeft[_orders[i].ProductName] = _orders[i].ProductAmount;
+            foreach (Order order in _orders)
+            {
+                if (order == null) continue;
+                _ordersAmountLeft[order.ProductName] = order.ProductAmount;
+            }
         }
 
-        Events.Instance.OnRemoveScore(100);
+        if (Events.Instance != null)
+        {
+            Events.Instance.OnRemoveScore(100);
+        }
+    }
+
+    private static void CollectProducts(Transform parent, List<ProductLevel2> products)
+    {
+        if (parent == null) return;
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            ProductLevel2 product = parent.GetChild(i).GetComponent<ProductLevel2>();
+            if (product != null)
+            {
+                products.Add(product);
+            }
+        }
     }
 
     private async void ChangeCorrectImage(bool correct)

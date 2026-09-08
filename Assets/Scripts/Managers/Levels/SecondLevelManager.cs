@@ -29,6 +29,7 @@ public class SecondLevelManager : LevelManagerBase
     [ContextMenu("Star Game Manually")]
     protected override void HandleStartGame()
     {
+        Events.Instance.onPause += HandlePause;
         Events.Instance.onShelfCompleted += HandleShelfCompletion;
 
         Audio.StartBackground();

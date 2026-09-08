@@ -510,6 +510,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _group: {fileID: 2333267850129415573}
   _scoreTx: {fileID: 7832689111771351971}
+  _preScoreTx: {fileID: 7663756347074879718}
   _nextBt: {fileID: 6637438915586472545}
   _menuBt: {fileID: 8197147187760961484}
   _loader: {fileID: 1564487087685776734, guid: e43faa6e30566a8408c6d6c73fb1d2a8, type: 3}

@@ -195,16 +195,7 @@ public class ProductLevel2 : ProductBase, IPointerEnterHandler, IPointerDownHand
 
     public void ShelfRemovedProduct()
     {
-        if (_shelf != null)
-        {
-            //_shelf.ProductReplaced(ProductName);
-            _shelf = null;
-        }
-        else
-        {
-            Debug.LogError("Slot is null");
-        }
-
+        _shelf = null;
         InitialParent(true);
     }
     #endregion
