@@ -49,6 +49,7 @@ public class MenuManager : MonoBehaviour
 
         SetButtonsToMenuOptions();
         SetLevelSelectionButtons();
+        ConfigureQuitButton();
     }
 
     [ContextMenu("Reset Score")]
@@ -140,8 +141,26 @@ public class MenuManager : MonoBehaviour
         _creditsScene.SetActive(false);
     }
 
+    private void ConfigureQuitButton()
+    {
+        bool canQuit = true;
+
+#if UNITY_WEBGL || UNITY_IOS
+        canQuit = false;
+#endif
+
+        if (_leaveBt != null)
+        {
+            _leaveBt.gameObject.SetActive(canQuit);
+        }
+    }
+
     private void LeaveGame()
     {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
 }

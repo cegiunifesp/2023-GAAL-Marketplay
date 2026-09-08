@@ -45,7 +45,7 @@ public class Loader : MonoBehaviour
         LeanTween.scaleX(_background.gameObject, 1.0f, 0.5f).setEaseInOutQuad().setOnComplete(() =>
         {
             InitiateVisual();
-            SetLoadingScene(scene);
+            SetLoadingScene(scene).Forget();
 
             LeanTween.value(1, 0, 1f).setOnUpdate((value) =>
             {
@@ -56,7 +56,7 @@ public class Loader : MonoBehaviour
         });
     }
 
-    private void SetLoadingScene(Enums.Scenes scene)
+    private async UniTaskVoid SetLoadingScene(Enums.Scenes scene)
     {
         _backgroundSource.StartBackground();
 
@@ -64,23 +64,45 @@ public class Loader : MonoBehaviour
         _scene = scene;
 
         var sceneName = GetSceneName(scene);
-        var operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
         operation.allowSceneActivation = false;
 
-        LeanTween.value(0, 1, 5f).setOnComplete(async () =>
+        try
         {
+            float startedAt = Time.realtimeSinceStartup;
+
+            while (operation.progress < 0.9f)
+            {
+                await UniTask.Yield(PlayerLoopTiming.Update, destroyCancellationToken);
+            }
+
+            int remainingMs = Mathf.CeilToInt((2.5f - (Time.realtimeSinceStartup - startedAt)) * 1000f);
+            if (remainingMs > 0)
+            {
+                await UniTask.Delay(remainingMs, true, PlayerLoopTiming.Update, destroyCancellationToken);
+            }
+
             operation.allowSceneActivation = true;
+
+            while (!operation.isDone)
+            {
+                await UniTask.Yield(PlayerLoopTiming.Update, destroyCancellationToken);
+            }
 
             StartCoroutine(_backgroundSource.FadeAllSounds());
 
-            await UniTask.Delay(500, false, PlayerLoopTiming.Update, destroyCancellationToken);
+            await UniTask.Delay(500, true, PlayerLoopTiming.Update, destroyCancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
 
-            PerformExitAnimation();
+        PerformExitAnimation();
 
-            Loading = false;
-            _productsParent.SetActive(false);
-            SetupLevel(scene);
-        });
+        Loading = false;
+        _productsParent.SetActive(false);
+        SetupLevel(scene);
     }
 
     private string GetSceneName(Enums.Scenes scene)
