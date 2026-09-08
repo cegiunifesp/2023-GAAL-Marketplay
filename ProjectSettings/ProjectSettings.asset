@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: CEGI - UNIFESP
+  companyName: CEGI UNIFESP
   productName: Marketplay
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -165,7 +165,7 @@ PlayerSettings:
   androidMinAspectRatio: 1
   applicationIdentifier:
     Android: com.CEGIUNIFESP.Marketplay
-    Standalone: com.CEGI.Mercado-GAAL-2023
+    Standalone: com.CEGI-UNIFESP.Marketplay
   buildNumber:
     Bratwurst: 0
     Standalone: 0
